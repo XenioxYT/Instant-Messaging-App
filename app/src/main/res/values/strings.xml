@@ -5,4 +5,6 @@
     <string name="password_editText_register">Password</string>
     <string name="confirm_password_editText_register">Confirm Password</string>
     <string name="button_create_account">Create Account</string>
+    <string name="button_login_signupActivity">Log in</string>
+    <string name="text_already_have_account">Already have an account?</string>
 </resources>
