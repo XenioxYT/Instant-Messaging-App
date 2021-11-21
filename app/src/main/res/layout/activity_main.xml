@@ -5,25 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/purple_500"
-    tools:context=".MainActivity">
+    tools:context=".SignupActivity"
+    tools:ignore="ExtraText">
+
+    <TextView
+        android:id="@+id/text_sign_up_here"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/text_sign_up_here"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/username_editText_register"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
+        android:layout_margin="16dp"
         android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
         android:autofillHints=""
         android:background="@color/white"
         android:ems="10"
         android:hint="@string/username_editText_register"
         android:inputType="textPersonName"
         android:textColorHint="#757575"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/text_sign_up_here"
+        app:layout_constraintStart_toStartOf="@+id/text_sign_up_here"
+        app:layout_constraintTop_toBottomOf="@+id/text_sign_up_here" />
 
     <EditText
         android:id="@+id/email_editText_register"
@@ -72,16 +83,40 @@
         app:layout_constraintTop_toBottomOf="@+id/password_editText_register" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button_create_account"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:background="@color/teal_200"
+        android:layout_marginTop="16dp"
         android:text="@string/button_create_account"
         android:textColor="@color/black"
-        android:layout_marginTop="16dp"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         app:layout_constraintEnd_toEndOf="@+id/confirm_password_editText_register"
         app:layout_constraintStart_toStartOf="@+id/confirm_password_editText_register"
         app:layout_constraintTop_toBottomOf="@+id/confirm_password_editText_register" />
+
+    <TextView
+        android:id="@+id/text_already_have_account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/text_already_have_account"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@id/button_create_account"
+        app:layout_constraintStart_toStartOf="@id/button_create_account"
+        app:layout_constraintTop_toBottomOf="@id/button_create_account"
+        android:textSize="20sp"/>
+    <Button
+        android:id="@+id/button_login_signupActivity"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/button_login_signupActivity"
+        android:textColor="@color/black"
+        android:theme="@style/Theme.AppCompat.Light"
+        app:layout_constraintEnd_toEndOf="@+id/text_already_have_account"
+        app:layout_constraintStart_toStartOf="@+id/text_already_have_account"
+        app:layout_constraintTop_toBottomOf="@+id/text_already_have_account" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
