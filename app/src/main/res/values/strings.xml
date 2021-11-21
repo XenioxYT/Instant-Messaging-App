@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Instant Messaging App</string>
+    <string name="username_editText_register">Username</string>
+    <string name="email_editText_register">Email</string>
+    <string name="password_editText_register">Password</string>
+    <string name="confirm_password_editText_register">Confirm Password</string>
+    <string name="button_create_account">Create Account</string>
 </resources>
