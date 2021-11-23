@@ -13,8 +13,10 @@ class LoginActivity : AppCompatActivity() {
         // Set up the login form.
         button_login_loginActivity.setOnClickListener {
             Log.d("LoginActivity", "Login button pressed")
-             // Check if text fields are empty
-            if (username_editText_login.text.toString().isEmpty() || password_editText_login.text.toString().isEmpty()) {
+            // Check if text fields are empty
+            if (username_editText_login.text.toString()
+                    .isEmpty() || password_editText_login.text.toString().isEmpty()
+            ) {
                 Log.d("LoginActivity", "Login failed")
                 return@setOnClickListener
             }
