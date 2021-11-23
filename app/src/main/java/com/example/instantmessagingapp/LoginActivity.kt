@@ -1,9 +1,8 @@
 package com.example.instantmessagingapp
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.login_activity.*
 
 class LoginActivity : AppCompatActivity() {
@@ -18,6 +17,7 @@ class LoginActivity : AppCompatActivity() {
             if (username_editText_login.text.toString().isEmpty() || password_editText_login.text.toString().isEmpty()) {
                 Log.d("LoginActivity", "Login failed")
                 return@setOnClickListener
+            }
         }
     }
 }
