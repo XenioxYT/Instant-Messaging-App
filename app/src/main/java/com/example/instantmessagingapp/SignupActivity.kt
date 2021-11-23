@@ -15,10 +15,14 @@ class SignupActivity : AppCompatActivity() {
 
         button_create_account.setOnClickListener {
             Log.d("SignupActivity", "Button clicked")
-            val username = username_editText_register.text.toString() // Set username to the text entered into the username text box
-            val email = email_editText_register.text.toString() // Set email to the text entered into the email text box
-            val password = password_editText_register.text.toString() // Set password to the text entered into the password text box
-            val confirmPassword = confirm_password_editText_register.text.toString() // Set confirmPassword to the text entered into the confirm_password text box
+            val username =
+                username_editText_register.text.toString() // Set username to the text entered into the username text box
+            val email =
+                email_editText_register.text.toString() // Set email to the text entered into the email text box
+            val password =
+                password_editText_register.text.toString() // Set password to the text entered into the password text box
+            val confirmPassword =
+                confirm_password_editText_register.text.toString() // Set confirmPassword to the text entered into the confirm_password text box
 
             // Check if the username is empty
             if (username.isEmpty()) {
