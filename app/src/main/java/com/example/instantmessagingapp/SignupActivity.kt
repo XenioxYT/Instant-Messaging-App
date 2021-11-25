@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 
 
 // Main class for the SignupActivity
@@ -24,11 +25,10 @@ class SignupActivity : AppCompatActivity() {
             val confirmPassword =
                 confirm_password_editText_register.text.toString() // Set confirmPassword to the text entered into the confirm_password text box
 
-            // Check if the username is empty
-            if (username.isEmpty()) {
-                username_editText_register.error = "Username is required"
-                username_editText_register.requestFocus()
-            }
+
+            username_editText_textInputLayout.error = "Username is required"
+
+
             // Check if the email is empty
             if (email.isEmpty()) {
                 email_editText_register.error = "Email is required"

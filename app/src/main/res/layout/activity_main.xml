@@ -37,19 +37,22 @@
 <!--        app:layout_constraintTop_toBottomOf="@+id/text_sign_up_here" />-->
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/username_editText_register"
+        android:id="@+id/username_editText_textInputLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_margin="16dp"
         android:hint="@string/username_editText_register"
         app:layout_constraintEnd_toEndOf="@+id/text_sign_up_here"
         app:layout_constraintStart_toStartOf="@+id/text_sign_up_here"
-        app:layout_constraintTop_toBottomOf="@+id/text_sign_up_here">
+        app:layout_constraintTop_toBottomOf="@+id/text_sign_up_here"
+        app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/username_editText_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
+                app:errorEnabled="true"
+                tools:ignore="DuplicateIds" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -64,10 +67,10 @@
             android:hint="@string/email_editText_register"
             android:inputType="textEmailAddress"
             android:textColorHint="#757575"
-            app:layout_constraintEnd_toEndOf="@+id/username_editText_register"
+            app:layout_constraintEnd_toEndOf="@+id/username_editText_textInputLayout"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/username_editText_register"
-            app:layout_constraintTop_toBottomOf="@+id/username_editText_register" />
+            app:layout_constraintStart_toStartOf="@+id/username_editText_textInputLayout"
+            app:layout_constraintTop_toBottomOf="@+id/username_editText_textInputLayout" />
 
         <EditText
             android:id="@+id/password_editText_register"
