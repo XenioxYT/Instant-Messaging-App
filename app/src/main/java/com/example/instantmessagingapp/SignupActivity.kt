@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
 
 
 // Main class for the SignupActivity
@@ -26,27 +25,24 @@ class SignupActivity : AppCompatActivity() {
                 confirm_password_editText_register.text.toString() // Set confirmPassword to the text entered into the confirm_password text box
 
 
-            username_editText_textInputLayout.error = "Username is required"
-
-
+            // Check if the username is empty
+            if (username_editText_register.text.isNullOrEmpty()) {
+                username_editText_register.error = "Username Required"
+                username_editText_register.requestFocus()
+            }
             // Check if the email is empty
-            if (email.isEmpty()) {
+            if (email_editText_register.text.isNullOrEmpty()) {
                 email_editText_register.error = "Email is required"
                 email_editText_register.requestFocus()
             }
             // Check if the password is empty
-            if (password.isEmpty()) {
+            if (password_editText_register.text.isNullOrEmpty()) {
                 password_editText_register.error = "Password is required"
                 password_editText_register.requestFocus()
             }
             // Check if the confirm password is empty
-            if (confirmPassword.isEmpty()) {
+            if (confirm_password_editText_register.text.isNullOrEmpty()) {
                 confirm_password_editText_register.error = "Confirm Password is required"
-                confirm_password_editText_register.requestFocus()
-            }
-            // Check if the password and confirm password match
-            if (password != confirmPassword) {
-                confirm_password_editText_register.error = "Password does not match"
                 confirm_password_editText_register.requestFocus()
             }
             // If all the fields are filled in correctly, then create the user

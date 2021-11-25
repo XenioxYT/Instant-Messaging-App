@@ -3,6 +3,7 @@ package com.example.instantmessagingapp
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.login_activity.*
 
 class LoginActivity : AppCompatActivity() {
@@ -13,13 +14,18 @@ class LoginActivity : AppCompatActivity() {
         // Set up the login form.
         button_login_loginActivity.setOnClickListener {
             Log.d("LoginActivity", "Login button pressed")
-            // Check if text fields are empty
-            if (username_editText_login.text.toString()
-                    .isEmpty() || password_editText_login.text.toString().isEmpty()
-            ) {
-                Log.d("LoginActivity", "Login failed")
-                return@setOnClickListener
+            // Check if username is empty
+            if (username_editText_login.text.toString().isEmpty()) {
+                username_editText_login.error = "Username cannot be empty"
             }
+            // Check if password is empty
+            if (password_editText_login.text.toString().isEmpty()) {
+                password_editText_login.error = "Password cannot be empty"
+            }
+        }
+        button_back_to_signin.setOnClickListener {
+            Log.d("LoginActivity", "Back to sign in button pressed")
+            finish()
         }
     }
 }

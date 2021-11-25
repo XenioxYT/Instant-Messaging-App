@@ -4,18 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/purple_500"
+    android:background="@color/primary_light"
     tools:context=".LoginActivity">
 
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/text_welcome_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:fontFamily="sans-serif"
         android:text="@string/text_welcome_back_login"
-        android:textColor="@color/white"
+        android:textColor="@color/primary_text"
         android:textSize="20sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -32,9 +31,9 @@
         android:hint="@string/username_editText_register"
         android:inputType="textPersonName"
         android:textColorHint="#757575"
-        app:layout_constraintEnd_toEndOf="@+id/textView"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintEnd_toEndOf="@+id/text_welcome_back"
+        app:layout_constraintStart_toStartOf="@+id/text_welcome_back"
+        app:layout_constraintTop_toBottomOf="@+id/text_welcome_back" />
 
     <EditText
         android:id="@+id/password_editText_login"
@@ -57,10 +56,33 @@
         android:layout_height="50dp"
         android:layout_marginTop="16dp"
         android:text="@string/button_login_signupActivity"
-        android:textColor="@color/black"
-        android:theme="@style/Theme.AppCompat.Light"
+        android:textColor="@color/primary_text"
+        android:theme="@style/Theme.InstantMessagingApp.Day"
         app:layout_constraintEnd_toEndOf="@+id/password_editText_login"
         app:layout_constraintStart_toStartOf="@+id/password_editText_login"
         app:layout_constraintTop_toBottomOf="@+id/password_editText_login" />
+
+    <TextView
+        android:id="@+id/text_need_account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/need_an_account"
+        android:layout_marginTop="16dp"
+        android:textSize="20sp"
+        android:textColor="@color/primary_text"
+        app:layout_constraintTop_toBottomOf="@id/button_login_loginActivity"
+        app:layout_constraintLeft_toLeftOf="@id/button_login_loginActivity"
+        app:layout_constraintRight_toRightOf="@id/button_login_loginActivity"/>
+
+    <Button
+        android:id="@+id/button_back_to_signin"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/back_to_login"
+        android:theme="@style/Theme.InstantMessagingApp.Day"
+        app:layout_constraintEnd_toEndOf="@+id/text_need_account"
+        app:layout_constraintStart_toStartOf="@+id/text_need_account"
+        app:layout_constraintTop_toBottomOf="@+id/text_need_account" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
