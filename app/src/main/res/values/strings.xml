@@ -10,4 +10,6 @@
     <string name="text_welcome_back_login">Welcome back! Please login below.</string>
     <string name="text_sign_up_here">Sign up below</string>
     <string name="username_error">Username is required</string>
+    <string name="need_an_account">Need an account?</string>
+    <string name="back_to_login">Back to login</string>
 </resources>
