@@ -45,9 +45,21 @@ class SignupActivity : AppCompatActivity() {
                 confirm_password_editText_register.error = "Confirm Password is required"
                 confirm_password_editText_register.requestFocus()
             }
-            // If all the fields are filled in correctly, then create the user
-            // TODO: Create the user
-            // TODO: Go to the conversation list activity
+            // if all the text boxes are filled in, then check if the password and confirm password match
+            if (!password_editText_register.text.isNullOrEmpty() && !confirm_password_editText_register.text.isNullOrEmpty()) {
+                if (password != confirmPassword) {
+                    confirm_password_editText_register.error = "Passwords do not match"
+                    confirm_password_editText_register.requestFocus()
+                }
+            }
+            // If all the text boxes are filled in, then check if the email is valid
+            if (!email_editText_register.text.isNullOrEmpty()) {
+                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    email_editText_register.error = "Email is invalid"
+                    email_editText_register.requestFocus()
+                }
+            }
+
 
 
             // Use Logcat to output the text entered in the various text boxes
