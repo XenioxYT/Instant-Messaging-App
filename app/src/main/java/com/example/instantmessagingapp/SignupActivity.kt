@@ -62,7 +62,6 @@ class SignupActivity : AppCompatActivity() {
             }
 
 
-
             // Use Logcat to output the text entered in the various text boxes
             Log.d("SignupActivity", "Username is $username")
             Log.d("SignupActivity", "Email is $email")
