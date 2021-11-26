@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.login_activity.*
 
 
 // Main class for the SignupActivity
@@ -13,6 +14,7 @@ class SignupActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Listen for the create account button press
         button_create_account.setOnClickListener {
             Log.d("SignupActivity", "Button clicked")
             val username =
@@ -72,6 +74,17 @@ class SignupActivity : AppCompatActivity() {
         //listen for the login button click
         button_login_signupActivity.setOnClickListener {
             Log.d("SignupActivity", "Login button clicked")
+
+            // Clear the text boxes and set remove error message
+            username_editText_register.text.clear()
+            email_editText_register.text.clear()
+            password_editText_register.text.clear()
+            confirm_password_editText_register.text.clear()
+            username_editText_register.error = null
+            email_editText_register.error = null
+            password_editText_register.error = null
+            confirm_password_editText_register.error = null
+
             //create an intent to open the login activity
             Intent(
                 this,

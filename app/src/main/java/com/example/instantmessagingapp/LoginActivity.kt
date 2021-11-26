@@ -10,7 +10,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_activity)
 
-        // Set up the login form.
+        // Listen for the login button press
         button_login_loginActivity.setOnClickListener {
             Log.d("LoginActivity", "Login button pressed")
             // Check if username is empty
@@ -22,8 +22,18 @@ class LoginActivity : AppCompatActivity() {
                 password_editText_login.error = "Password cannot be empty"
             }
         }
+
+        // Listen for the back to sign in button press
         button_back_to_signin.setOnClickListener {
             Log.d("LoginActivity", "Back to sign in button pressed")
+
+            // Clear text fields and error messages
+            username_editText_login.text.clear()
+            password_editText_login.text.clear()
+            username_editText_login.error = null
+            password_editText_login.error = null
+
+            //End the activity
             finish()
         }
     }
