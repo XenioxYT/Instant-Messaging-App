@@ -45,10 +45,6 @@ class SignupActivity : AppCompatActivity() {
                 try {
                     FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener {
-//                            if (!it.isSuccessful) {
-//                                return@addOnCompleteListener
-//                            }
-//                            Log.d("SignupActivity", "Successfully created user with uid: ${it.result?.user?.uid}")
                             loginSuccessfulRegister(it)
                         }
                         .addOnFailureListener {
