@@ -28,95 +28,95 @@
         android:layout_margin="16dp"
         android:autofillHints=""
         android:background="@color/white"
-        android:ems="10"
+        android:ems="16"
         android:hint="@string/username_editText_register"
         android:inputType="textPersonName"
         android:textColorHint="#757575"
+        android:padding="10dp"
         app:layout_constraintEnd_toEndOf="@+id/text_sign_up_here"
         app:layout_constraintStart_toStartOf="@+id/text_sign_up_here"
         app:layout_constraintTop_toBottomOf="@+id/text_sign_up_here" />
 
-        <EditText
-            android:id="@+id/email_editText_register"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="16dp"
-            android:autofillHints=""
-            android:background="@color/white"
-            android:ems="10"
-            android:hint="@string/email_editText_register"
-            android:inputType="textEmailAddress"
-            android:textColorHint="#757575"
-            app:layout_constraintEnd_toEndOf="@+id/username_editText_register"
-            app:layout_constraintStart_toStartOf="@+id/username_editText_register"
-            app:layout_constraintTop_toBottomOf="@+id/username_editText_register" />
+    <EditText
+        android:id="@+id/email_editText_register"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:autofillHints=""
+        android:background="@color/white"
+        android:ems="10"
+        android:hint="@string/email_editText_register"
+        android:inputType="textEmailAddress"
+        android:textColorHint="#757575"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/username_editText_register"
+        app:layout_constraintStart_toStartOf="@+id/username_editText_register"
+        app:layout_constraintTop_toBottomOf="@+id/username_editText_register" />
 
-        <EditText
-            android:id="@+id/password_editText_register"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="16dp"
-            android:autofillHints=""
-            android:background="@color/white"
-            android:ems="10"
-            android:hint="@string/password_editText_register"
-            android:inputType="textPassword"
-            android:textColorHint="#757575"
-            app:layout_constraintEnd_toEndOf="@+id/email_editText_register"
-            app:layout_constraintStart_toStartOf="@+id/email_editText_register"
-            app:layout_constraintTop_toBottomOf="@+id/email_editText_register" />
-
-        <EditText
-            android:id="@+id/confirm_password_editText_register"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="16dp"
-            android:autofillHints=""
-            android:background="@color/white"
-            android:ems="10"
-            android:hint="@string/confirm_password_editText_register"
-            android:inputType="textPassword"
-            android:textColorHint="#757575"
-            app:layout_constraintEnd_toEndOf="@+id/password_editText_register"
-            app:layout_constraintStart_toStartOf="@+id/password_editText_register"
-            app:layout_constraintTop_toBottomOf="@+id/password_editText_register" />
-
-        <Button
-            android:id="@+id/button_create_account"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/button_create_account"
-            android:textColor="@color/primary_text"
-            android:theme="@style/Theme.InstantMessagingApp.Day"
-            app:layout_constraintEnd_toEndOf="@+id/confirm_password_editText_register"
-            app:layout_constraintStart_toStartOf="@+id/confirm_password_editText_register"
-            app:layout_constraintTop_toBottomOf="@+id/confirm_password_editText_register" />
-
-        <TextView
-            android:id="@+id/text_already_have_account"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/text_already_have_account"
-            android:textAllCaps="false"
-            android:textColor="@color/primary_text"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="@id/button_create_account"
-            app:layout_constraintStart_toStartOf="@id/button_create_account"
-            app:layout_constraintTop_toBottomOf="@id/button_create_account" />
-
-        <Button
-            android:id="@+id/button_login_signupActivity"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/button_login_signupActivity"
-            android:textColor="@color/primary_text"
-            android:theme="@style/Theme.InstantMessagingApp.Day"
-            app:layout_constraintEnd_toEndOf="@+id/text_already_have_account"
-            app:layout_constraintStart_toStartOf="@+id/text_already_have_account"
-            app:layout_constraintTop_toBottomOf="@+id/text_already_have_account" />
+    <EditText
+        android:id="@+id/password_editText_register"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:autofillHints=""
+        android:background="@color/white"
+        android:ems="10"
+        android:hint="@string/password_editText_register"
+        android:inputType="textPassword"
+        android:textColorHint="#757575"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/email_editText_register"
+        app:layout_constraintStart_toStartOf="@+id/email_editText_register"
+        app:layout_constraintTop_toBottomOf="@+id/email_editText_register" />
+    <EditText
+        android:id="@+id/confirm_password_editText_register"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:autofillHints=""
+        android:background="@color/white"
+        android:ems="10"
+        android:hint="@string/confirm_password_editText_register"
+        android:inputType="textPassword"
+        android:textColorHint="#757575"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/password_editText_register"
+        app:layout_constraintStart_toStartOf="@+id/password_editText_register"
+        app:layout_constraintTop_toBottomOf="@+id/password_editText_register" />
+    <Button
+        android:id="@+id/button_create_account"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/button_create_account"
+        android:textColor="@color/primary_text"
+        android:theme="@style/Theme.InstantMessagingApp.Day"
+        app:layout_constraintEnd_toEndOf="@+id/confirm_password_editText_register"
+        app:layout_constraintStart_toStartOf="@+id/confirm_password_editText_register"
+        app:layout_constraintTop_toBottomOf="@+id/confirm_password_editText_register" />
+    <TextView
+        android:id="@+id/text_already_have_account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/text_already_have_account"
+        android:textAllCaps="false"
+        android:textColor="@color/primary_text"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@id/button_create_account"
+        app:layout_constraintStart_toStartOf="@id/button_create_account"
+        app:layout_constraintTop_toBottomOf="@id/button_create_account" />
+    <Button
+        android:id="@+id/button_login_signupActivity"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/button_login_signupActivity"
+        android:textColor="@color/primary_text"
+        android:theme="@style/Theme.InstantMessagingApp.Day"
+        app:layout_constraintEnd_toEndOf="@+id/text_already_have_account"
+        app:layout_constraintStart_toStartOf="@+id/text_already_have_account"
+        app:layout_constraintTop_toBottomOf="@+id/text_already_have_account" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
