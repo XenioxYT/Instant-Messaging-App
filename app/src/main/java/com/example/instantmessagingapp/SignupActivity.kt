@@ -1,11 +1,18 @@
 package com.example.instantmessagingapp
 // imports
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.Layout
+import android.text.SpannableString
+import android.text.style.AlignmentSpan
 import android.util.Log
+import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -55,7 +62,7 @@ class SignupActivity : AppCompatActivity() {
             }
             // If all the text boxes are filled in, then check if the email is valid
             if (!email_editText_register.text.isNullOrEmpty()) {
-                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     email_editText_register.error = "Email is invalid"
                     email_editText_register.requestFocus()
                 }
@@ -74,6 +81,65 @@ class SignupActivity : AppCompatActivity() {
                     username_editText_register.requestFocus()
                 }
             }
+
+            // I have no idea why this code works, but it does
+            // However, something may break cos it's shit
+            if (username_editText_register.text.isNotEmpty() && email_editText_register.text.isNotEmpty() && password_editText_register.text.isNotEmpty() && confirm_password_editText_register.text.isNotEmpty() && password == confirmPassword && Patterns.EMAIL_ADDRESS.matcher(email).matches() && password.length >= 6 && username.length <= 18) {
+                try {
+                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener {
+                            if (!it.isSuccessful) return@addOnCompleteListener
+                            Log.d(
+                                "SignupActivity",
+                                "Successfully created user with uid: ${it.result?.user?.uid}"
+                            )
+                            val intent = Intent(this, LoginActivity::class.java)
+                            startActivity(intent)
+                        }
+                        .addOnFailureListener {
+                            Log.d("SignupActivity", "Failed to create user: ${it.message}")
+                            val context = this
+                            val title = SpannableString("${it.message}")
+                            title.setSpan(
+                                AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
+                                0,
+                                title.length,
+                                0
+                            )
+                            val builder = AlertDialog.Builder(context)
+                            builder.setTitle(title)
+                            builder.setMessage("There seems to be an error with your registration. Please check your details and try again by clicking the button below.")
+                            builder.setPositiveButton("Try again") { dialog, _ ->
+                                dialog.dismiss()
+                                password_editText_register.text.clear()
+                                confirm_password_editText_register.text.clear()
+                            }
+                            val dialog: AlertDialog = builder.create()
+                            dialog.show()
+                        }
+                }
+                catch (e: Exception) {
+                    val context = this
+                    val title = SpannableString("Error")
+                    title.setSpan(
+                        AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
+                        0,
+                        title.length,
+                        0
+                    )
+                    val builder = AlertDialog.Builder(context)
+                    builder.setTitle(title)
+                    builder.setMessage("There was an error creating your account. Please try again in a few minutes.")
+                    builder.setPositiveButton("OK") { dialog, which ->
+                        dialog.dismiss()
+                    }
+                    val dialog: AlertDialog = builder.create()
+                    dialog.show()
+                }
+            }
+
+
+
 
             // Use Logcat to output the text entered in the various text boxes
             Log.d("SignupActivity", "Username is $username")
@@ -106,4 +172,5 @@ class SignupActivity : AppCompatActivity() {
         }
     }
 }
+
 
