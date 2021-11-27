@@ -3,7 +3,9 @@ package com.example.instantmessagingapp
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -47,11 +49,9 @@ class SignupActivity : AppCompatActivity() {
                 confirm_password_editText_register.requestFocus()
             }
             // if all the text boxes are filled in, then check if the password and confirm password match
-            if (!password_editText_register.text.isNullOrEmpty() && !confirm_password_editText_register.text.isNullOrEmpty()) {
-                if (password != confirmPassword) {
-                    confirm_password_editText_register.error = "Passwords do not match"
-                    confirm_password_editText_register.requestFocus()
-                }
+            if (password != confirmPassword) {
+                confirm_password_editText_register.error = "Passwords do not match"
+                confirm_password_editText_register.requestFocus()
             }
             // If all the text boxes are filled in, then check if the email is valid
             if (!email_editText_register.text.isNullOrEmpty()) {
@@ -60,7 +60,20 @@ class SignupActivity : AppCompatActivity() {
                     email_editText_register.requestFocus()
                 }
             }
-
+            // If all the text boxes are filled in, then check if the password is valid
+            if (!password_editText_register.text.isNullOrEmpty()) {
+                if (password.length < 6) {
+                    password_editText_register.error = "Password must be at least 6 characters"
+                    password_editText_register.requestFocus()
+                }
+            }
+            // If all the text boxes are filled in, then check if the username is valid
+            if (!username_editText_register.text.isNullOrEmpty()) {
+                if (username.length <= 6 || username.length >= 18) {
+                    username_editText_register.error = "Username must be at least 6 characters and no more than 18 characters"
+                    username_editText_register.requestFocus()
+                }
+            }
 
             // Use Logcat to output the text entered in the various text boxes
             Log.d("SignupActivity", "Username is $username")
