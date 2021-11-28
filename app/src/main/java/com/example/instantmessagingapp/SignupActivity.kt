@@ -8,6 +8,7 @@ import android.text.SpannableString
 import android.text.style.AlignmentSpan
 import android.util.Log
 import android.util.Patterns
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -43,49 +44,17 @@ class SignupActivity : AppCompatActivity() {
             // However, something may break cos it's shit
             if (username_editText_register.text.isNotEmpty() && email_editText_register.text.isNotEmpty() && password_editText_register.text.isNotEmpty() && confirm_password_editText_register.text.isNotEmpty() && password == confirmPassword && Patterns.EMAIL_ADDRESS.matcher(email).matches() && password.length >= 6 && username.length <= 18) {
                 try {
+                    // Create a new user with the email and password
                     FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener {
                             loginSuccessfulRegister(it)
                         }
                         .addOnFailureListener {
-                            Log.d("SignupActivity", "Failed to create user: ${it.message}")
-                            val context = this
-                            val title = SpannableString("${it.message}")
-                            title.setSpan(
-                                AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
-                                0,
-                                title.length,
-                                0
-                            )
-                            val builder = AlertDialog.Builder(context)
-                            builder.setTitle(title)
-                            builder.setMessage("There seems to be an error with your registration. Please check your details and try again by clicking the button below.")
-                            builder.setPositiveButton("Try again") { dialog, _ ->
-                                dialog.dismiss()
-                                password_editText_register.text.clear()
-                                confirm_password_editText_register.text.clear()
-                            }
-                            val dialog: AlertDialog = builder.create()
-                            dialog.show()
+                            loginFailedRegister(it)
                         }
                 }
                 catch (e: Exception) {
-                    val context = this
-                    val title = SpannableString("Error")
-                    title.setSpan(
-                        AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
-                        0,
-                        title.length,
-                        0
-                    )
-                    val builder = AlertDialog.Builder(context)
-                    builder.setTitle(title)
-                    builder.setMessage("There was an error creating your account. Please try again in a few minutes.")
-                    builder.setPositiveButton("OK") { dialog, _ ->
-                        dialog.dismiss()
-                    }
-                    val dialog: AlertDialog = builder.create()
-                    dialog.show()
+                    loginException()
                 }
             }
 
@@ -194,6 +163,48 @@ class SignupActivity : AppCompatActivity() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
     }
+
+    private fun loginFailedRegister(it: java.lang.Exception) {
+        Log.d("SignupActivity", "Failed to create user: ${it.message}")
+        val context = this
+        val title = SpannableString("${it.message}")
+        title.setSpan(
+            AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
+            0,
+            title.length,
+            0
+        )
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(title)
+        builder.setMessage("There seems to be an error with your registration. Please check your details and try again by clicking the button below.")
+        builder.setPositiveButton("Try again") { dialog, _ ->
+            dialog.dismiss()
+            password_editText_register.text.clear()
+            confirm_password_editText_register.text.clear()
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+    }
+
+    private fun loginException() {
+        val context = this
+        val title = SpannableString("Error")
+        title.setSpan(
+            AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
+            0,
+            title.length,
+            0
+        )
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(title)
+        builder.setMessage("There was an error creating your account. Please try again in a few minutes.")
+        builder.setPositiveButton("OK") { dialog, _ ->
+            dialog.dismiss()
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+    }
+
 }
 
 

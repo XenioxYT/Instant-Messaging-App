@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary_light"
+    android:background="@color/yellow"
     tools:context=".SignupActivity"
     tools:ignore="ExtraText">
 
@@ -89,7 +89,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="16dp"
         android:text="@string/button_create_account"
-        android:textColor="@color/primary_text"
+        android:textColor="@color/yellow"
         android:theme="@style/Theme.InstantMessagingApp.Day"
         app:layout_constraintEnd_toEndOf="@+id/confirm_password_editText_register"
         app:layout_constraintStart_toStartOf="@+id/confirm_password_editText_register"

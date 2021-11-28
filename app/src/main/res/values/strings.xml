@@ -11,5 +11,5 @@
     <string name="text_sign_up_here">Sign up below</string>
     <string name="username_error">Username is required</string>
     <string name="need_an_account">Need an account?</string>
-    <string name="back_to_login">Back to login</string>
+    <string name="back_to_login">Sign up</string>
 </resources>
