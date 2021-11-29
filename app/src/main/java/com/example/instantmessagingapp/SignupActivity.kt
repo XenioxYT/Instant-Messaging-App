@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 
 
 // Main class for the SignupActivity
@@ -42,7 +43,7 @@ class SignupActivity : AppCompatActivity() {
 
             // I have no idea why this code works, but it does
             // However, something may break cos it's shit
-            if (username_editText_register.text.isNotEmpty() && email_editText_register.text.isNotEmpty() && password_editText_register.text.isNotEmpty() && confirm_password_editText_register.text.isNotEmpty() && password == confirmPassword && Patterns.EMAIL_ADDRESS.matcher(email).matches() && password.length >= 6 && username.length <= 18) {
+            if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() && password == confirmPassword && Patterns.EMAIL_ADDRESS.matcher(email).matches() && password.length >= 6 && username.length <= 18) {
                 try {
                     // Create a new user with the email and password
                     FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
@@ -73,10 +74,9 @@ class SignupActivity : AppCompatActivity() {
             Log.d("SignupActivity", "Login button clicked")
 
             // Clear the text boxes and set remove error message
-            username_editText_register.text.clear()
-            email_editText_register.text.clear()
-            password_editText_register.text.clear()
-            confirm_password_editText_register.text.clear()
+//            email_editText_register.text.toString()
+//            password_editText_register.text.clear()
+//            confirm_password_editText_register.text.clear()
             username_editText_register.error = null
             email_editText_register.error = null
             password_editText_register.error = null
@@ -94,10 +94,9 @@ class SignupActivity : AppCompatActivity() {
 
 
     private fun checkUsername() {
-        if (!username_editText_register.text.isNullOrEmpty()) {
+        if (username_editText_register.text.toString().isNotEmpty()) {
             if (username_editText_register.text.toString().length <= 6 || username_editText_register.text.toString().length >= 18) {
-                username_editText_register.error =
-                    "Username must be at least 6 characters and no more than 18 characters"
+                username_editText_register.error = "Username must be at least 6 characters and no more than 18 characters"
                 username_editText_register.requestFocus()
                 return
             }
@@ -179,8 +178,8 @@ class SignupActivity : AppCompatActivity() {
         builder.setMessage("There seems to be an error with your registration. Please check your details and try again by clicking the button below.")
         builder.setPositiveButton("Try again") { dialog, _ ->
             dialog.dismiss()
-            password_editText_register.text.clear()
-            confirm_password_editText_register.text.clear()
+//            password_editText_register.text.clear()
+//            confirm_password_editText_register.text.clear()
         }
         val dialog: AlertDialog = builder.create()
         dialog.show()

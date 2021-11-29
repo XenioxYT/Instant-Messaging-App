@@ -9,13 +9,17 @@
         <item name="colorSecondary">@color/black</item>
         <item name="colorSecondaryVariant">@color/yellow</item>
         <item name="colorOnSecondary">@color/white</item>
+        <!-- Background color for surface widgets. -->
+        <item name="colorSurface">@color/yellow</item>
+        <!-- Color for text selection handles. -->
+        <item name="colorOnSurface">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
     <style name="Theme.InstantMessagingApp.Day" parent="Theme.InstantMessagingApp">
-        <item name="colorPrimary">@color/yellow</item>
-        <item name="colorPrimaryVariant">@color/yellow</item>
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryVariant">@color/black</item>
         <item name="colorOnPrimary">@color/black</item>
     </style>
 </resources>
