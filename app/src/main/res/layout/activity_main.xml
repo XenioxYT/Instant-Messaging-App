@@ -24,6 +24,16 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/outfit_light"
+        android:textSize="15dp"
+        android:text="Create your account by filling in the fields below"
+        app:layout_constraintStart_toStartOf="@+id/text_sign_up_here"
+        app:layout_constraintTop_toBottomOf="@+id/text_sign_up_here" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/username_editText_register_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -47,7 +57,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textColorHint="@color/black"
-            android:inputType="text"/>
+            android:inputType="text"
+            android:textCursorDrawable="@color/black"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -121,6 +132,7 @@
         app:layout_constraintStart_toStartOf="@+id/email_editText_register_layout"
         app:layout_constraintTop_toBottomOf="@+id/email_editText_register_layout"
         app:boxStrokeWidth="1dp"
+        app:hintTextAppearance="@style/TextAppearance.AppCompat.Medium"
         app:boxStrokeColor="@color/black"
         app:hintAnimationEnabled="true"
         app:hintTextColor="@color/black"
@@ -199,7 +211,7 @@
         android:id="@+id/button_create_account"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:text="@string/button_create_account"
         android:textColor="@color/yellow"
         android:theme="@style/Theme.InstantMessagingApp.Day"
@@ -231,6 +243,7 @@
         app:layout_constraintEnd_toEndOf="@+id/text_already_have_account"
         app:layout_constraintStart_toStartOf="@+id/text_already_have_account"
         app:layout_constraintTop_toBottomOf="@+id/text_already_have_account" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
