@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".WelcomeActivity"
-    android:background="@color/yellow">
+    android:background="@color/yellow"
+    tools:context=".WelcomeActivity">
 
     <TextView
         android:id="@+id/textView"
@@ -24,10 +24,10 @@
         android:id="@+id/login_button_welcome"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/outfit_bold"
         android:layout_marginTop="16dp"
-        android:textColor="@color/yellow"
+        android:fontFamily="@font/outfit_bold"
         android:text="@string/button_login_signupActivity"
+        android:textColor="@color/yellow"
         android:theme="@style/Theme.InstantMessagingApp.Day"
         app:layout_constraintEnd_toEndOf="@+id/textView"
         app:layout_constraintStart_toStartOf="@+id/textView"
@@ -36,10 +36,10 @@
     <Button
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/outfit_bold"
         android:layout_marginTop="16dp"
-        android:textColor="@color/yellow"
+        android:fontFamily="@font/outfit_bold"
         android:text="@string/text_sign_up_here"
+        android:textColor="@color/yellow"
         android:theme="@style/Theme.InstantMessagingApp.Day"
         app:layout_constraintEnd_toEndOf="@+id/login_button_welcome"
         app:layout_constraintStart_toStartOf="@+id/login_button_welcome"

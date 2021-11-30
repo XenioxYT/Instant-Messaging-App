@@ -43,7 +43,10 @@ class SignupActivity : AppCompatActivity() {
 
             // I have no idea why this code works, but it does
             // However, something may break if I remove it
-            if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() && password == confirmPassword && Patterns.EMAIL_ADDRESS.matcher(email).matches() && password.length >= 6 && username.length <= 18) {
+            if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() && password == confirmPassword && Patterns.EMAIL_ADDRESS.matcher(
+                    email
+                ).matches() && password.length >= 6 && username.length <= 18
+            ) {
                 try {
                     // Create a new user with the email andpassword
                     FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
@@ -53,13 +56,10 @@ class SignupActivity : AppCompatActivity() {
                         .addOnFailureListener {
                             loginFailedRegister(it)
                         }
-                }
-                catch (e: Exception) {
+                } catch (e: Exception) {
                     loginException()
                 }
             }
-
-
 
 
             // Use Logcat to output the text entered in the various text boxes
@@ -96,12 +96,12 @@ class SignupActivity : AppCompatActivity() {
     private fun checkUsername() {
         if (username_editText_register.text.toString().isNotEmpty()) {
             if (username_editText_register.text.toString().length <= 6 || username_editText_register.text.toString().length >= 18) {
-                username_editText_register.error = "Username must be at least 6 characters and no more than 18 characters"
+                username_editText_register.error =
+                    "Username must be at least 6 characters and no more than 18 characters"
                 username_editText_register.requestFocus()
                 return
             }
-        }
-        else {
+        } else {
             username_editText_register.error = "Username cannot be empty"
             username_editText_register.requestFocus()
             return
@@ -110,13 +110,14 @@ class SignupActivity : AppCompatActivity() {
 
     private fun checkEmail() {
         if (!email_editText_register.text.isNullOrEmpty()) {
-            if (!Patterns.EMAIL_ADDRESS.matcher(email_editText_register.text.toString()).matches()) {
+            if (!Patterns.EMAIL_ADDRESS.matcher(email_editText_register.text.toString())
+                    .matches()
+            ) {
                 email_editText_register.error = "Email is invalid"
                 email_editText_register.requestFocus()
                 return
             }
-        }
-        else {
+        } else {
             email_editText_register.error = "Email is required"
             email_editText_register.requestFocus()
             return
@@ -130,8 +131,7 @@ class SignupActivity : AppCompatActivity() {
                 password_editText_register.requestFocus()
                 return
             }
-        }
-        else {
+        } else {
             password_editText_register.error = "Password cannot be empty"
             password_editText_register.requestFocus()
             return
@@ -145,8 +145,7 @@ class SignupActivity : AppCompatActivity() {
                 confirm_password_editText_register.requestFocus()
                 return
             }
-        }
-        else {
+        } else {
             confirm_password_editText_register.error = "Confirm Password cannot be empty"
             confirm_password_editText_register.requestFocus()
             return

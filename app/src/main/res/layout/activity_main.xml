@@ -29,8 +29,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/outfit_light"
-        android:textSize="16sp"
         android:text="@string/text_create_account_description"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/text_sign_up_here"
         app:layout_constraintTop_toBottomOf="@+id/text_sign_up_here" />
 
@@ -39,18 +39,18 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="150dp"
         android:layout_marginRight="16dp"
         android:hint="@string/username_editText_register"
+        app:boxStrokeColor="@color/black"
+        app:boxStrokeWidth="1dp"
+        app:endIconMode="clear_text"
+        app:hintAnimationEnabled="true"
+        app:hintTextColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:boxStrokeWidth="1dp"
-        app:boxStrokeColor="@color/black"
-        app:hintAnimationEnabled="true"
-        app:hintTextColor="@color/black"
-        app:endIconMode="clear_text"
         app:startIconDrawable="@drawable/ic_person_outline_black_24dp"
         tools:override="true">
 
@@ -58,9 +58,9 @@
             android:id="@+id/username_editText_register"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColorHint="@color/black"
-            android:textColor="@color/black"
             android:inputType="text"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
             android:textCursorDrawable="@color/black" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -71,19 +71,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginTop="5dp"
+        android:layout_marginRight="16dp"
         android:hint="@string/email_editText_register"
-        app:endIconMode="clear_text"
         app:boxStrokeColor="@color/black"
         app:boxStrokeWidth="1dp"
+        app:endIconMode="clear_text"
         app:hintAnimationEnabled="true"
         app:hintTextColor="@color/black"
         app:layout_constraintEnd_toEndOf="@id/username_editText_register_layout"
         app:layout_constraintStart_toStartOf="@id/username_editText_register_layout"
         app:layout_constraintTop_toBottomOf="@+id/username_editText_register_layout"
-        tools:override="true"
-        app:startIconDrawable="@drawable/ic_email_black_24dp">
+        app:startIconDrawable="@drawable/ic_email_black_24dp"
+        tools:override="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email_editText_register"
@@ -100,26 +100,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
+        android:layout_marginRight="16dp"
         android:hint="@string/password_editText_register"
+        app:boxStrokeColor="@color/black"
+        app:boxStrokeWidth="1dp"
+        app:endIconMode="password_toggle"
+        app:hintAnimationEnabled="true"
+        app:hintTextColor="@color/black"
         app:layout_constraintEnd_toEndOf="@+id/email_editText_register_layout"
         app:layout_constraintStart_toStartOf="@+id/email_editText_register_layout"
         app:layout_constraintTop_toBottomOf="@+id/email_editText_register_layout"
-        app:boxStrokeWidth="1dp"
-        app:boxStrokeColor="@color/black"
-        app:hintAnimationEnabled="true"
-        app:hintTextColor="@color/black"
-        app:endIconMode="password_toggle"
-        tools:override="true"
-        app:startIconDrawable="@drawable/ic_lock_black_24dp">
+        app:startIconDrawable="@drawable/ic_lock_black_24dp"
+        tools:override="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password_editText_register"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColorHint="@color/black"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword"
+            android:textColorHint="@color/black" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -129,17 +129,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
+        android:layout_marginRight="16dp"
         android:hint="@string/confirm_password_editText_register"
+        app:boxStrokeColor="@color/black"
+        app:boxStrokeWidth="1dp"
+        app:endIconMode="password_toggle"
+        app:hintAnimationEnabled="true"
+        app:hintTextColor="@color/black"
         app:layout_constraintEnd_toEndOf="@+id/password_editText_register_layout"
         app:layout_constraintStart_toStartOf="@+id/password_editText_register_layout"
         app:layout_constraintTop_toBottomOf="@+id/password_editText_register_layout"
-        app:boxStrokeWidth="1dp"
-        app:boxStrokeColor="@color/black"
-        app:hintAnimationEnabled="true"
-        app:hintTextColor="@color/black"
-        app:endIconMode="password_toggle"
         app:startIconDrawable="@drawable/ic_enhanced_encryption_black_24dp"
         tools:override="true">
 
@@ -147,8 +147,8 @@
             android:id="@+id/confirm_password_editText_register"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColorHint="@color/black"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword"
+            android:textColorHint="@color/black" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -168,12 +168,12 @@
         android:id="@+id/text_already_have_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:fontFamily="@font/outfit_regular"
         android:text="@string/text_already_have_account"
         android:textAllCaps="false"
         android:textColor="@color/primary_text"
         android:textSize="20sp"
-        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/button_login_signupActivity"
         app:layout_constraintEnd_toEndOf="@id/button_create_account"
         app:layout_constraintStart_toStartOf="@id/button_create_account" />
@@ -189,7 +189,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/text_already_have_account"
         app:layout_constraintStart_toStartOf="@+id/text_already_have_account" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
