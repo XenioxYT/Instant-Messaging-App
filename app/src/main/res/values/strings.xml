@@ -11,11 +11,12 @@
     <string name="text_sign_up_here">SIGN UP</string>
     <string name="username_error">Username is required</string>
     <string name="need_an_account">Need an account?</string>
+    <string name="account_signup_created">Problem with your account?</string>
     <string name="back_to_login">Sign up</string>
     <string name="welcome">Welcome</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="login">LOGIN</string>
+    <string name="account_created_login">ACCOUNT CREATED</string>
     <string name="text_create_account_description">Create your account by filling in the fields below</string>
     <string name="text_login_description">Log in to your account by filling in the fields below</string>
 </resources>

@@ -48,16 +48,41 @@ class SignupActivity : AppCompatActivity() {
                 ).matches() && password.length >= 6 && username.length <= 18
             ) {
                 try {
-                    // Create a new user with the email andpassword
+
+                    val context = this
+                    val title = SpannableString("Creating Account")
+                    val dismiss = false
+                    title.setSpan(
+                        AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
+                        0,
+                        title.length,
+                        0
+                    )
+                    val builder = AlertDialog.Builder(context)
+                    builder.setTitle(title)
+                    builder.setMessage("Please wait while your account is being created.")
+                    val dialog: AlertDialog = builder.create()
+                    if (!dismiss) {
+                        dialog.show()
+                    }
+
+//                    creationInProgress(false)
+                    // Create a new user with the email and password
                     FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener {
+//                            creationInProgress(false)
+                            dialog.dismiss()
                             loginSuccessfulRegister(it)
+                            //TODO: Call loginWelcome activity
                         }
                         .addOnFailureListener {
                             loginFailedRegister(it)
+//                            creationInProgress(true)
+                            dialog.dismiss()
                         }
                 } catch (e: Exception) {
                     loginException()
+                    creationInProgress(true)
                 }
             }
 
@@ -177,8 +202,6 @@ class SignupActivity : AppCompatActivity() {
         builder.setMessage("There seems to be an error with your registration. Please check your details and try again by clicking the button below.")
         builder.setPositiveButton("Try again") { dialog, _ ->
             dialog.dismiss()
-//            password_editText_register.text.clear()
-//            confirm_password_editText_register.text.clear()
         }
         val dialog: AlertDialog = builder.create()
         dialog.show()
@@ -202,7 +225,6 @@ class SignupActivity : AppCompatActivity() {
         val dialog: AlertDialog = builder.create()
         dialog.show()
     }
-
 }
 
 

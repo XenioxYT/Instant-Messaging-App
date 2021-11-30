@@ -21,13 +21,16 @@ class LoginActivity : AppCompatActivity() {
             if (password_editText_login.text.toString().isEmpty()) {
                 password_editText_login.error = "Password cannot be empty"
             }
+            if (username_editText_login.text.toString().isNotEmpty() && password_editText_login.text.toString().isNotEmpty()) {
+                //TODO: Login the user once details have been validated
+            }
         }
 
         // Listen for the back to sign in button press
         button_back_to_signin.setOnClickListener {
             Log.d("LoginActivity", "Back to sign in button pressed")
 
-            // Clear text fields and error messages
+            // Clear error messages
             username_editText_login.error = null
             password_editText_login.error = null
 

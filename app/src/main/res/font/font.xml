@@ -1,23 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<font-family xmlns:android="http://schemas.android.com/apk/res/android">
+<font-family xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <font
-        android:font="@font/outfit_thin"/>
+        android:font="@font/outfit_thin"
+        tools:ignore="UnusedAttribute" />
     <font
-        android:font="@font/outfit_extralight"/>
+        android:font="@font/outfit_extralight"
+        tools:ignore="UnusedAttribute" />
     <font
-        android:font="@font/outfit_light"/>
+        android:font="@font/outfit_light"
+        tools:ignore="UnusedAttribute" />
     <font
-        android:font="@font/outfit_regular"/>
+        android:font="@font/outfit_regular"
+        tools:ignore="UnusedAttribute" />
     <font
-        android:font="@font/outfit_medium"/>
+        android:font="@font/outfit_medium"
+        tools:ignore="UnusedAttribute" />
     <font
-        android:font="@font/outfit_semibold"/>
+        android:font="@font/outfit_semibold"
+        tools:ignore="UnusedAttribute" />
     <font
-        android:font="@font/outfit_bold"/>
+        android:font="@font/outfit_bold"
+        tools:ignore="UnusedAttribute" />
     <font
-        android:font="@font/outfit_extrabold"/>
+        android:font="@font/outfit_extrabold"
+        tools:targetApi="o" />
     <font
-        android:font="@font/outfit_black"/>
+        android:font="@font/outfit_black"
+        tools:ignore="UnusedAttribute" />
 
 </font-family>
