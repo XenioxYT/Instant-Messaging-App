@@ -82,7 +82,6 @@ class SignupActivity : AppCompatActivity() {
                         }
                 } catch (e: Exception) {
                     loginException()
-                    creationInProgress(true)
                 }
             }
 
