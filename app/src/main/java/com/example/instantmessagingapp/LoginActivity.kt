@@ -28,8 +28,6 @@ class LoginActivity : AppCompatActivity() {
             Log.d("LoginActivity", "Back to sign in button pressed")
 
             // Clear text fields and error messages
-            username_editText_login.text.clear()
-            password_editText_login.text.clear()
             username_editText_login.error = null
             password_editText_login.error = null
 

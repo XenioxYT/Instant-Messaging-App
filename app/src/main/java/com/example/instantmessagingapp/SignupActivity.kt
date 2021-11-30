@@ -42,10 +42,10 @@ class SignupActivity : AppCompatActivity() {
                 confirm_password_editText_register.text.toString() // Set confirmPassword to the text entered into the confirm_password text box
 
             // I have no idea why this code works, but it does
-            // However, something may break cos it's shit
+            // However, something may break if I remove it
             if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() && password == confirmPassword && Patterns.EMAIL_ADDRESS.matcher(email).matches() && password.length >= 6 && username.length <= 18) {
                 try {
-                    // Create a new user with the email and password
+                    // Create a new user with the email andpassword
                     FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener {
                             loginSuccessfulRegister(it)

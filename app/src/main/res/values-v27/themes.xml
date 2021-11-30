@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-
+    <!-- Base application theme. -->
     <style name="Theme.InstantMessagingApp" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/yellow</item>
-        <item name="colorPrimaryVariant">@color/yellow</item>
+        <item name="colorPrimary">@color/lightblue</item>
+        <item name="colorPrimaryVariant">@color/lightblue</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/black</item>
@@ -15,36 +14,23 @@
         <!-- Color for text selection handles. -->
         <item name="colorOnSurface">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="colorControlActivated">@color/black</item>
-        <item name="colorControlNormal">@color/black</item>
         <item name="colorControlHighlight">@color/black</item>
-
+        <item name="colorControlNormal">@color/black</item>
+        <item name="colorControlActivated">@color/black</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+    <style name="Theme.InstantMessagingApp.Day" parent="Theme.InstantMessagingApp">
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorSecondary">@color/black</item>
+        <item name="colorSecondaryVariant">@color/black</item>
     </style>
 
-<!--    <style name="Theme.InstantMessagingApp" parent="Theme.MaterialComponents.Light.NoActionBar" tools:ignore="DuplicateDefinition">-->
-<!--        &lt;!&ndash; Primary brand color. &ndash;&gt;-->
-<!--        <item name="colorPrimary">@color/yellow</item>-->
-<!--        <item name="colorPrimaryVariant">@color/yellow</item>-->
-<!--        <item name="colorOnPrimary">@color/black</item>-->
-<!--        &lt;!&ndash; Secondary brand color. &ndash;&gt;-->
-<!--        <item name="colorSecondary">@color/black</item>-->
-<!--        <item name="colorSecondaryVariant">@color/black</item>-->
-<!--        <item name="colorOnSecondary">@color/black</item>-->
-<!--        &lt;!&ndash; Background color for surface widgets. &ndash;&gt;-->
-<!--        <item name="colorSurface">@color/black</item>-->
-<!--        &lt;!&ndash; Color for text selection handles. &ndash;&gt;-->
-<!--        <item name="colorOnSurface">@color/black</item>-->
-<!--        &lt;!&ndash; Status bar color. &ndash;&gt;-->
-<!--        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>-->
-<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
-<!--        <item name="android:windowLightStatusBar">true</item>-->
-<!--        <item name="android:windowLightNavigationBar">true</item>-->
-<!--        <item name="android:windowNoTitle">true</item>-->
 
-<!--    </style>-->
 </resources>
