@@ -8,14 +8,12 @@ import android.text.SpannableString
 import android.text.style.AlignmentSpan
 import android.util.Log
 import android.util.Patterns
-import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
 
 
 // Main class for the SignupActivity
@@ -183,19 +181,21 @@ class SignupActivity : AppCompatActivity() {
             "SignupActivity",
             "Successfully created user with uid: ${it.result?.user?.uid}"
         )
-        val intent = Intent(this, LoginAccountCreatedActivity::class.java)
-        startActivity(intent)
         val uid = FirebaseAuth.getInstance().uid ?: ""
-        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+        val ref =
+            FirebaseDatabase.getInstance("https://instant-messaging-app-7fed6-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("/users/$uid")
 
         val user = User(uid, username_editText_register.text.toString())
         ref.setValue(user)
             .addOnSuccessListener {
                 Log.d("SignupActivity", "Finally we saved the user to Firebase Database")
             }
-            .addOnFailureListener{
+            .addOnFailureListener {
                 Log.d("SignupActivity", "Failed to set value to database: ${it.message}")
             }
+        val intent = Intent(this, LoginAccountCreatedActivity::class.java)
+        startActivity(intent)
     }
 
     private fun loginFailedRegister(it: java.lang.Exception) {
