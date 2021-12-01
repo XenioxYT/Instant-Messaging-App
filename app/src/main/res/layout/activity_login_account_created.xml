@@ -23,6 +23,7 @@
         app:layout_constraintBottom_toTopOf="@+id/username_editText_login_layout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
@@ -30,6 +31,7 @@
         android:fontFamily="@font/outfit_light"
         android:text="@string/text_login_description"
         android:textSize="15sp"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="@+id/text_login"
         app:layout_constraintTop_toBottomOf="@+id/text_login" />
     <com.google.android.material.textfield.TextInputLayout
@@ -58,21 +60,7 @@
             android:textColorHint="@color/black"
             android:textCursorDrawable="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
-    <!--    <EditText-->
-    <!--        android:id="@+id/username_editText_login"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="50dp"-->
-    <!--        android:layout_margin="16dp"-->
-    <!--        android:autofillHints=""-->
-    <!--        android:background="@color/white"-->
-    <!--        android:ems="10"-->
-    <!--        android:hint="@string/username_editText_register"-->
-    <!--        android:inputType="textPersonName"-->
-    <!--        android:textColorHint="#757575"-->
-    <!--        android:padding="10dp"-->
-    <!--        app:layout_constraintEnd_toEndOf="@+id/text_welcome_back"-->
-    <!--        app:layout_constraintStart_toStartOf="@+id/text_welcome_back"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/text_welcome_back" />-->
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/password_editText_login_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"

@@ -182,7 +182,7 @@ class SignupActivity : AppCompatActivity() {
             "SignupActivity",
             "Successfully created user with uid: ${it.result?.user?.uid}"
         )
-        val intent = Intent(this, LoginActivity::class.java)
+        val intent = Intent(this, LoginAccountCreatedActivity::class.java)
         startActivity(intent)
     }
 

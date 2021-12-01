@@ -30,6 +30,7 @@
         android:fontFamily="@font/outfit_light"
         android:text="@string/text_login_description"
         android:textSize="15sp"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="@+id/text_login"
         app:layout_constraintTop_toBottomOf="@+id/text_login" />
 
