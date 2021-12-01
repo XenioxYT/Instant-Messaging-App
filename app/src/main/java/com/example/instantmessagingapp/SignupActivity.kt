@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
 
@@ -184,6 +185,17 @@ class SignupActivity : AppCompatActivity() {
         )
         val intent = Intent(this, LoginAccountCreatedActivity::class.java)
         startActivity(intent)
+        val uid = FirebaseAuth.getInstance().uid ?: ""
+        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+
+        val user = User(uid, username_editText_register.text.toString())
+        ref.setValue(user)
+            .addOnSuccessListener {
+                Log.d("SignupActivity", "Finally we saved the user to Firebase Database")
+            }
+            .addOnFailureListener{
+                Log.d("SignupActivity", "Failed to set value to database: ${it.message}")
+            }
     }
 
     private fun loginFailedRegister(it: java.lang.Exception) {
@@ -225,5 +237,7 @@ class SignupActivity : AppCompatActivity() {
         dialog.show()
     }
 }
+
+class User(val uid: String, val username: String)
 
 

@@ -91,7 +91,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="textEmailAddress"
-            android:textColorHint="@color/black" />
+            android:textColorHint="@color/black"
+            tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
