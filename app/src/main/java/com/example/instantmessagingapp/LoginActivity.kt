@@ -1,5 +1,6 @@
 package com.example.instantmessagingapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -35,7 +36,8 @@ class LoginActivity : AppCompatActivity() {
             password_editText_login.error = null
 
             //End the activity
-            finish()
+            val intent = Intent(this, ConversationsActivity::class.java)
+            startActivity(intent)
         }
     }
 }

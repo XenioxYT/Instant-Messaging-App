@@ -65,18 +65,14 @@ class SignupActivity : AppCompatActivity() {
                         dialog.show()
                     }
 
-//                    creationInProgress(false)
                     // Create a new user with the email and password
                     FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener {
-//                            creationInProgress(false)
                             dialog.dismiss()
                             loginSuccessfulRegister(it)
-                            //TODO: Call loginWelcome activity
                         }
                         .addOnFailureListener {
                             loginFailedRegister(it)
-//                            creationInProgress(true)
                             dialog.dismiss()
                         }
                 } catch (e: Exception) {
@@ -97,21 +93,15 @@ class SignupActivity : AppCompatActivity() {
             Log.d("SignupActivity", "Login button clicked")
 
             // Clear the text boxes and set remove error message
-//            email_editText_register.text.toString()
-//            password_editText_register.text.clear()
-//            confirm_password_editText_register.text.clear()
             username_editText_register.error = null
             email_editText_register.error = null
             password_editText_register.error = null
             confirm_password_editText_register.error = null
 
             //create an intent to open the login activity
-            Intent(
-                this,
-                LoginActivity::class.java
-            ).also {
-                startActivity(it)
-            }
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+            startActivity(intent)
         }
     }
 
@@ -181,6 +171,7 @@ class SignupActivity : AppCompatActivity() {
             "SignupActivity",
             "Successfully created user with uid: ${it.result?.user?.uid}"
         )
+
         val uid = FirebaseAuth.getInstance().uid ?: ""
         val ref =
             FirebaseDatabase.getInstance("https://instant-messaging-app-7fed6-default-rtdb.europe-west1.firebasedatabase.app/")
@@ -190,12 +181,13 @@ class SignupActivity : AppCompatActivity() {
         ref.setValue(user)
             .addOnSuccessListener {
                 Log.d("SignupActivity", "Finally we saved the user to Firebase Database")
+                val intent = Intent(this, LoginAccountCreatedActivity::class.java)
+                startActivity(intent)
             }
             .addOnFailureListener {
                 Log.d("SignupActivity", "Failed to set value to database: ${it.message}")
+                //TODO: Handle failure and show error message
             }
-        val intent = Intent(this, LoginAccountCreatedActivity::class.java)
-        startActivity(intent)
     }
 
     private fun loginFailedRegister(it: java.lang.Exception) {
@@ -210,7 +202,7 @@ class SignupActivity : AppCompatActivity() {
         )
         val builder = AlertDialog.Builder(context)
         builder.setTitle(title)
-        builder.setMessage("There seems to be an error with your registration. Please check your details and try again by clicking the button below.")
+        builder.setMessage("There seems to be an error with your registration. Please check your details and network connection and try again by clicking the button below.")
         builder.setPositiveButton("Try again") { dialog, _ ->
             dialog.dismiss()
         }
