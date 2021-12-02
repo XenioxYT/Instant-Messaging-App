@@ -33,5 +33,17 @@
         <item name="colorSecondaryVariant">@color/black</item>
     </style>
 
+    <!--Change the font for the material theme-->
+    <!-- Toolbar -->
+    <style name="MyToolbar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="titleTextAppearance">@style/My_TextAppearance_Toolbar</item>
+    </style>
+
+    <style name="My_TextAppearance_Toolbar" parent="@style/TextAppearance.MaterialComponents.Headline6">
+        <item name="fontFamily">@font/outfit_bold</item>
+        <item name="android:fontFamily">@font/outfit_bold</item>
+
+    </style>
+
 
 </resources>
