@@ -12,16 +12,19 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:liftOnScroll="true">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBar"
+            style="@style/MyToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Conversations"
+            android:theme="@style/ItemBackground"
             app:menu="@menu/nav_menu"
-            app:navigationIcon="@drawable/ic_email_black_24dp"
-            style="@style/MyToolbar" />
+            app:navigationIcon="@drawable/ic_menu_black_24dp"
+            app:title="CONVERSATIONS"
+            app:titleCentered="true" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

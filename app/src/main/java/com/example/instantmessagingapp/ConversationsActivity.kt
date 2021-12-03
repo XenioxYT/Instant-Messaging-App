@@ -8,7 +8,14 @@ class ConversationsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_conversations)
 
+        setNavigationViewListener()
 
+    }
 
+    private fun setNavigationViewListener() {
+        val navigationView = findViewById<androidx.appcompat.widget.Toolbar>(R.id.topAppBar)
+        navigationView.setNavigationOnClickListener {
+            onBackPressed()
+        }
     }
 }

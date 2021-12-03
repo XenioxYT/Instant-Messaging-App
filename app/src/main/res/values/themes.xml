@@ -6,8 +6,8 @@
         <item name="colorPrimaryVariant">@color/lightblue</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/black</item>
-        <item name="colorSecondaryVariant">@color/black</item>
+        <item name="colorSecondary">@color/lightblue</item>
+        <item name="colorSecondaryVariant">@color/lightblue</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Background color for surface widgets. -->
         <item name="colorSurface">@color/black</item>
@@ -33,6 +33,12 @@
         <item name="colorSecondaryVariant">@color/black</item>
     </style>
 
+    <style name="ItemBackground" parent="Theme.AppCompat.Light.DarkActionBar">
+        ...
+        <item name="android:itemBackground">@color/white</item>
+        ...
+    </style>
+
     <!--Change the font for the material theme-->
     <!-- Toolbar -->
     <style name="MyToolbar" parent="Widget.MaterialComponents.Toolbar">
@@ -40,7 +46,7 @@
     </style>
 
     <style name="My_TextAppearance_Toolbar" parent="@style/TextAppearance.MaterialComponents.Headline6">
-        <item name="fontFamily">@font/outfit_bold</item>
+        <item name="fontFamily">@font/outfit_black</item>
         <item name="android:fontFamily">@font/outfit_bold</item>
 
     </style>
