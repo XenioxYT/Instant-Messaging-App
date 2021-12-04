@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Carrion</string>
+    <string name="app_name">Recivo</string>
     <string name="username_editText_register">Username</string>
     <string name="email_editText_register">Email</string>
     <string name="password_editText_register">Password</string>
