@@ -3,6 +3,8 @@ package com.example.instantmessagingapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import kotlinx.android.synthetic.main.activity_conversations.*
+
 
 class ConversationsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,8 +18,7 @@ class ConversationsActivity : AppCompatActivity() {
     private fun setNavigationViewListener() {
         val navigationView = findViewById<androidx.appcompat.widget.Toolbar>(R.id.topAppBar)
         navigationView.setNavigationOnClickListener {
-            val intent = Intent(this, ConversationsActivity::class.java)
-            startActivity(intent)
+            navigationView.open()
         }
 
     }
