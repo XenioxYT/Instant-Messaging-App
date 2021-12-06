@@ -24,7 +24,7 @@ class ConversationsActivity : AppCompatActivity() {
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
-        actionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         navigation_drawer.setNavigationItemSelectedListener {
             when(it.itemId){
