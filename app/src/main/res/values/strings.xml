@@ -27,6 +27,8 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
+    <string name="open">Open</string>
+    <string name="close">Close</string>
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_main">MainActivity</string>
