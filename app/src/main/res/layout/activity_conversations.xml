@@ -23,7 +23,6 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:theme="@style/ItemBackground"
-            app:menu="@menu/nav_menu"
             app:navigationIcon="@drawable/ic_menu_black_24dp"
             app:title="CONVERSATIONS"
             app:titleCentered="true" />
