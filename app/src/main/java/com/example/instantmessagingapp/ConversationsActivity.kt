@@ -13,44 +13,44 @@ class ConversationsActivity : AppCompatActivity() {
     lateinit var toggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_conversations)
+        super.onCreate(savedInstanceState) // call super class onCreate method
+        setContentView(R.layout.activity_conversations) // set the layout of the activity
 
-        topAppBar.setNavigationOnClickListener {
-            drawer_layout.openDrawer(GravityCompat.START)
+        topAppBar.setNavigationOnClickListener { // set the navigation icon on the top app bar
+            drawer_layout.openDrawer(GravityCompat.START) // open the drawer
         }
 
-        toggle = ActionBarDrawerToggle(this, drawer_layout, R.string.open, R.string.close)
-        drawer_layout.addDrawerListener(toggle)
-        toggle.syncState()
+        toggle = ActionBarDrawerToggle(this, drawer_layout, R.string.open, R.string.close) // create a toggle for the drawer
+        drawer_layout.addDrawerListener(toggle) // add the toggle to the drawer layout
+        toggle.syncState() // sync the toggle state
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true) // enable the back button on the top app bar
 
-        navigation_drawer.setNavigationItemSelectedListener {
-            when(it.itemId){
-                R.id.item2 -> {
-                    val intent = Intent(this, SignupActivity::class.java)
-                    startActivity(intent)
+        navigation_drawer.setNavigationItemSelectedListener { // Set the navigation click listener
+            when(it.itemId){ // check which item was clicked
+                R.id.item2 -> { // if the item was the second item
+                    val intent = Intent(this, SignupActivity::class.java) // create an intent to go to the signup activity
+                    startActivity(intent) // start the intent
                 }
-                R.id.item3 -> {
-                    val intent = Intent(this, ConversationsActivity::class.java)
-                    startActivity(intent)
+                R.id.item3 -> { // if the item was the third item
+                    val intent = Intent(this, ConversationsActivity::class.java) // create an intent to go to the conversations activity
+                    startActivity(intent) // start the intent
                 }
-                R.id.item4 -> {
-                    val intent = Intent(this, LoginActivity::class.java)
-                    startActivity(intent)
+                R.id.item4 -> { // if the item was the fourth item
+                    val intent = Intent(this, LoginActivity::class.java) // create an intent to go to the login activity
+                    startActivity(intent) // start the intent
                 }
             }
-            drawer_layout.closeDrawer(navigation_drawer)
-            true
+            drawer_layout.closeDrawer(navigation_drawer) // close the drawer
+            true // return true to indicate that the item was selected
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean { // override the onOptionsItemSelected method
 
-        if (toggle.onOptionsItemSelected(item)) {
-            return true
+        if (toggle.onOptionsItemSelected(item)) { // if the toggle was selected
+            return true // return true
         }
-        return super.onOptionsItemSelected(item)
+        return super.onOptionsItemSelected(item) // return the super class onOptionsItemSelected method
     }
 }
