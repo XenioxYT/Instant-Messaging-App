@@ -22,6 +22,7 @@
     <color name="mtrl_textinput_default_box_stroke_color" tools:ignore="PrivateResource">#000000
     </color>
     <color name="lightblue">#00BCD4</color>
+    <color name="transparent">#00000000</color>
 
 </resources>
 

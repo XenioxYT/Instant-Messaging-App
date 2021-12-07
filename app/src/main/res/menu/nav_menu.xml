@@ -6,7 +6,8 @@
         android:id="@+id/menu_group_main"
         android:checkableBehavior="none"
         android:orderInCategory="100"
-        android:visible="true">
+        android:visible="true"
+        android:menuCategory="secondary">
         <item
             android:id="@+id/menu_item_main_1"
             android:title="groupitem1"

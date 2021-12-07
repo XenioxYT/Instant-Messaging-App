@@ -37,4 +37,5 @@
     <string name="title_notifications">Notifications</string>
     <string name="username_nav_header">Username</string>
     <string name="email_nav_header">Email</string>
+    <string name="title_app_bar">CONVERSATIONS</string>
 </resources>

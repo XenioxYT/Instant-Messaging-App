@@ -29,8 +29,11 @@ class ConversationsActivity : AppCompatActivity() {
         navigation_drawer.setNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.item2 -> {
-                    val intent = Intent(this, SignupActivity::class.java)
-                    startActivity(intent)
+                    // Get title_app_bar from layout and change the text to "settings"
+                    topAppBar.title = "SETTINGS"
+                    // Close the drawer
+                    drawer_layout.closeDrawer(GravityCompat.START)
+                    intent = Intent(this, SettingsActivity::class.java)
                 }
                 R.id.item3 -> {
                     val intent = Intent(this, ConversationsActivity::class.java)
