@@ -193,21 +193,40 @@ class SignupActivity : AppCompatActivity() {
     private fun loginFailedRegister(it: java.lang.Exception) {
         Log.d("SignupActivity", "Failed to create user: ${it.message}")
         val context = this
-        val title = SpannableString("${it.message}")
-        title.setSpan(
-            AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
-            0,
-            title.length,
-            0
-        )
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle(title)
-        builder.setMessage("There seems to be an error with your registration. Please check your details and network connection and try again by clicking the button below.")
-        builder.setPositiveButton("Try again") { dialog, _ ->
-            dialog.dismiss()
+        var title = SpannableString("${it.message}")
+        if (it.message == "A network error (such as timeout, interrupted connection or unreachable host) has occurred.") {
+            var title = SpannableString("No internet connection")
+            title.setSpan(
+                AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
+                0,
+                title.length,
+                0
+            )
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle(title)
+            builder.setMessage("There was an error connecting to the servers. Please check your internet connection and try again.")
+            builder.setPositiveButton("Try again") { dialog, _ ->
+                dialog.dismiss()
+            }
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
         }
-        val dialog: AlertDialog = builder.create()
-        dialog.show()
+        else {
+            title.setSpan(
+                AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
+                0,
+                title.length,
+                0
+            )
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle(title)
+            builder.setMessage("There seems to be an error with your registration. Please check your details and try again.")
+            builder.setPositiveButton("Try again") { dialog, _ ->
+                dialog.dismiss()
+            }
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
+        }
     }
 
     private fun loginException() {
