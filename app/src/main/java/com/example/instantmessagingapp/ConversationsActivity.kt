@@ -4,8 +4,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.ActionMenuView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
+import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.android.synthetic.main.activity_conversations.*
 
 class ConversationsActivity : AppCompatActivity() {
@@ -28,20 +30,21 @@ class ConversationsActivity : AppCompatActivity() {
 
         navigation_drawer.setNavigationItemSelectedListener { // Set the navigation click listener
             when(it.itemId){ // check which item was clicked
-                R.id.item2 -> { // if the item was the second item
-                    val intent = Intent(this, SignupActivity::class.java) // create an intent to go to the signup activity
+                R.id.conversations -> { // if the item was the second item
+                    val intent = Intent(this, ConversationsActivity::class.java) // create an intent to go to the signup activity
                     startActivity(intent) // start the intent
                 }
-                R.id.item3 -> { // if the item was the third item
-                    val intent = Intent(this, ConversationsActivity::class.java) // create an intent to go to the conversations activity
+                R.id.settings -> { // if the item was the third item
+                    val intent = Intent(this, SettingsActivity::class.java) // create an intent to go to the conversations activity
                     startActivity(intent) // start the intent
                 }
-                R.id.item4 -> { // if the item was the fourth item
+                R.id.logout -> { // if the item was the fourth item
                     val intent = Intent(this, LoginActivity::class.java) // create an intent to go to the login activity
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // set the flags
                     startActivity(intent) // start the intent
                 }
             }
-            drawer_layout.closeDrawer(navigation_drawer) // close the drawer
+            //drawer_layout.closeDrawer(navigation_drawer) // close the drawer
             true // return true to indicate that the item was selected
         }
     }

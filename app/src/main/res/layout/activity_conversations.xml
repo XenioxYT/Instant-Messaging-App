@@ -25,7 +25,8 @@
             android:theme="@style/ItemBackground"
             app:navigationIcon="@drawable/ic_menu_black_24dp"
             app:title="CONVERSATIONS"
-            app:titleCentered="true" />
+            app:titleCentered="true"
+            app:menu="@menu/actionbar_menu"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 

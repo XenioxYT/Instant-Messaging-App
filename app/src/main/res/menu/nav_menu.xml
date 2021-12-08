@@ -2,41 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <group
-        android:id="@+id/menu_group_main"
-        android:checkableBehavior="none"
-        android:orderInCategory="100"
-        android:visible="true">
-        <item
-            android:id="@+id/menu_item_main_1"
-            android:title="groupitem1"
-            app:showAsAction="never" />
-        <item
-            android:id="@+id/menu_item_main_2"
-            android:title="groupitem2"
-            app:showAsAction="never" />
-        <item
-            android:id="@+id/menu_item_main_3"
-            android:title="groupitem3"
-            app:showAsAction="never" />
-    </group>
-
     <item
-        android:id="@+id/search"
-        android:icon="@drawable/ic_search_black_24dp"
-        android:contentDescription="Search"
-        app:showAsAction="ifRoom"
-        android:title="Search" />
+        android:id="@+id/conversations"
+        android:title="Conversations"
+        android:icon="@drawable/ic_conversations_black_24dp"/>
     <item
-        android:id="@+id/item2"
-        android:title="Item 2" />
+        android:id="@+id/settings"
+        android:title="Settings"
+        android:icon="@drawable/ic_settings_black_24dp"/>
     <item
-        android:id="@+id/item3"
-        android:title="Item 3" />
-    <item
-        android:id="@+id/item4"
-        android:title="Item 4" />
-    <item
-        android:id="@+id/item5"
-        android:title="Item 5" />
+        android:id="@+id/logout"
+        android:title="Logout"
+        android:icon="@drawable/ic_logout_black_24dp"/>
 </menu>
