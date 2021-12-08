@@ -3,12 +3,14 @@ package com.example.instantmessagingapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.widget.ActionMenuView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import com.google.android.material.appbar.MaterialToolbar
-import kotlinx.android.synthetic.main.activity_conversations.*
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -17,6 +19,8 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState) // call super class onCreate method
         setContentView(R.layout.activity_settings) // set the layout of the activity
+
+        verifyUserIsLoggedIn()
 
         topAppBar.setNavigationOnClickListener { // set the navigation icon on the top app bar
             drawer_layout.openDrawer(GravityCompat.START) // open the drawer
@@ -31,16 +35,19 @@ class SettingsActivity : AppCompatActivity() {
         navigation_drawer.setNavigationItemSelectedListener { // Set the navigation click listener
             when(it.itemId){ // check which item was clicked
                 R.id.conversations -> { // if the item was the second item
-                    val intent = Intent(this, ConversationsActivity::class.java) // create an intent to go to the signup activity
+                    val intent = Intent(this, ConversationsActivity::class.java) // create an intent to go to the Conversations activity
                     startActivity(intent) // start the intent
                 }
                 R.id.settings -> { // if the item was the third item
-                    val intent = Intent(this, SettingsActivity::class.java) // create an intent to go to the conversations activity
+                    val intent = Intent(this, SettingsActivity::class.java) // create an intent to go to the Settings activity
                     startActivity(intent) // start the intent
                 }
                 R.id.logout -> { // if the item was the fourth item
                     val intent = Intent(this, LoginActivity::class.java) // create an intent to go to the login activity
+                    FirebaseAuth.getInstance().signOut()
+                    Log.d("Logout", "Logged out") // log the user out
                     startActivity(intent) // start the intent
+
                 }
             }
             //drawer_layout.closeDrawer(navigation_drawer) // close the drawer
@@ -55,4 +62,14 @@ class SettingsActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item) // return the super class onOptionsItemSelected method
     }
+
+    private fun verifyUserIsLoggedIn() {
+        val uid = FirebaseAuth.getInstance().uid // get the current user's uid
+        if (uid == null) { // if the user is not logged in
+            val intent = Intent(this, SignupActivity::class.java) // create an intent to go to the login activity
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK) // clear the task and start a new one
+            startActivity(intent) // start the intent
+        }
+    }
+
 }

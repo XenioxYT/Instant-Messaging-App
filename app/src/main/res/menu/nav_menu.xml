@@ -2,16 +2,32 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/conversations"
-        android:title="Conversations"
-        android:icon="@drawable/ic_conversations_black_24dp"/>
-    <item
-        android:id="@+id/settings"
-        android:title="Settings"
-        android:icon="@drawable/ic_settings_black_24dp"/>
-    <item
-        android:id="@+id/logout"
-        android:title="Logout"
-        android:icon="@drawable/ic_logout_black_24dp"/>
+
+    <group
+        android:id="@+id/nav_menu_main"
+        android:checkableBehavior="none"
+        android:orderInCategory="100"
+        android:visible="true">
+
+        <item
+            android:id="@+id/conversations"
+            android:title="Conversations"
+            android:icon="@drawable/ic_conversations_black_24dp"/>
+        <item
+            android:id="@+id/settings"
+            android:title="Settings"
+            android:icon="@drawable/ic_settings_black_24dp"/>
+    </group>
+
+    <group
+        android:id="@+id/menu_group_"
+        android:checkableBehavior="none"
+        android:orderInCategory="100"
+        android:visible="true">
+
+        <item
+            android:id="@+id/logout"
+            android:title="Logout"
+            android:icon="@drawable/ic_logout_black_24dp"/>
+    </group>
 </menu>

@@ -31,8 +31,7 @@ class ConversationsActivity : AppCompatActivity() {
         navigation_drawer.setNavigationItemSelectedListener { // Set the navigation click listener
             when(it.itemId){ // check which item was clicked
                 R.id.conversations -> { // if the item was the second item
-                    val intent = Intent(this, ConversationsActivity::class.java) // create an intent to go to the signup activity
-                    startActivity(intent) // start the intent
+                    drawer_layout.closeDrawer(GravityCompat.START) // close the drawer
                 }
                 R.id.settings -> { // if the item was the third item
                     val intent = Intent(this, SettingsActivity::class.java) // create an intent to go to the conversations activity

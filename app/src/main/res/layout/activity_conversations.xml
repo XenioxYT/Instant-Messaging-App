@@ -9,8 +9,8 @@
     tools:openDrawer="start">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -23,10 +23,11 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:theme="@style/ItemBackground"
+            app:titleTextColor="@color/black"
             app:navigationIcon="@drawable/ic_menu_black_24dp"
             app:title="CONVERSATIONS"
             app:titleCentered="true"
-            app:menu="@menu/actionbar_menu"/>
+            app:menu="@menu/actionbar_menu" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -53,7 +54,6 @@
             android:layout_gravity="start"
             android:background="@color/white"
             app:headerLayout="@layout/nav_header"
-            app:menu="@menu/nav_menu"
-            android:fitsSystemWindows="true" />
+            app:menu="@menu/nav_menu"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>
