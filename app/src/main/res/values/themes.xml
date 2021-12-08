@@ -23,6 +23,7 @@
         <item name="colorControlNormal">@color/black</item>
         <item name="colorControlActivated">@color/black</item>
         <item name="colorAccent">@color/black</item>
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 
     <style name="Theme.InstantMessagingApp.Day" parent="Theme.InstantMessagingApp">
@@ -31,18 +32,33 @@
         <item name="colorOnPrimary">@color/black</item>
         <item name="colorSecondary">@color/black</item>
         <item name="colorSecondaryVariant">@color/black</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="colorControlHighlight">@color/black</item>
+        <item name="colorControlNormal">@color/black</item>
+        <item name="colorControlActivated">@color/black</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+
+    <style name="Theme.App" parent="Theme.MaterialComponents.DayNight">
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 
     <style name="ItemBackground" parent="Theme.AppCompat.Light.DarkActionBar">
-        ...
         <item name="android:itemBackground">@color/white</item>
-        ...
+        <item name="android:windowNoTitle">true</item>
+        <item name="colorControlHighlight">@color/black</item>
+        <item name="colorControlNormal">@color/black</item>
+        <item name="colorControlActivated">@color/black</item>
+        <item name="colorAccent">@color/black</item>
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 
     <!--Change the font for the material theme-->
     <!-- Toolbar -->
     <style name="MyToolbar" parent="Widget.MaterialComponents.Toolbar">
         <item name="titleTextAppearance">@style/My_TextAppearance_Toolbar</item>
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 
     <style name="My_TextAppearance_Toolbar" parent="@style/TextAppearance.MaterialComponents.Headline6">
