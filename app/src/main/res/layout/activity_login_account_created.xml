@@ -34,6 +34,7 @@
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="@+id/text_login"
         app:layout_constraintTop_toBottomOf="@+id/text_login" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/username_editText_login_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -42,7 +43,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="150dp"
         android:layout_marginRight="16dp"
-        android:hint="@string/username_editText_register"
+        android:hint="@string/email_editText_register"
         app:boxStrokeColor="@color/black"
         app:boxStrokeWidth="1dp"
         app:hintAnimationEnabled="true"
@@ -50,8 +51,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:startIconDrawable="@drawable/ic_person_outline_black_24dp"
+        app:startIconDrawable="@drawable/ic_email_black_24dp"
         tools:override="true">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/username_editText_login"
             android:layout_width="match_parent"

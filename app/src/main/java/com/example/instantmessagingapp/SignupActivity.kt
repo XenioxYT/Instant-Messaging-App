@@ -44,19 +44,25 @@ class SignupActivity : AppCompatActivity() { // Start of class
             // However, something may break if I remove it
             if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() && password == confirmPassword && Patterns.EMAIL_ADDRESS.matcher(email).matches() && password.length >= 6 && username.length <= 18) { // If all the fields are filled in and the passwords match
                 try { // Try to create the user
+
                     val context = this // Set context to this
+
                     val title = SpannableString("Creating Account") // Set title to the text "Creating Account"
+
                     val dismiss = false // Set dismiss to false
+
                     title.setSpan( // Set the alignment of the text to center
                         AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), // Set the alignment to center
                         0, // Set the start of the alignment to 0
                         title.length, // Set the end of the alignment to the length of the text
                         0 // Set the flags to 0
                     ) // End the alignment
+
                     val builder = AlertDialog.Builder(context) // Set builder to an alert dialog builder
                     builder.setTitle(title) // Set the title of the alert dialog to the title
                     builder.setMessage("Please wait while your account is being created.") // Set the message of the alert dialog to "Please wait while your account is being created."
                     val dialog: AlertDialog = builder.create() // Set dialog to the alert dialog created by the builder
+
                     if (!dismiss) { // If dismiss is false
                         dialog.show() // Show the alert dialog
                     }

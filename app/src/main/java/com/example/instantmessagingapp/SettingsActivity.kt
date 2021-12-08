@@ -1,14 +1,12 @@
 package com.example.instantmessagingapp
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.widget.ActionMenuView
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_settings.*
 
@@ -66,7 +64,10 @@ class SettingsActivity : AppCompatActivity() {
     private fun verifyUserIsLoggedIn() {
         val uid = FirebaseAuth.getInstance().uid // get the current user's uid
         if (uid == null) { // if the user is not logged in
-            val intent = Intent(this, SignupActivity::class.java) // create an intent to go to the login activity
+            val intent = Intent(
+                this,
+                LoginActivity::class.java
+            ) // create an intent to go to the login activity
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK) // clear the task and start a new one
             startActivity(intent) // start the intent
         }
