@@ -1,30 +1,30 @@
 package com.example.instantmessagingapp
 // imports
-import android.app.AlertDialog
-import android.content.Intent
-import android.os.Bundle
-import android.text.Layout
-import android.text.SpannableString
-import android.text.style.AlignmentSpan
-import android.util.Log
-import android.util.Patterns
-import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
-import kotlinx.android.synthetic.main.activity_main.*
+import android.app.AlertDialog // imports
+import android.content.Intent // imports
+import android.os.Bundle // imports
+import android.text.Layout // imports
+import android.text.SpannableString // imports
+import android.text.style.AlignmentSpan // imports
+import android.util.Log // imports
+import android.util.Patterns // imports
+import androidx.appcompat.app.AppCompatActivity // imports
+import com.google.android.gms.tasks.Task // imports
+import com.google.firebase.auth.AuthResult // imports
+import com.google.firebase.auth.FirebaseAuth // imports
+import com.google.firebase.database.FirebaseDatabase // imports
+import kotlinx.android.synthetic.main.activity_main.* // imports
 
 
 // Main class for the SignupActivity
-class SignupActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+class SignupActivity : AppCompatActivity() { // Start of class
+    override fun onCreate(savedInstanceState: Bundle?) { // onCreate method
+        super.onCreate(savedInstanceState) // call super class onCreate
+        setContentView(R.layout.activity_main) // set the layout
 
         // Listen for the create account button press
-        button_create_account.setOnClickListener {
-            Log.d("SignupActivity", "Button clicked")
+        button_create_account.setOnClickListener { // Create a new user with email and password
+            Log.d("SignupActivity", "Button clicked") // Log the button press
 
             checkUsername() // Check if the username is valid
             checkEmail() // Check if the email is valid
@@ -100,6 +100,9 @@ class SignupActivity : AppCompatActivity() {
             startActivity(intent) // Start the login activity
         }
     }
+
+
+    ///// FUNCTIONS \\\\\
 
 
     private fun checkUsername() { // Create a function called checkUsername
@@ -186,9 +189,9 @@ class SignupActivity : AppCompatActivity() {
     private fun loginFailedRegister(it: java.lang.Exception) { // Create a function called loginFailedRegister
         Log.d("SignupActivity", "Failed to create user: ${it.message}") // Log that the user has failed to be created
         val context = this // Create a context variable
-        var title = SpannableString("${it.message}") // Create a title variable with the error message
+        val title = SpannableString("${it.message}") // Create a title variable with the error message
         if (it.message == "A network error (such as timeout, interrupted connection or unreachable host) has occurred.") { // If the error message is "A network error (such as timeout, interrupted connection or unreachable host) has occurred."
-            var title = SpannableString("No internet connection") // Set the title variable to "No internet connection"
+            val title = SpannableString("No internet connection") // Set the title variable to "No internet connection"
             title.setSpan(
                 AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), // Set the alignment of the text to center
                 0, // Start at the beginning of the string
