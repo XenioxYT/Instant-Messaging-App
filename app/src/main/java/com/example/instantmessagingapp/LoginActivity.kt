@@ -22,10 +22,27 @@ class LoginActivity : AppCompatActivity() {
         button_login_loginActivity.setOnClickListener {
             Log.d("LoginActivity", "Login button pressed")
             // Check if username is empty
-            var email = email_editText_login.text.toString()
-            var password = password_editText_login.text.toString()
+            val email = email_editText_login.text.toString()
+            val password = password_editText_login.text.toString()
             checkEmail()
-            loginDialog()
+            Log.d("LoginActivity", "Login dialog") // Log the dialog
+            // Create a dialog
+            val context = this
+            val title = SpannableString("Logging in") // Create a title
+            val dismiss = false
+            title.setSpan(
+                AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
+                0,
+                title.length,
+                0
+            )
+            val builder = AlertDialog.Builder(context) // Create a builder
+            builder.setTitle(title) // Set the title
+            builder.setMessage("Please wait while we log you in") // Set the message
+            val dialog: AlertDialog = builder.create() // Create the dialog
+            if (!dismiss) {
+                dialog.show()
+            }
             // Check if password is empty
             if (password_editText_login.text.toString().isEmpty()) { // If password is empty
                 password_editText_login.error = "Password cannot be empty" // Show error
@@ -35,7 +52,27 @@ class LoginActivity : AppCompatActivity() {
                     .isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
             ) { // If username and password are not empty
                 Log.d("LoginActivity", "Logging in user") // Log the login
-                loginUser(email, password) // Login the user
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener {
+                        dialog.dismiss()
+                        if (!it.isSuccessful) return@addOnCompleteListener
+
+                        Log.d(
+                            "LoginActivity",
+                            "Successfully logged in: ${it.result?.user?.uid}"
+                        ) // Log the successful login
+                        val intent = Intent(
+                            this,
+                            ConversationsActivity::class.java
+                        ) // Create an intent to go to the ConversationsActivity
+                        intent.flags =
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK) // Clear the back stack
+                        startActivity(intent) // Start the activity
+                    }
+                    .addOnFailureListener {
+                        dialog.dismiss()
+                        loginFailed(it)
+                    }
             }
         }
 
