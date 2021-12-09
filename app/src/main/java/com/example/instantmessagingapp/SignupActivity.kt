@@ -95,14 +95,20 @@ class SignupActivity : AppCompatActivity() { // Start of class
             Log.d("SignupActivity", "Login button clicked") // Log the login button clicked
 
             // Clear the text boxes and set remove error message
-            username_editText_register.error = null // Clear the error message of the username text box
+            username_editText_register.error =
+                null // Clear the error message of the username text box
             email_editText_register.error = null // Clear the error message of the email text box
-            password_editText_register.error = null // Clear the error message of the password text box
-            confirm_password_editText_register.error = null // Clear the error message of the confirm password text box
+            password_editText_register.error =
+                null // Clear the error message of the password text box
+            confirm_password_editText_register.error =
+                null // Clear the error message of the confirm password text box
 
             //create an intent to open the login activity
-            val intent = Intent(this, LoginActivity::class.java) // Set intent to an intent to open the login activity
-            intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY // Set the flags of the intent to not have a history
+            val intent = Intent(
+                this,
+                LoginActivity::class.java
+            ) // Set intent to an intent to open the login activity
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK // Set the flags of the intent to clear the task and start a new task
             startActivity(intent) // Start the login activity
         }
     }

@@ -66,8 +66,9 @@ class LoginActivity : AppCompatActivity() {
                             ConversationsActivity::class.java
                         ) // Create an intent to go to the ConversationsActivity
                         intent.flags =
-                            Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK) // Clear the back stack
+                            Intent.FLAG_ACTIVITY_NO_HISTORY // Clear the back stack
                         startActivity(intent) // Start the activity
+                        finish() // Finish the current activity
                     }
                     .addOnFailureListener {
                         dialog.dismiss()
@@ -84,10 +85,10 @@ class LoginActivity : AppCompatActivity() {
             email_editText_login.error = null // Clear error
             password_editText_login.error = null // Clear error
 
-            //End the activity
+            //Call the signup activity
             val intent = Intent(
                 this,
-                ConversationsActivity::class.java
+                SignupActivity::class.java
             ) // Create an intent to go to the ConversationsActivity
             intent.flags =
                 Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK) // Clear the back stack
@@ -110,8 +111,9 @@ class LoginActivity : AppCompatActivity() {
                     ConversationsActivity::class.java
                 ) // Create an intent to go to the ConversationsActivity
                 intent.flags =
-                    Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK) // Clear the back stack
+                    Intent.FLAG_ACTIVITY_NO_HISTORY // Clear the back stack
                 startActivity(intent) // Start the activity
+                finish()
             }
             .addOnFailureListener {
                 loginFailed(it)

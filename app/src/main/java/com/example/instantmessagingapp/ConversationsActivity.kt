@@ -15,10 +15,9 @@ class ConversationsActivity : AppCompatActivity() {
     lateinit var toggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        verifyUserIsLoggedIn()
         super.onCreate(savedInstanceState) // call super class onCreate method
         setContentView(R.layout.activity_conversations) // set the layout of the activity
-
-        verifyUserIsLoggedIn()
 
         topAppBar.setNavigationOnClickListener { // set the navigation icon on the top app bar
             drawer_layout.openDrawer(GravityCompat.START)
@@ -38,21 +37,19 @@ class ConversationsActivity : AppCompatActivity() {
 
         navigation_drawer.setNavigationItemSelectedListener { // Set the navigation click listener
             when (it.itemId) { // check which item was clicked
-                R.id.conversations -> { // if the item was the second item
+                R.id.conversations -> { // if the conversations item was clicked
                     drawer_layout.closeDrawer(GravityCompat.START) // close the drawer
                 }
-                R.id.settings -> { // if the item was the third item
+                R.id.settings -> { // if the settings item was clicked
                     val intent = Intent(
                         this,
                         SettingsActivity::class.java
                     ) // create an intent to go to the conversations activity
                     startActivity(intent) // start the intent
                 }
-                R.id.logout -> { // if the item was the fourth item
-                    val intent = Intent(
-                        this,
-                        LoginActivity::class.java
-                    ) // create an intent to go to the login activity
+                R.id.logout -> { // if logout was clicked
+                    FirebaseAuth.getInstance().signOut() // sign out of firebase
+                    val intent = Intent(this, LoginActivity::class.java) // create an intent to go to the login activity
                     intent.flags =
                         Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // set the flags
                     startActivity(intent) // start the intent
@@ -83,6 +80,7 @@ class ConversationsActivity : AppCompatActivity() {
             intent.flags =
                 Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK) // clear the task and start a new one
             startActivity(intent) // start the intent
+            finish()
         }
         else {
             Log.d("ConversationsActivity", "User is logged in") // log the user is logged in
