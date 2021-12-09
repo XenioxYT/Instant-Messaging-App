@@ -1,26 +1,30 @@
 package com.example.instantmessagingapp
 // imports
-import android.app.AlertDialog // imports
-import android.content.Intent // imports
-import android.os.Bundle // imports
-import android.text.Layout // imports
-import android.text.SpannableString // imports
-import android.text.style.AlignmentSpan // imports
-import android.util.Log // imports
-import android.util.Patterns // imports
-import androidx.appcompat.app.AppCompatActivity // imports
-import com.google.android.gms.tasks.Task // imports
-import com.google.firebase.auth.AuthResult // imports
-import com.google.firebase.auth.FirebaseAuth // imports
-import com.google.firebase.database.FirebaseDatabase // imports
-import kotlinx.android.synthetic.main.activity_main.* // imports
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import android.provider.MediaStore
+import android.text.Layout
+import android.text.SpannableString
+import android.text.style.AlignmentSpan
+import android.util.Log
+import android.util.Patterns
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.android.synthetic.main.activity_signup.*
+import java.util.*
 
 
 // Main class for the SignupActivity
 class SignupActivity : AppCompatActivity() { // Start of class
     override fun onCreate(savedInstanceState: Bundle?) { // onCreate method
         super.onCreate(savedInstanceState) // call super class onCreate
-        setContentView(R.layout.activity_main) // set the layout
+        setContentView(R.layout.activity_signup) // set the layout
 
         // Listen for the create account button press
         button_create_account.setOnClickListener { // Create a new user with email and password
@@ -30,6 +34,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
             checkEmail() // Check if the email is valid
             checkPassword() // Check if the password is valid
             checkPasswordsMatch() // Check if the passwords match
+            checkProfilePicture() // Check if the profile picture is valid
 
             val username =
                 username_editText_register.text.toString() // Set username to the text entered into the username text box
@@ -42,12 +47,17 @@ class SignupActivity : AppCompatActivity() { // Start of class
 
             // I have no idea why this code works, but it does
             // However, something may break if I remove it
-            if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() && password == confirmPassword && Patterns.EMAIL_ADDRESS.matcher(email).matches() && password.length >= 6 && username.length <= 18) { // If all the fields are filled in and the passwords match
+            if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() && password == confirmPassword && Patterns.EMAIL_ADDRESS.matcher(
+                    email
+                )
+                    .matches() && password.length >= 6 && username.length <= 18 && selectedPhotoUri != null
+            ) { // If all the fields are filled in and the passwords match
                 try { // Try to create the user
 
                     val context = this // Set context to this
 
-                    val title = SpannableString("Creating Account") // Set title to the text "Creating Account"
+                    val title =
+                        SpannableString("Creating Account") // Set title to the text "Creating Account"
 
                     val dismiss = false // Set dismiss to false
 
@@ -67,11 +77,12 @@ class SignupActivity : AppCompatActivity() { // Start of class
                         dialog.show() // Show the alert dialog
                     }
 
+
                     // Create a new user with the email and password
                     FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password) // Create a new user with the email and password
                         .addOnCompleteListener { // Add an onCompleteListener to the task
+                            uploadImageToFirebase() // Upload the image to firebase
                             dialog.dismiss() // Dismiss the alert dialog
-                            loginSuccessfulRegister(it) // Call the loginSuccessfulRegister function
                         } // End the onCompleteListener
                         .addOnFailureListener { // Add an onFailureListener to the task
                             loginFailedRegister(it) // Call the loginFailedRegister function
@@ -108,8 +119,44 @@ class SignupActivity : AppCompatActivity() { // Start of class
                 this,
                 LoginActivity::class.java
             ) // Set intent to an intent to open the login activity
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK // Set the flags of the intent to clear the task and start a new task
+            intent.flags =
+                Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK // Set the flags of the intent to clear the task and start a new task
             startActivity(intent) // Start the login activity
+        }
+
+        button_profile_picture.setOnClickListener {
+            Log.d(
+                "SignupActivity",
+                "Profile picture button clicked"
+            ) // Log the profile picture button clicked
+
+            //create an intent to open the gallery
+            val intent = Intent(Intent.ACTION_PICK) // Set intent to an intent to open the gallery
+            intent.type = "image/*" // Set the type of the intent to image
+            startActivityForResult(
+                intent,
+                0
+            ) // Start the activity for result with the intent and the request code
+        }
+    }
+
+    private var selectedPhotoUri: Uri? = null // Create a variable to hold the selected photo uri
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
+            selectedPhotoUri =
+                data.data // Set the selected photo uri to the uri returned from the gallery
+            val bitmap = MediaStore.Images.Media.getBitmap(
+                contentResolver,
+                selectedPhotoUri
+            ) // Get the bitmap from the uri
+            selectphoto_imageview_register.setImageBitmap(bitmap) // Set the profile picture image view to the bitmap
+            button_profile_picture.alpha = 0f // Set the alpha of the profile picture button to 0
+        } else {
+            Toast.makeText(this, "Please select a photo", Toast.LENGTH_SHORT)
+                .show() // Show a toast to the user
         }
     }
 
@@ -118,7 +165,9 @@ class SignupActivity : AppCompatActivity() { // Start of class
 
 
     private fun checkUsername() { // Create a function called checkUsername
-        if (username_editText_register.text.toString().isNotEmpty()) { // If the username text box is not empty
+        if (username_editText_register.text.toString()
+                .isNotEmpty()
+        ) { // If the username text box is not empty
             if (username_editText_register.text.toString().length <= 6 || username_editText_register.text.toString().length >= 18) { // If the length of the username is less than 6 or greater than 18
                 username_editText_register.error =
                     "Username must be at least 6 characters and no more than 18 characters" // Set the error message of the username text box to "Username must be at least 6 characters and no more than 18 characters"
@@ -174,22 +223,27 @@ class SignupActivity : AppCompatActivity() { // Start of class
         } // End the if statement
     } // End the checkPasswordsMatch function
 
-    private fun loginSuccessfulRegister(it: Task<AuthResult>) { // Create a function called loginSuccessfulRegister
-        if (!it.isSuccessful) return // If the task is not successful, return
-        Log.d(
-            "SignupActivity",
-            "Successfully created user with uid: ${it.result?.user?.uid}"
-        ) // Log the user's uid
+    private fun loginSuccessfulRegister(profileImageUrl: String) { // Create a function called loginSuccessfulRegister
         val uid = FirebaseAuth.getInstance().uid ?: "" // Get the user's uid
         val ref =
             FirebaseDatabase.getInstance("https://instant-messaging-app-7fed6-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("/users/$uid") // Get the user's reference
 
-        val user = User(uid, username_editText_register.text.toString()) // Create a user object with the user's uid and username
+        val user = User(
+            uid,
+            username_editText_register.text.toString(),
+            profileImageUrl
+        ) // Create a user object with the user's uid and username
         ref.setValue(user) // Set the user's reference to the user object
             .addOnSuccessListener { // Add an onSuccessListener to the setValue function
-                Log.d("SignupActivity", "Finally we saved the user to Firebase Database") // Log that the user has been saved to Firebase Database
-                val intent = Intent(this, LoginAccountCreatedActivity::class.java) // Create an intent to the LoginAccountCreatedActivity
+                Log.d(
+                    "SignupActivity",
+                    "Finally we saved the user to Firebase Database"
+                ) // Log that the user has been saved to Firebase Database
+                val intent = Intent(
+                    this,
+                    LoginAccountCreatedActivity::class.java
+                ) // Create an intent to the LoginAccountCreatedActivity
                 startActivity(intent) // Start the intent
             } // End the addOnSuccessListener
             .addOnFailureListener { // Add an onFailureListener to the setValue function
@@ -255,8 +309,50 @@ class SignupActivity : AppCompatActivity() { // Start of class
         val dialog: AlertDialog = builder.create() // Create a dialog variable with the builder
         dialog.show() // Show the dialog
     } // End the loginException function
+
+    private fun checkProfilePicture() {
+        if (selectedPhotoUri == null) {
+            val context = this
+            val title = SpannableString("Error")
+            title.setSpan(
+                AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
+                0,
+                title.length,
+                0
+            )
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle(title)
+            builder.setMessage("Please select a profile picture.")
+            builder.setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
+        }
+    }
+
+    private fun uploadImageToFirebase() {
+        if (selectedPhotoUri == null) return
+        val filename = UUID.randomUUID().toString()
+        val ref = FirebaseStorage.getInstance().getReference("/images/$filename")
+        ref.putFile(selectedPhotoUri!!)
+            .addOnSuccessListener { it ->
+                Log.d("RegisterActivity", "Successfully uploaded image: ${it.metadata?.path}")
+                ref.downloadUrl.addOnSuccessListener {
+                    Log.d("RegisterActivity", "File Location: $it")
+                    loginSuccessfulRegister(it.toString())
+                }
+            }
+            .addOnFailureListener {
+                Log.d("RegisterActivity", "Failed to upload image to storage: ${it.message}")
+            }
+    }
 }
 
-class User(val uid: String, val username: String) // Create a class called User
+class User(
+    val uid: String,
+    val username: String,
+    val profileImageUrl: String
+) // Create a class called User
 
 

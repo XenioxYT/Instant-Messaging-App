@@ -20,7 +20,7 @@
         android:textAllCaps="false"
         android:textColor="@color/black"
         android:textSize="45sp"
-        app:layout_constraintBottom_toTopOf="@+id/username_editText_login_layout"
+        app:layout_constraintBottom_toTopOf="@+id/email_editText_login_layout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,7 +36,7 @@
         app:layout_constraintTop_toBottomOf="@+id/text_login" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/username_editText_login_layout"
+        android:id="@+id/email_editText_login_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
         tools:override="true">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/username_editText_login"
+            android:id="@+id/email_editText_login"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="text"
@@ -72,20 +72,22 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
         android:hint="@string/password_editText_register"
+        app:endIconMode="password_toggle"
         app:boxStrokeColor="@color/black"
         app:boxStrokeWidth="1dp"
         app:hintAnimationEnabled="true"
         app:hintTextColor="@color/black"
-        app:layout_constraintEnd_toEndOf="@id/username_editText_login_layout"
-        app:layout_constraintStart_toStartOf="@id/username_editText_login_layout"
-        app:layout_constraintTop_toBottomOf="@id/username_editText_login_layout"
+        app:layout_constraintEnd_toEndOf="@id/email_editText_login_layout"
+        app:layout_constraintStart_toStartOf="@id/email_editText_login_layout"
+        app:layout_constraintTop_toBottomOf="@id/email_editText_login_layout"
         app:startIconDrawable="@drawable/ic_lock_black_24dp"
         tools:override="true">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password_editText_login"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:inputType="text"
+            android:inputType="textPassword"
             android:textColorHint="@color/black"
             android:textCursorDrawable="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>

@@ -14,13 +14,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="42dp"
         android:fontFamily="@font/outfit_black"
         android:text="@string/text_sign_up_here"
         android:textAllCaps="false"
         android:textColor="@color/black"
         android:textSize="45sp"
-        app:layout_constraintBottom_toTopOf="@+id/username_editText_register_layout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,8 +40,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="150dp"
         android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
         android:hint="@string/username_editText_register"
         app:boxStrokeColor="@color/black"
         app:boxStrokeWidth="1dp"
@@ -51,7 +50,7 @@
         app:hintTextColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_profile_picture"
         app:startIconDrawable="@drawable/ic_person_outline_black_24dp"
         tools:override="true">
 
@@ -72,7 +71,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="8dp"
         android:layout_marginRight="16dp"
         android:hint="@string/email_editText_register"
         app:boxStrokeColor="@color/black"
@@ -191,6 +190,30 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/text_already_have_account"
         app:layout_constraintStart_toStartOf="@+id/text_already_have_account" />
+
+    <Button
+        android:id="@+id/button_profile_picture"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="130dp"
+        android:background="@drawable/rounded_profile_picture_button"
+        android:text="Select Photo"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:theme="@style/Theme.InstantMessagingApp.Day"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/selectphoto_imageview_register"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:civ_border_width="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/button_profile_picture"
+        app:layout_constraintEnd_toEndOf="@+id/button_profile_picture"
+        app:layout_constraintStart_toStartOf="@+id/button_profile_picture"
+        app:layout_constraintTop_toTopOf="@+id/button_profile_picture" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

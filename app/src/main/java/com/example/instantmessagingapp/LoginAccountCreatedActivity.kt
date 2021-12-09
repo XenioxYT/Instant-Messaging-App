@@ -10,7 +10,7 @@ import android.util.Log
 import android.util.Patterns
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.login_activity.*
+import kotlinx.android.synthetic.main.activity_login_account_created.*
 
 class LoginAccountCreatedActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
