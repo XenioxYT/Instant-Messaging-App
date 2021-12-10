@@ -6,12 +6,11 @@
     android:layout_height="150dp">
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/username_nav_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:fontFamily="@font/outfit_bold"
-        android:text="@string/username_nav_header"
         android:textColor="@color/black"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,11 +18,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/email_nav_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/email_nav_header"
         android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintStart_toStartOf="@+id/username_nav_header"
+        app:layout_constraintTop_toBottomOf="@+id/username_nav_header" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

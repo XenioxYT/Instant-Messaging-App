@@ -4,11 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_conversations.*
+import kotlinx.android.synthetic.main.nav_header.*
 
 class ConversationsActivity : AppCompatActivity() {
 
@@ -21,8 +23,10 @@ class ConversationsActivity : AppCompatActivity() {
 
         topAppBar.setNavigationOnClickListener { // set the navigation icon on the top app bar
             drawer_layout.openDrawer(GravityCompat.START)
-        verifyUserIsLoggedIn()// open the drawer
+            verifyUserIsLoggedIn()// open the drawer
         }
+
+        changeUsernameEmailNavHeader() // change the username and email on the nav header
 
         toggle = ActionBarDrawerToggle(
             this,
@@ -81,9 +85,24 @@ class ConversationsActivity : AppCompatActivity() {
                 Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK) // clear the task and start a new one
             startActivity(intent) // start the intent
             finish()
-        }
-        else {
+        } else {
             Log.d("ConversationsActivity", "User is logged in") // log the user is logged in
         }
+    }
+
+    private fun changeUsernameEmailNavHeader() {
+        Log.d(
+            "ConversationsActivity",
+            "changeUsernameEmailNavHeader"
+        ) // log the changeUsernameEmailNavHeader method
+        var navigationView = findViewById(R.id.navigation_drawer) // get the navigation view
+        var headerView = navigationView.getHeaderView(0) // get the header view
+        var navEmail =
+            headerView.findViewById<TextView>(R.id.email_nav_header) // get the nav username text view
+        var navUsername =
+            headerView.findViewById<TextView>(R.id.username_nav_header) // get the nav email text view
+        navEmail.text =
+            FirebaseAuth.getInstance().currentUser?.email // set the nav email text view to the current user's email
+
     }
 }
