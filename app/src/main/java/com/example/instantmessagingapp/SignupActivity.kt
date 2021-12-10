@@ -47,11 +47,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
 
             // I have no idea why this code works, but it does
             // However, something may break if I remove it
-            if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() && password == confirmPassword && Patterns.EMAIL_ADDRESS.matcher(
-                    email
-                )
-                    .matches() && password.length >= 6 && username.length <= 18 && selectedPhotoUri != null
-            ) { // If all the fields are filled in and the passwords match
+            if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() && password == confirmPassword && Patterns.EMAIL_ADDRESS.matcher(email).matches() && password.length >= 6 && username.length <= 18 && username.length <= 6 && selectedPhotoUri != null) { // If all the fields are filled in and the passwords match
                 try { // Try to create the user
 
                     val context = this // Set context to this
