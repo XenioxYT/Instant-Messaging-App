@@ -3,6 +3,7 @@ package com.example.instantmessagingapp
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -11,6 +12,7 @@ import androidx.core.view.GravityCompat
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_conversations.*
 import kotlinx.android.synthetic.main.nav_header.*
+import kotlinx.android.synthetic.main.nav_header.view.*
 
 class ConversationsActivity : AppCompatActivity() {
 
@@ -22,11 +24,14 @@ class ConversationsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_conversations) // set the layout of the activity
 
         topAppBar.setNavigationOnClickListener { // set the navigation icon on the top app bar
-            drawer_layout.openDrawer(GravityCompat.START)
-            verifyUserIsLoggedIn()// open the drawer
+            drawer_layout.openDrawer(GravityCompat.START) // open the drawer
         }
 
-        changeUsernameEmailNavHeader() // change the username and email on the nav header
+        floating_action_button_start_chat.setOnClickListener {
+            val intent = Intent(this, NewConversationActivity::class.java)
+            startActivity(intent)
+        }
+
 
         toggle = ActionBarDrawerToggle(
             this,
@@ -64,6 +69,7 @@ class ConversationsActivity : AppCompatActivity() {
         }
     }
 
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean { // override the onOptionsItemSelected method
 
         if (toggle.onOptionsItemSelected(item)) { // if the toggle was selected
@@ -90,19 +96,22 @@ class ConversationsActivity : AppCompatActivity() {
         }
     }
 
-    private fun changeUsernameEmailNavHeader() {
-        Log.d(
-            "ConversationsActivity",
-            "changeUsernameEmailNavHeader"
-        ) // log the changeUsernameEmailNavHeader method
-        var navigationView = findViewById(R.id.navigation_drawer) // get the navigation view
-        var headerView = navigationView.getHeaderView(0) // get the header view
-        var navEmail =
-            headerView.findViewById<TextView>(R.id.email_nav_header) // get the nav username text view
-        var navUsername =
-            headerView.findViewById<TextView>(R.id.username_nav_header) // get the nav email text view
-        navEmail.text =
-            FirebaseAuth.getInstance().currentUser?.email // set the nav email text view to the current user's email
-
-    }
+//    private fun changeUsernameEmailNavHeader() {
+//        Log.d(
+//            "ConversationsActivity",
+//            "changeUsernameEmailNavHeader"
+//        ) // log the changeUsernameEmailNavHeader method
+//
+//        val email = FirebaseAuth.getInstance().currentUser?.email // get the current user's email
+//        val username = FirebaseAuth.getInstance().currentUser?.displayName // get the current user's username
+//        Log.d("ConversationsActivity", "email: $email") // log the email
+//        Log.d("ConversationsActivity", "username: $username") // log the username
+//        try {
+//            setContentView(R.layout.nav_header)
+//            username_nav_header.text = email
+//            Log.d("ConversationsActivity", "email set successfully") // log the email
+//        }
+//        catch (e: Exception) {
+//            Log.d("ConversationsActivity", "username_nav_header: $e") // log the exception
+//        }
 }

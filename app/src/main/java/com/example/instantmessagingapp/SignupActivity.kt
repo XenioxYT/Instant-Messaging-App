@@ -151,7 +151,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
             selectphoto_imageview_register.setImageBitmap(bitmap) // Set the profile picture image view to the bitmap
             button_profile_picture.alpha = 0f // Set the alpha of the profile picture button to 0
         } else {
-            Toast.makeText(this, "Please select a photo", Toast.LENGTH_SHORT)
+            Toast.makeText(this, "Please select a photo", Toast.LENGTH_SHORT) // CHANGE TO SNACKBAR LATER ON
                 .show() // Show a toast to the user
         }
     }
