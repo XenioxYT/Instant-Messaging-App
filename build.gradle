@@ -3,10 +3,16 @@ buildscript {
     repositories {
         // Check that you have the following line (if not, add it):
         google()  // Google's Maven repository
+        mavenCentral()
+        //noinspection JcenterRepositoryObsolete
+        jcenter()
+        maven { url 'https://jitpack.io'}
     }
     dependencies {
         // Check that you have the following line (if not, add it):
         classpath 'com.google.gms:google-services:4.3.10'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.8.1'
+
     }
 }
 
@@ -24,5 +30,9 @@ allprojects {
     repositories {
         // Check that you have the following line (if not, add it):
         google()  // Google's Maven repository
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+        //noinspection JcenterRepositoryObsolete
+        jcenter()
     }
 }

@@ -52,6 +52,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_profile_picture"
         app:startIconDrawable="@drawable/ic_person_outline_black_24dp"
+        app:endIconTint="@color/black"
         tools:override="true">
 
         <com.google.android.material.textfield.TextInputEditText

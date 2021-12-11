@@ -16,6 +16,10 @@
         <activity
             android:name=".NewConversationActivity"
             android:exported="false" />
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".ConversationsActivity" />
+
         <activity
             android:name=".SettingsActivity"
             android:exported="false" />

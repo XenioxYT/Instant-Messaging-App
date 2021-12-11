@@ -13,18 +13,21 @@ import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_signup.*
 import java.util.*
 
+private lateinit var firebaseAnalytics: FirebaseAnalytics
 
 // Main class for the SignupActivity
 class SignupActivity : AppCompatActivity() { // Start of class
     override fun onCreate(savedInstanceState: Bundle?) { // onCreate method
         super.onCreate(savedInstanceState) // call super class onCreate
         setContentView(R.layout.activity_signup) // set the layout
+
 
         // Listen for the create account button press
         button_create_account.setOnClickListener { // Create a new user with email and password
@@ -102,12 +105,13 @@ class SignupActivity : AppCompatActivity() { // Start of class
             Log.d("SignupActivity", "Login button clicked") // Log the login button clicked
 
             // Clear the text boxes and set remove error message
-            username_editText_register.error =
+            username_editText_register_layout.error =
                 null // Clear the error message of the username text box
-            email_editText_register.error = null // Clear the error message of the email text box
-            password_editText_register.error =
+            email_editText_register_layout.error =
+                null // Clear the error message of the email text box
+            password_editText_register_layout.error =
                 null // Clear the error message of the password text box
-            confirm_password_editText_register.error =
+            confirm_password_editText_register_layout.error =
                 null // Clear the error message of the confirm password text box
 
             //create an intent to open the login activity
@@ -164,59 +168,101 @@ class SignupActivity : AppCompatActivity() { // Start of class
         if (username_editText_register.text.toString()
                 .isNotEmpty()
         ) { // If the username text box is not empty
+            username_editText_register_layout.isErrorEnabled = true
             if (username_editText_register.text.toString().length <= 6 || username_editText_register.text.toString().length >= 18) { // If the length of the username is less than 6 or greater than 18
-                username_editText_register.error =
+                username_editText_register_layout.error =
                     "Username must be at least 6 characters and no more than 18 characters" // Set the error message of the username text box to "Username must be at least 6 characters and no more than 18 characters"
                 username_editText_register.requestFocus() // Request focus of the username text box
                 return // Return
             }
-        } else { // If the username text box is empty
-            username_editText_register.error = "Username cannot be empty" // Set the error message of the username text box to "Username cannot be empty"
+        }
+        if (username_editText_register.text.toString()
+                .isEmpty()
+        ) { // If the username text box is empty
+            username_editText_register_layout.isErrorEnabled = true
+            username_editText_register_layout.error =
+                "Username cannot be empty" // Set the error message of the username text box to "Username cannot be empty"
             username_editText_register.requestFocus() // Request focus of the username text box
             return // Return
-        } // End the if statement
+        } else {
+            username_editText_register_layout.isErrorEnabled =
+                false // Clear the error message of the username text box
+            Log.d("SignupActivity", "Username is valid") // Log that the username is valid
+        }
     }
 
     private fun checkEmail() { // Create a function called checkEmail
         if (!email_editText_register.text.isNullOrEmpty()) { // If the email text box is not empty
-            if (!Patterns.EMAIL_ADDRESS.matcher(email_editText_register.text.toString()).matches()) { // If the email text box does not match the email pattern
-                email_editText_register.error = "Email is invalid" // Set the error message of the email text box to "Email is invalid"
+            if (!Patterns.EMAIL_ADDRESS.matcher(email_editText_register.text.toString())
+                    .matches()
+            ) { // If the email text box does not match the email pattern
+                email_editText_register_layout.isErrorEnabled = true
+                email_editText_register_layout.error =
+                    "Email is invalid" // Set the error message of the email text box to "Email is invalid"
                 email_editText_register.requestFocus() // Request focus of the email text box
                 return // Return
             }
-        } else { // If the email text box is empty
-            email_editText_register.error = "Email is required" // Set the error message of the email text box to "Email is required"
+        }
+        if (email_editText_register.text.toString()
+                .isNullOrEmpty()
+        ) { // If the email text box is empty
+            email_editText_register_layout.isErrorEnabled = true
+            email_editText_register_layout.error =
+                "Email is required" // Set the error message of the email text box to "Email is required"
             email_editText_register.requestFocus() // Request focus of the email text box
             return // Return
-        } // End the if statement
+        } else {
+            email_editText_register_layout.isErrorEnabled =
+                false // Clear the error message of the email text box
+        }
     }
 
     private fun checkPassword() { // Create a function called checkPassword
         if (!password_editText_register.text.isNullOrEmpty()) { // If the password text box is not empty
             if (password_editText_register.text.toString().length < 6) { // If the length of the password is less than 6
-                password_editText_register.error = "Password must be at least 6 characters" // Set the error message of the password text box to "Password must be at least 6 characters"
+                password_editText_register_layout.isErrorEnabled = true
+                password_editText_register_layout.error =
+                    "Password must be at least 6 characters" // Set the error message of the password text box to "Password must be at least 6 characters"
                 password_editText_register.requestFocus() // Request focus of the password text box
                 return // Return
             }
-        } else { // If the password text box is empty
-            password_editText_register.error = "Password cannot be empty" // Set the error message of the password text box to "Password cannot be empty"
+        }
+        if (password_editText_register.text.toString()
+                .isNullOrEmpty()
+        ) { // If the password text box is empty
+            password_editText_register_layout.isErrorEnabled = true
+            password_editText_register_layout.error =
+                "Password cannot be empty" // Set the error message of the password text box to "Password cannot be empty"
             password_editText_register.requestFocus() // Request focus of the password text box
             return // Return
-        } // End the if statement
+        } else {
+            password_editText_register_layout.isErrorEnabled =
+                false // Clear the error message of the password text box
+        }
     } // End the checkPassword function
 
     private fun checkPasswordsMatch() { // Create a function called checkPasswordsMatch
         if (!confirm_password_editText_register.text.isNullOrEmpty()) { // If the confirm password text box is not empty
             if (confirm_password_editText_register.text.toString() != password_editText_register.text.toString()) { // If the confirm password text box does not match the password text box
-                confirm_password_editText_register.error = "Passwords do not match" // Set the error message of the confirm password text box to "Passwords do not match"
+                confirm_password_editText_register_layout.isErrorEnabled = true
+                confirm_password_editText_register_layout.error =
+                    "Passwords do not match" // Set the error message of the confirm password text box to "Passwords do not match"
                 confirm_password_editText_register.requestFocus() // Request focus of the confirm password text box
                 return // Return
             } // End the if statement
-        } else { // If the confirm password text box is empty
-            confirm_password_editText_register.error = "Confirm Password cannot be empty" // Set the error message of the confirm password text box to "Confirm Password cannot be empty"
+        }
+        if (confirm_password_editText_register.text.toString()
+                .isNullOrEmpty()
+        ) { // If the confirm password text box is empty
+            confirm_password_editText_register_layout.isErrorEnabled = true
+            confirm_password_editText_register_layout.error =
+                "Confirm Password cannot be empty" // Set the error message of the confirm password text box to "Confirm Password cannot be empty"
             confirm_password_editText_register.requestFocus() // Request focus of the confirm password text box
             return // Return
-        } // End the if statement
+        } else {
+            confirm_password_editText_register_layout.isErrorEnabled =
+                false // Clear the error message of the confirm password text box
+        }
     } // End the checkPasswordsMatch function
 
     private fun loginSuccessfulRegister(profileImageUrl: String) { // Create a function called loginSuccessfulRegister
