@@ -6,7 +6,6 @@ buildscript {
         mavenCentral()
         //noinspection JcenterRepositoryObsolete
         jcenter()
-        maven { url 'https://jitpack.io'}
     }
     dependencies {
         // Check that you have the following line (if not, add it):
@@ -35,4 +34,9 @@ allprojects {
         //noinspection JcenterRepositoryObsolete
         jcenter()
     }
+}
+
+repositories {
+    maven { url "https://jitpack.io" }
+    jcenter()
 }
