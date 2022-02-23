@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Layout
@@ -12,11 +13,10 @@ import android.text.style.AlignmentSpan
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_signup.*
 import java.util.*
@@ -45,8 +45,10 @@ class SignupActivity : AppCompatActivity() { // Start of class
             Log.d("SignupActivity", "Password Checked")
             checkPasswordsMatch() // Check if the passwords match
             Log.d("SignupActivity", "Passwords match Checked")
-//            checkProfilePicture() // Check if the profile picture is valid
-            Log.d("SignupActivity", "Profile picture Checked")
+            val profilepic = false
+            if (checkProfilePicture(profilepic)) { // Check if the profile picture is valid
+                Log.d("SignupActivity", "Profile picture Checked")
+            }
 
             val username =
                 username_editText_register.text.toString() // Set username to the text entered into the username text box
@@ -64,18 +66,14 @@ class SignupActivity : AppCompatActivity() { // Start of class
                     Log.d("SignupActivity","Everything validated")
 
                     val context = this // Set context to this
-
                     val title = SpannableString("Creating Account") // Set title to the text "Creating Account"
-
                     title.setSpan( // Set the alignment of the text to center
                         AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), // Set the alignment to center
                         0, // Set the start of the alignment to 0
                         title.length, // Set the end of the alignment to the length of the text
                         0 // Set the flags to 0
                     ) // End the alignment
-
                     Log.d("SignupActivity", "Title aligned")
-
                     val builder = AlertDialog.Builder(context) // Set builder to an alert dialog builder
                     builder.setTitle(title) // Set the title of the alert dialog to the title
                     builder.setMessage("Please wait while your account is being created.") // Set the message of the alert dialog to "Please wait while your account is being created."
@@ -85,18 +83,75 @@ class SignupActivity : AppCompatActivity() { // Start of class
 
 
                     // Create a new user with the email and password
-                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password) // Create a new user with the email and password
-                        .addOnCompleteListener {
-                            Log.d("SignupActivity", "user created with UID $it")// Add an onCompleteListener to the task
-                            uploadImageToFirebase() // Upload the image to firebase
+                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener {
+                        Log.d(
+                            "SignupActivity",
+                            "user created with UID $it"
+                        )// Add an onCompleteListener to the task
+                        if (selectedPhotoUri == null) {
+                            Log.d("SignupAcitivity", "The user has not uploaded an image")
+                        }
+                        if (checkProfilePicture(profilepic)) {
+                            val filename = UUID.randomUUID().toString()
+                            val ref =
+                                FirebaseStorage.getInstance().getReference("/images/$filename")
+                            val profilepic = false
+                            ref.putFile(selectedPhotoUri!!).addOnSuccessListener { it ->
+                                Log.d(
+                                    "SignupActivity",
+                                    "Successfully uploaded image: ${it.metadata?.path}"
+                                )
+                                ref.downloadUrl.addOnSuccessListener {
+                                    Log.d("SignupActivity", "File Location: $it")
+                                    val filelocation = it
+                                    val uid = FirebaseAuth.getInstance().uid
+                                        ?: "" // Get the user's uid
+                                    val ref =
+                                        FirebaseDatabase.getInstance("https://instant-messaging-app-7fed6-default-rtdb.europe-west1.firebasedatabase.app/")
+                                            .getReference("/users/$uid") // Get the user's reference
+                                    Log.d("SignupActivity", "${filename}, ${filelocation}")
+                                    val profileImageUrl = filelocation.toString()
+                                    val user = User(
+                                        uid,
+                                        username_editText_register.text.toString(),
+                                        profileImageUrl
+                                    ) // Create a user object with the user's uid and username
+                                    ref.setValue(user)
+                                        .addOnSuccessListener { // Add an onSuccessListener to the setValue function
+                                            Log.d(
+                                                "SignupActivity",
+                                                "Finally we saved the user to Firebase Database"
+                                            ) // Log that the user has been saved to Firebase Database
+                                            Log.d("SignupActivity", "Intent = ${intent}")
+                                            val intent = Intent(
+                                                this,
+                                                LoginAccountCreatedActivity::class.java
+                                            ) // Create an intent to the LoginAccountCreatedActivity
+                                            startActivity(intent) // Start the intent
+                                        } // End the addOnSuccessListener
+                                        .addOnFailureListener { // Add an onFailureListener to the setValue function
+                                            Log.d(
+                                                "SignupActivity",
+                                                "Failed to set value to database: ${it.message}"
+                                            ) // Log that the user has failed to be saved to Firebase Database
+                                            //TODO: Handle failure and show error message to user
+                                        } // End the addOnFailureListener
+                                }
+                            }.addOnFailureListener {
+                                Log.d(
+                                    "Activity",
+                                    "Failed to upload image to storage: ${it.message}"
+                                )
+                            }
+                        }
+                        if (!checkProfilePicture(profilepic)) {
+                            Log.d("SignupActivity","The profile picture was not selected")
+                        }
+
+                    }
                             dialog.dismiss() // Dismiss the alert dialog
-                        } // End the onCompleteListener
-                        .addOnFailureListener { // Add an onFailureListener to the task
-//                            loginFailedRegister(it) // Call the loginFailedRegister function
-                            dialog.dismiss() // Dismiss the alert dialog
-                        } // End the onFailureListener
                 } else {
-                Log.d("SignupActivity", "Everything is not valid")
+                    Log.d("SignupActivity", "Everything is not valid")
                 }
             } catch (e: Exception) { // Catch any exceptions
 //                loginException()
@@ -155,6 +210,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
 
     private var selectedPhotoUri: Uri? = null // Create a variable to hold the selected photo uri
 
+    @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -230,8 +286,6 @@ class SignupActivity : AppCompatActivity() { // Start of class
         }
     }
 
-
-
     private fun checkPassword() { // Create a function called checkPassword
         if (password_editText_register.text.toString().isNotEmpty()) { // If the password text box is not empty
             if (password_editText_register.text.toString().length < 6) { // If the length of the password is less than 6
@@ -252,8 +306,6 @@ class SignupActivity : AppCompatActivity() { // Start of class
                 false // Clear the error message of the password text box
         }
     } // End the checkPassword function
-
-
 
     private fun checkPasswordsMatch() { // Create a function called checkPasswordsMatch
         if (confirm_password_editText_register.text.toString().isNotEmpty()) { // If the confirm password text box is not empty
@@ -276,31 +328,29 @@ class SignupActivity : AppCompatActivity() { // Start of class
 
 
 
-    private fun loginSuccessfulRegister(profileImageUrl: Uri) { // Create a function called loginSuccessfulRegister
-        val uid = FirebaseAuth.getInstance().uid ?: "" // Get the user's uid
-        val ref =
-            FirebaseDatabase.getInstance("https://instant-messaging-app-7fed6-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("/users/$uid") // Get the user's reference
-
-        val user = User(uid, username_editText_register.text.toString(), profileImageUrl) // Create a user object with the user's uid and username
-        ref.setValue(user) // Set the user's reference to the user object
-            .addOnSuccessListener { // Add an onSuccessListener to the setValue function
-                Log.d(
-                    "SignupActivity",
-                    "Finally we saved the user to Firebase Database"
-                ) // Log that the user has been saved to Firebase Database
-                if (intent.toString().isEmpty()) {
-                    val intent = Intent(this, LoginAccountCreatedActivity::class.java) // Create an intent to the LoginAccountCreatedActivity
-                    startActivity(intent) // Start the intent
-                }
-            } // End the addOnSuccessListener
-            .addOnFailureListener { // Add an onFailureListener to the setValue function
-                Log.d("SignupActivity", "Failed to set value to database: ${it.message}") // Log that the user has failed to be saved to Firebase Database
-                //TODO: Handle failure and show error message to user
-            } // End the addOnFailureListener
-    } // End the loginSuccessfulRegister function
-
-
+//    private fun loginSuccessfulRegister(profileImageUrl: String) { // Create a function called loginSuccessfulRegister
+//        val uid = FirebaseAuth.getInstance().uid ?: "" // Get the user's uid
+//        val ref =
+//            FirebaseDatabase.getInstance("https://instant-messaging-app-7fed6-default-rtdb.europe-west1.firebasedatabase.app/")
+//                .getReference("/users/$uid") // Get the user's reference
+//
+//        val user = User(uid, username_editText_register.text.toString(), profileImageUrl) // Create a user object with the user's uid and username
+//        ref.setValue(user) // Set the user's reference to the user object
+//            .addOnSuccessListener { // Add an onSuccessListener to the setValue function
+//                Log.d(
+//                    "SignupActivity",
+//                    "Finally we saved the user to Firebase Database"
+//                ) // Log that the user has been saved to Firebase Database
+//                if (intent.toString().isEmpty()) {
+//                    val intent = Intent(this, LoginAccountCreatedActivity::class.java) // Create an intent to the LoginAccountCreatedActivity
+//                    startActivity(intent) // Start the intent
+//                }
+//            } // End the addOnSuccessListener
+//            .addOnFailureListener { // Add an onFailureListener to the setValue function
+//                Log.d("SignupActivity", "Failed to set value to database: ${it.message}") // Log that the user has failed to be saved to Firebase Database
+//                //TODO: Handle failure and show error message to user
+//            } // End the addOnFailureListener
+//    } // End the loginSuccessfulRegister function
 
     private fun loginFailedRegister(it: java.lang.Exception) { // Create a function called loginFailedRegister
         Log.d("SignupActivity", "Failed to create user: ${it.message}") // Log that the user has failed to be created
@@ -341,8 +391,6 @@ class SignupActivity : AppCompatActivity() { // Start of class
         } // End the else statement
     } // End the loginFailedRegister function
 
-
-
     private fun loginException() { // Create a function called loginException
         val context = this // Create a context variable
         val title = SpannableString("Error") // Create a title variable with the error message
@@ -362,9 +410,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
         dialog.show() // Show the dialog
     } // End the loginException function
 
-
-
-    private fun checkProfilePicture() {
+    private fun checkProfilePicture(profilepic: Boolean): Boolean {
         if (selectedPhotoUri == null) {
             val context = this
             val title = SpannableString("Error")
@@ -382,30 +428,31 @@ class SignupActivity : AppCompatActivity() { // Start of class
             }
             val dialog: AlertDialog = builder.create()
             dialog.show()
+            return false
         }
         else {
-            return
+            return true
         }
     }
 
 
 
-    private fun uploadImageToFirebase() {
-        if (selectedPhotoUri == null) return
-        val filename = UUID.randomUUID().toString()
-        val ref = FirebaseStorage.getInstance().getReference("/images/$filename")
-        ref.putFile(selectedPhotoUri!!)
-            .addOnSuccessListener { it ->
-                Log.d("SignupActivity", "Successfully uploaded image: ${it.metadata?.path}")
-                ref.downloadUrl.addOnSuccessListener {
-                    Log.d("SignupActivity", "File Location: $it")
-                    loginSuccessfulRegister(it)
-                }
-            }
-            .addOnFailureListener {
-                Log.d("Activity", "Failed to upload image to storage: ${it.message}")
-            }
-    }
+//    private fun uploadImageToFirebase() {
+//        if (selectedPhotoUri == null) return
+//        val filename = UUID.randomUUID().toString()
+//        val ref = FirebaseStorage.getInstance().getReference("/images/$filename")
+//        ref.putFile(selectedPhotoUri!!)
+//            .addOnSuccessListener { it ->
+//                Log.d("SignupActivity", "Successfully uploaded image: ${it.metadata?.path}")
+//                ref.downloadUrl.addOnSuccessListener {
+//                    Log.d("SignupActivity", "File Location: $it")
+//                    loginSuccessfulRegister(it)
+//                }
+//            }
+//            .addOnFailureListener {
+//                Log.d("Activity", "Failed to upload image to storage: ${it.message}")
+//            }
+//    }
 }
 
 
@@ -415,7 +462,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
 class User(
     val uid: String,
     val username: String,
-    val profileImageUrl: Uri
+    val profileImageUrl: String
 ) // Create a class called User
 
 
