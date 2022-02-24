@@ -46,9 +46,9 @@ class SignupActivity : AppCompatActivity() { // Start of class
             checkPasswordsMatch() // Check if the passwords match
             Log.d("SignupActivity", "Passwords match Checked")
             val profilepic = false
-            if (checkProfilePicture(profilepic)) { // Check if the profile picture is valid
-                Log.d("SignupActivity", "Profile picture Checked")
-            }
+//            if (checkProfilePicture(profilepic)) { // Check if the profile picture is valid
+//                Log.d("SignupActivity", "Profile picture Checked")
+//            }
 
             val username =
                 username_editText_register.text.toString() // Set username to the text entered into the username text box
@@ -144,9 +144,9 @@ class SignupActivity : AppCompatActivity() { // Start of class
                                 )
                             }
                         }
-                        if (!checkProfilePicture(profilepic)) {
-                            Log.d("SignupActivity","The profile picture was not selected")
-                        }
+//                        if (!checkProfilePicture(profilepic)) {
+//                            Log.d("SignupActivity","The profile picture was not selected")
+//                        }
 
                     }
                             dialog.dismiss() // Dismiss the alert dialog
@@ -413,7 +413,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
     private fun checkProfilePicture(profilepic: Boolean): Boolean {
         if (selectedPhotoUri == null) {
             val context = this
-            val title = SpannableString("Error")
+            val title = SpannableString("No profile picture was selected")
             title.setSpan(
                 AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
                 0,
@@ -422,7 +422,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
             )
             val builder = AlertDialog.Builder(context)
             builder.setTitle(title)
-            builder.setMessage("Please select a profile picture.")
+            builder.setMessage("There was a problem creating your account. Please select a profile picture and try again.")
             builder.setPositiveButton("OK") { dialog, _ ->
                 dialog.dismiss()
             }
