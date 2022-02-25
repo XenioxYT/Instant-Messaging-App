@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.instantmessagingapp">
+    package="com.xeniox.instantmessagingapp">
 
     <application
         android:allowBackup="true"
@@ -14,15 +14,15 @@
         android:theme="@style/Theme.InstantMessagingApp"
         tools:targetApi="30">
         <activity
-            android:name=".NewConversationActivity"
+            android:name="com.xeniox.instantmessagingapp.NewConversationActivity"
             android:exported="false"/>
 
         <activity
-            android:name=".SettingsActivity"
+            android:name="com.xeniox.instantmessagingapp.SettingsActivity"
             android:exported="false"/>
 
         <activity
-            android:name=".ConversationsActivity"
+            android:name="com.xeniox.instantmessagingapp.ConversationsActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,18 +31,18 @@
         </activity>
 
         <activity
-            android:name=".LoginAccountCreatedActivity"
+            android:name="com.xeniox.instantmessagingapp.LoginAccountCreatedActivity"
             android:exported="false"/>
 
         <activity
-            android:name=".WelcomeActivity"
+            android:name="com.xeniox.instantmessagingapp.WelcomeActivity"
             android:exported="false"/>
 
         <activity
-            android:name=".LoginActivity"
+            android:name="com.xeniox.instantmessagingapp.LoginActivity"
             android:exported="false"/>
         <activity
-            android:name=".SignupActivity"
+            android:name="com.xeniox.instantmessagingapp.SignupActivity"
             android:exported="false"/>
 
             <!-- <intent-filter> -->
