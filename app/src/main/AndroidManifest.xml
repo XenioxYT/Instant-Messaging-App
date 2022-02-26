@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.instantmessagingapp">
+    package="com.xeniox.instantmessagingapp">
 
     <application
         android:allowBackup="true"
@@ -12,32 +12,38 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.InstantMessagingApp"
-        tools:targetApi="31">
+        tools:targetApi="30">
         <activity
-            android:name=".NewConversationActivity"
-            android:exported="false" />
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".ConversationsActivity" />
+            android:name="com.xeniox.instantmessagingapp.NewConversationActivity"
+            android:exported="false"/>
 
         <activity
-            android:name=".SettingsActivity"
-            android:exported="false" />
+            android:name="com.xeniox.instantmessagingapp.SettingsActivity"
+            android:exported="false"/>
+
         <activity
-            android:name=".ConversationsActivity"
+            android:name="com.xeniox.instantmessagingapp.ConversationsActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".LoginAccountCreatedActivity"
-            android:exported="false" />
+            android:name="com.xeniox.instantmessagingapp.LoginAccountCreatedActivity"
+            android:exported="false"/>
+
         <activity
-            android:name=".WelcomeActivity"
-            android:exported="true">
+            android:name="com.xeniox.instantmessagingapp.WelcomeActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name="com.xeniox.instantmessagingapp.LoginActivity"
+            android:exported="false"/>
+        <activity
+            android:name="com.xeniox.instantmessagingapp.SignupActivity"
+            android:exported="false"/>
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -45,21 +51,6 @@
 
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
-        </activity>
-        <activity
-            android:name=".LoginActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SignupActivity"
-            android:exported="true">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
     </application>
 
 </manifest>
