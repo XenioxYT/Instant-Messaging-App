@@ -124,6 +124,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
                                                 "Finally we saved the user to Firebase Database"
                                             ) // Log that the user has been saved to Firebase Database
                                             Log.d("SignupActivity", "Intent = ${intent}")
+                                            dialog.dismiss()
                                             val intent = Intent(
                                                 this,
                                                 LoginAccountCreatedActivity::class.java
@@ -135,6 +136,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
                                                 "SignupActivity",
                                                 "Failed to set value to database: ${it.message}"
                                             ) // Log that the user has failed to be saved to Firebase Database
+                                            dialog.dismiss()
                                             //TODO: Handle failure and show error message to user
                                         } // End the addOnFailureListener
                                 }
@@ -143,6 +145,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
                                     "Activity",
                                     "Failed to upload image to storage: ${it.message}"
                                 )
+                                dialog.dismiss()
                             }
                         }
 //                        if (!checkProfilePicture(profilepic)) {
@@ -152,7 +155,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
                     } .addOnFailureListener {
                         loginFailedRegister(it)
                     }
-                    dialog.dismiss() // Dismiss the alert dialog
+//                    dialog.dismiss() // Dismiss the alert dialog
                 } else {
                     Log.d("SignupActivity", "Everything is not valid")
                 }
@@ -244,8 +247,8 @@ class SignupActivity : AppCompatActivity() { // Start of class
                 .isNotEmpty()
         ) { // If the username text box is not empty
             username_editText_register_layout.isErrorEnabled = true
-            if (username_editText_register.text.toString().length <= 6 || username_editText_register.text.toString().length >= 18) { // If the length of the username is less than 6 or greater than 18
-                username_editText_register_layout.error = "Username must be at least 6 characters and no more than 18 characters" // Set the error message of the username text box to "Username must be at least 6 characters and no more than 18 characters"
+            if (username_editText_register.text.toString().length >= 18) { // If the length of the username is less than 6 or greater than 18
+                username_editText_register_layout.error = "Username must be no more than 18 characters" // Set the error message of the username text box to "Username must be at least 6 characters and no more than 18 characters"
                 username_editText_register.requestFocus() // Request focus of the username text box
                 return // Return
             }
