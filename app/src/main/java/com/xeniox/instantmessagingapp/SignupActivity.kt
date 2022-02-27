@@ -15,7 +15,6 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.xeniox.instantmessagingapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
@@ -96,7 +95,6 @@ class SignupActivity : AppCompatActivity() { // Start of class
                             val filename = UUID.randomUUID().toString()
                             val ref =
                                 FirebaseStorage.getInstance().getReference("/images/$filename")
-                            val profilepic = false
                             ref.putFile(selectedPhotoUri!!).addOnSuccessListener { it ->
                                 Log.d(
                                     "SignupActivity",
