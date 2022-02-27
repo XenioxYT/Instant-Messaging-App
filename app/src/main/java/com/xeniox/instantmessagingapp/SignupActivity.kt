@@ -15,6 +15,9 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.FirebaseApp
+import com.google.firebase.appcheck.FirebaseAppCheck
+import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
@@ -31,6 +34,12 @@ class SignupActivity : AppCompatActivity() { // Start of class
     override fun onCreate(savedInstanceState: Bundle?) { // onCreate method
         super.onCreate(savedInstanceState) // call super class onCreate
         setContentView(R.layout.activity_signup) // set the layout
+
+        FirebaseApp.initializeApp(/*context=*/this)
+        val firebaseAppCheck = FirebaseAppCheck.getInstance()
+        firebaseAppCheck.installAppCheckProviderFactory(
+            SafetyNetAppCheckProviderFactory.getInstance()
+        )
 
 
         // Listen for the create account button press
@@ -151,6 +160,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
 //                        }
 
                     } .addOnFailureListener {
+                        dialog.dismiss()
                         loginFailedRegister(it)
                     }
 //                    dialog.dismiss() // Dismiss the alert dialog
