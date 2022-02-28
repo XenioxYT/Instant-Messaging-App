@@ -23,7 +23,7 @@
                 android:theme="@style/ItemBackground"
                 app:menu="@menu/actionbar_menu"
                 app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
-                app:title="SELECT USER"
+                app:title="CONTACTS"
                 app:titleCentered="true"
                 app:titleTextColor="@color/black" />
 
