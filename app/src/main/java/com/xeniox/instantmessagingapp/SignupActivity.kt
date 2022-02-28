@@ -477,7 +477,10 @@ class User(
     val uid: String,
     val username: String,
     val profileImageUrl: String
-) // Create a class called User
+) {
+    constructor() : this("", "", "")
+    //created blank constructor as kotlin now requires this when making a class
+} // Create a class called User
 
 
 // TODO: PROBLEM DESCRIPTION BELOW AS TO WHY THE PROGRAM CRASHES WHEN CREATING AN ACCOUNT:
