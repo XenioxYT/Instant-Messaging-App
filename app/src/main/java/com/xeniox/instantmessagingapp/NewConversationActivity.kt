@@ -17,6 +17,17 @@ class NewConversationActivity : AppCompatActivity() {
         adapter.add(UserItem())// add the layout.
         adapter.add(UserItem())
         adapter.add(UserItem())
+        adapter.add(UserItem())
+        adapter.add(UserItem())
+        adapter.add(UserItem())
+        adapter.add(UserItem())
+        adapter.add(UserItem())
+        adapter.add(UserItem())
+        adapter.add(UserItem())
+        adapter.add(UserItem())
+        adapter.add(UserItem())
+        adapter.add(UserItem())
+        adapter.add(UserItem())
 
 
         recyclerView_new_conversation.adapter = adapter
