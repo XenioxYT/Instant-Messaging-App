@@ -13,7 +13,9 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:liftOnScroll="true">
+            android:elevation="10dp"
+            app:liftOnScroll="true"
+            app:liftOnScrollTargetViewId="@id/recyclerView_new_conversation">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/topAppBar_new_conversation"
@@ -25,8 +27,7 @@
                 app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
                 app:title="CONTACTS"
                 app:titleCentered="true"
-                app:titleTextColor="@color/black"
-                app:layout_scrollFlags="snap"/>
+                app:titleTextColor="@color/black" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
