@@ -25,7 +25,8 @@
                 app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
                 app:title="CONTACTS"
                 app:titleCentered="true"
-                app:titleTextColor="@color/black" />
+                app:titleTextColor="@color/black"
+                app:layout_scrollFlags="snap"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 
