@@ -21,8 +21,10 @@ import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
+import id.zelory.compressor.Compressor
 import kotlinx.android.synthetic.main.activity_signup.*
 import java.util.*
+import id.zelory.compressor.Compressor.compress
 
 
 // ...
@@ -105,6 +107,9 @@ class SignupActivity : AppCompatActivity() { // Start of class
                             val filename = UUID.randomUUID().toString()
                             val ref =
                                 FirebaseStorage.getInstance().getReference("/images/$filename")
+                            val image = selectedPhotoUri
+
+
                             ref.putFile(selectedPhotoUri!!).addOnSuccessListener { it ->
                                 Log.d(
                                     "SignupActivity",
@@ -238,6 +243,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
             ) // Get the bitmap from the uri
             selectphoto_imageview_register.setImageBitmap(bitmap) // Set the profile picture image view to the bitmap
             button_profile_picture.alpha = 0f // Set the alpha of the profile picture button to 0
+//            val compressedImage = Compressor.compress(this, bitmap)
         } else {
             Toast.makeText(this, "Please select a photo", Toast.LENGTH_SHORT) // TODO: CHANGE TO SNACKBAR LATER ON
                 .show() // Show a toast to the user
@@ -494,7 +500,6 @@ class SignupActivity : AppCompatActivity() { // Start of class
 //            }
 //    }
 }
-
 
 
 // CLASSES \\
