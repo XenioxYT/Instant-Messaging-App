@@ -3,6 +3,8 @@ package com.xeniox.instantmessagingapp
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -21,10 +23,9 @@ import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
-import id.zelory.compressor.Compressor
 import kotlinx.android.synthetic.main.activity_signup.*
+import java.io.ByteArrayOutputStream
 import java.util.*
-import id.zelory.compressor.Compressor.compress
 
 
 // ...
@@ -73,7 +74,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
             // I have no idea why this code works, but it does
             // However, something may break if I remove it
             try { // Try to create the user
-                if (checkUsername() && checkEmail() && checkPassword() && checkPasswordsMatch()) { // If all the fields are filled in and the passwords match
+                if (checkUsername() && checkEmail() && checkPassword() && checkPasswordsMatch() && checkProfilePicture()) { // If all the fields are filled in and the passwords match
                     Log.d("SignupActivity", "Everything validated")
 
                     val context = this // Set context to this
@@ -103,19 +104,24 @@ class SignupActivity : AppCompatActivity() { // Start of class
                         if (selectedPhotoUri == null) {
                             Log.d("SignupAcitivity", "The user has not uploaded an image")
                         }
-                        if (checkProfilePicture(profilepic)) {
+                        if (checkProfilePicture()) {
                             val filename = UUID.randomUUID().toString()
                             val ref =
                                 FirebaseStorage.getInstance().getReference("/images/$filename")
-                            val image = selectedPhotoUri
+                            val bitmap = MediaStore.Images.Media.getBitmap(
+                                contentResolver,
+                                selectedPhotoUri
+                            )
+                            val compressedimage = compressBitmap(bitmap, 10)
 
+                            // add
 
                             ref.putFile(selectedPhotoUri!!).addOnSuccessListener { it ->
                                 Log.d(
                                     "SignupActivity",
                                     "Successfully uploaded image: ${it.metadata?.path}"
                                 )
-                                ref.downloadUrl.addOnSuccessListener {
+                                ref.downloadUrl.addOnSuccessListener { it ->
                                     Log.d("SignupActivity", "File Location: $it")
                                     val filelocation = it
                                     val uid = FirebaseAuth.getInstance().uid
@@ -123,7 +129,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
                                     val ref =
                                         FirebaseDatabase.getInstance("https://instant-messaging-app-7fed6-default-rtdb.europe-west1.firebasedatabase.app/")
                                             .getReference("/users/$uid") // Get the user's reference
-                                    Log.d("SignupActivity", "${filename}, ${filelocation}")
+                                    Log.d("SignupActivity", "${filename}, $filelocation")
                                     val profileImageUrl = filelocation.toString()
                                     val user = User(
                                         uid,
@@ -136,7 +142,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
                                                 "SignupActivity",
                                                 "Finally we saved the user to Firebase Database"
                                             ) // Log that the user has been saved to Firebase Database
-                                            Log.d("SignupActivity", "Intent = ${intent}")
+                                            Log.d("SignupActivity", "Intent = $intent")
                                             dialog.dismiss()
                                             val intent = Intent(
                                                 this,
@@ -235,21 +241,20 @@ class SignupActivity : AppCompatActivity() { // Start of class
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
-            selectedPhotoUri =
-                data.data // Set the selected photo uri to the uri returned from the gallery
+
+            selectedPhotoUri = data.data
             val bitmap = MediaStore.Images.Media.getBitmap(
                 contentResolver,
                 selectedPhotoUri
             ) // Get the bitmap from the uri
-            selectphoto_imageview_register.setImageBitmap(bitmap) // Set the profile picture image view to the bitmap
-            button_profile_picture.alpha = 0f // Set the alpha of the profile picture button to 0
-//            val compressedImage = Compressor.compress(this, bitmap)
+
+            selectphoto_imageview_register.setImageBitmap(compressBitmap(bitmap, 10))
+
+            button_profile_picture.alpha = 0f
+
         } else {
             Toast.makeText(this, "Please select a photo", Toast.LENGTH_SHORT) // TODO: CHANGE TO SNACKBAR LATER ON
                 .show() // Show a toast to the user
-            // TODO: Can I check the profile picture here and stop the user from creating an account here
-            // instead of creating about 500 errors because of my shit code?
-            // seems likely.
         }
     }
 
@@ -456,7 +461,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
         dialog.show() // Show the dialog
     } // End the loginException function
 
-    private fun checkProfilePicture(profilepic: Boolean): Boolean {
+    private fun checkProfilePicture(): Boolean {
         if (selectedPhotoUri == null) {
             val context = this
             val title = SpannableString("No profile picture was selected")
@@ -475,12 +480,17 @@ class SignupActivity : AppCompatActivity() { // Start of class
             val dialog: AlertDialog = builder.create()
             dialog.show()
             return false
-        }
-        else {
+        } else {
             return true
         }
     }
 
+    private fun compressBitmap(bitmap: Bitmap, quality: Int): Bitmap? {
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, quality, stream)
+        val byteArray = stream.toByteArray()
+        return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+    }
 
 
 //    private fun uploadImageToFirebase() {
