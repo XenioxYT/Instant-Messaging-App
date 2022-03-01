@@ -1,5 +1,6 @@
 package com.xeniox.instantmessagingapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +23,9 @@ class NewConversationActivity : AppCompatActivity() {
         topAppBar_new_conversation.setNavigationOnClickListener { // set the navigation icon on the top app bar
             finish() // end the activity
         }
+
+        val intent = Intent(this, SignupActivity::class.java)
+        startActivity(intent)
         fetchUsers()
     }
 
@@ -29,6 +33,7 @@ class NewConversationActivity : AppCompatActivity() {
         val ref = FirebaseDatabase.getInstance().getReference("/users")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
+
 
                 val adapter = GroupAdapter<ViewHolder>()
                 p0.children.forEach {
@@ -38,6 +43,9 @@ class NewConversationActivity : AppCompatActivity() {
                         adapter.add(UserItem(user))
                     }
                 }
+
+                val intent = Intent(this, SignupActivity::class.java)
+
                 recyclerView_new_conversation.adapter = adapter
             }
 
@@ -47,6 +55,7 @@ class NewConversationActivity : AppCompatActivity() {
 
         })
     }
+
 
 }
 
