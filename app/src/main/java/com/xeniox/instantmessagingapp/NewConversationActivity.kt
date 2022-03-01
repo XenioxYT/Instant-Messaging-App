@@ -21,11 +21,13 @@ class NewConversationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_new_conversation)
 
         topAppBar_new_conversation.setNavigationOnClickListener { // set the navigation icon on the top app bar
-            finish() // end the activity
+            val intent = Intent(this, ConversationsActivity::class.java) // end the activity
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
         }
 
-        val intent = Intent(this, SignupActivity::class.java)
-        startActivity(intent)
+//        val intent = Intent(this, SignupActivity::class.java)
+//        startActivity(intent)
         fetchUsers()
     }
 
@@ -44,8 +46,12 @@ class NewConversationActivity : AppCompatActivity() {
                     }
                 }
 
-                val intent = Intent(this, SignupActivity::class.java)
+                adapter.setOnItemClickListener { item, view ->
 
+                    val intent = Intent(view.context, ConversationsChatActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
                 recyclerView_new_conversation.adapter = adapter
             }
 
