@@ -3,17 +3,12 @@ package com.xeniox.instantmessagingapp
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
 import android.view.MenuItem
-import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import com.xeniox.instantmessagingapp.R
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_conversations.*
-import kotlinx.android.synthetic.main.nav_header.*
-import kotlinx.android.synthetic.main.nav_header.view.*
 
 class ConversationsActivity : AppCompatActivity() {
 
@@ -56,6 +51,7 @@ class ConversationsActivity : AppCompatActivity() {
                         SettingsActivity::class.java
                     ) // create an intent to go to the conversations activity
                     startActivity(intent) // start the intent
+                    drawer_layout.closeDrawer(GravityCompat.START)
                 }
                 R.id.logout -> { // if logout was clicked
                     FirebaseAuth.getInstance().signOut() // sign out of firebase
@@ -63,6 +59,7 @@ class ConversationsActivity : AppCompatActivity() {
                     intent.flags =
                         Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // set the flags
                     startActivity(intent) // start the intent
+                    drawer_layout.closeDrawer(GravityCompat.START)
                 }
             }
             //drawer_layout.closeDrawer(navigation_drawer) // close the drawer
