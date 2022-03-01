@@ -99,6 +99,8 @@ dependencies {
     //noinspection GradleDependency
     implementation 'com.github.lisawray.groupie:groupie-viewbinding:2.10.0'
     implementation "com.github.lisawray.groupie:groupie-kotlin-android-extensions:2.10.0"
+    implementation 'id.zelory:compressor:3.0.1'
+
 
 
 
