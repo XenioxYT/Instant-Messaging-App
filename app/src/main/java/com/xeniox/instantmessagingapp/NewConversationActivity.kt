@@ -1,7 +1,11 @@
 package com.xeniox.instantmessagingapp
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.Layout
+import android.text.SpannableString
+import android.text.style.AlignmentSpan
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
@@ -20,6 +24,24 @@ class NewConversationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_conversation)
 
+        val title =
+            SpannableString("Loading") // Set the title variable to "No internet connection"
+        title.setSpan(
+            AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), // Set the alignment of the text to center
+            0, // Start at the beginning of the string
+            title.length, // End at the end of the string
+            0 // No flags
+        ) // End the setSpan function
+        val builder = AlertDialog.Builder(this) // Create a builder variable
+        builder.setTitle(title) // Set the title of the alert dialog to the title variable
+        builder.setMessage("Please wait while we load the users") // Set the message of the alert dialog to "There was an error connecting to the servers. Please check your internet connection and try again."
+        val dialog: AlertDialog = builder.create() // Create a dialog variable with the builder
+        dialog.show() // Show the dialog
+
+
+
+
+
         topAppBar_new_conversation.setNavigationOnClickListener { // set the navigation icon on the top app bar
             val intent = Intent(this, ConversationsActivity::class.java) // end the activity
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -28,10 +50,10 @@ class NewConversationActivity : AppCompatActivity() {
 
 //        val intent = Intent(this, SignupActivity::class.java)
 //        startActivity(intent)
-        fetchUsers()
+        fetchUsers(dialog)
     }
 
-    private fun fetchUsers() {
+    private fun fetchUsers(dialog: AlertDialog) {
         val ref = FirebaseDatabase.getInstance().getReference("/users")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
@@ -44,6 +66,7 @@ class NewConversationActivity : AppCompatActivity() {
                     if (user != null) {
                         adapter.add(UserItem(user))
                     }
+                    dialog.dismiss()
                 }
 
                 adapter.setOnItemClickListener { item, view ->
@@ -61,8 +84,6 @@ class NewConversationActivity : AppCompatActivity() {
 
         })
     }
-
-
 }
 
 class UserItem(val user: User) : Item<ViewHolder>() {
