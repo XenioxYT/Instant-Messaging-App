@@ -8,9 +8,18 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_conversations.*
+import kotlinx.android.synthetic.main.nav_header.*
 
 class ConversationsActivity : AppCompatActivity() {
+
+    companion object {
+        var currentUser: User? = null
+    }
 
     lateinit var toggle: ActionBarDrawerToggle
 
@@ -18,6 +27,9 @@ class ConversationsActivity : AppCompatActivity() {
         verifyUserIsLoggedIn()
         super.onCreate(savedInstanceState) // call super class onCreate method
         setContentView(R.layout.activity_conversations) // set the layout of the activity
+
+        fetchCurrentUser()
+
 
         changeUsernameEmailNavHeader()
 
@@ -69,6 +81,20 @@ class ConversationsActivity : AppCompatActivity() {
         }
     }
 
+    private fun fetchCurrentUser() {
+        val uid = FirebaseAuth.getInstance().uid
+        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                currentUser = snapshot.getValue(User::class.java)
+                Log.d("ConversationsActivity", "Current User ${currentUser!!.username}")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean { // override the onOptionsItemSelected method
 
@@ -102,17 +128,26 @@ class ConversationsActivity : AppCompatActivity() {
             "changeUsernameEmailNavHeader"
         ) // log the changeUsernameEmailNavHeader method
 
-        val email = FirebaseAuth.getInstance().currentUser?.email // get the current user's email
-        val username =
-            FirebaseAuth.getInstance().currentUser?.displayName // get the current user's username
-        Log.d("ConversationsActivity", "email: $email") // log the email
-        Log.d("ConversationsActivity", "username: $username") // log the username
-        try {
-//            setContentView(R.layout.nav_header)
-//            username_nav_header.text = email
-            Log.d("ConversationsActivity", "email set successfully") // log the email
-        } catch (e: Exception) {
-            Log.d("ConversationsActivity", "username_nav_header: $e") // log the exception
+        val uid = FirebaseAuth.getInstance().uid
+        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+        val firebaseuser = FirebaseAuth.getInstance().currentUser
+        val userEmail = firebaseuser!!.email
+        Log.d("email", "$userEmail")
+        if (userEmail != null) {
+//            Log.d("email", "${email_text_nav_header.text.toString()}")
         }
+//        email_nav_header.setText(userEmail.toString())
+
+
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                currentUser = snapshot.getValue(User::class.java)
+                Log.d("ConversationsActivity", "Current User ${currentUser!!.username}")
+                username_nav_header.setText(currentUser!!.username.toString())
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
     }
 }
