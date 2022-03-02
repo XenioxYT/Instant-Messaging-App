@@ -19,6 +19,8 @@ class ConversationsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState) // call super class onCreate method
         setContentView(R.layout.activity_conversations) // set the layout of the activity
 
+        changeUsernameEmailNavHeader()
+
         topAppBar.setNavigationOnClickListener { // set the navigation icon on the top app bar
             drawer_layout.openDrawer(GravityCompat.START) // open the drawer
         }
@@ -94,22 +96,23 @@ class ConversationsActivity : AppCompatActivity() {
         }
     }
 
-//    private fun changeUsernameEmailNavHeader() {
-//        Log.d(
-//            "ConversationsActivity",
-//            "changeUsernameEmailNavHeader"
-//        ) // log the changeUsernameEmailNavHeader method
-//
-//        val email = FirebaseAuth.getInstance().currentUser?.email // get the current user's email
-//        val username = FirebaseAuth.getInstance().currentUser?.displayName // get the current user's username
-//        Log.d("ConversationsActivity", "email: $email") // log the email
-//        Log.d("ConversationsActivity", "username: $username") // log the username
-//        try {
+    private fun changeUsernameEmailNavHeader() {
+        Log.d(
+            "ConversationsActivity",
+            "changeUsernameEmailNavHeader"
+        ) // log the changeUsernameEmailNavHeader method
+
+        val email = FirebaseAuth.getInstance().currentUser?.email // get the current user's email
+        val username =
+            FirebaseAuth.getInstance().currentUser?.displayName // get the current user's username
+        Log.d("ConversationsActivity", "email: $email") // log the email
+        Log.d("ConversationsActivity", "username: $username") // log the username
+        try {
 //            setContentView(R.layout.nav_header)
 //            username_nav_header.text = email
-//            Log.d("ConversationsActivity", "email set successfully") // log the email
-//        }
-//        catch (e: Exception) {
-//            Log.d("ConversationsActivity", "username_nav_header: $e") // log the exception
-//        }
+            Log.d("ConversationsActivity", "email set successfully") // log the email
+        } catch (e: Exception) {
+            Log.d("ConversationsActivity", "username_nav_header: $e") // log the exception
+        }
+    }
 }
