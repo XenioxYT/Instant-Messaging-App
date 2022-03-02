@@ -9,7 +9,6 @@ import android.text.style.AlignmentSpan
 import android.util.Log
 import android.util.Patterns
 import androidx.appcompat.app.AppCompatActivity
-import com.xeniox.instantmessagingapp.R
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login_account_created.*
 
@@ -19,8 +18,10 @@ class LoginAccountCreatedActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login_account_created)
 
 
-        // Listen for the login button press
+// Listen for the login button press
         button_login_loginActivity.setOnClickListener {
+
+
             Log.d("LoginActivity", "Login button pressed")
             // Check if username is empty
             val email = email_editText_login.text.toString()
@@ -41,13 +42,20 @@ class LoginAccountCreatedActivity : AppCompatActivity() {
             builder.setTitle(title) // Set the title
             builder.setMessage("Please wait while we log you in") // Set the message
             val dialog: AlertDialog = builder.create() // Create the dialog
-            if (!dismiss) {
-                dialog.show()
-            }
+            dialog.show() // Show the dialog
+
+
             // Check if password is empty
             if (password_editText_login.text.toString().isEmpty()) { // If password is empty
-                password_editText_login.error = "Password cannot be empty" // Show error
+                password_editText_login_created_layout.isErrorEnabled = true // Set error
+                password_editText_login_created_layout.error =
+                    "Password cannot be empty" // Show error
+            } else {
+                password_editText_login_created_layout.isErrorEnabled = false // Remove error
             }
+
+
+
             if (email_editText_login.text.toString()
                     .isNotEmpty() && password_editText_login.text.toString()
                     .isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
@@ -66,13 +74,18 @@ class LoginAccountCreatedActivity : AppCompatActivity() {
                             this,
                             ConversationsActivity::class.java
                         ) // Create an intent to go to the ConversationsActivity
-                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK) // Clear the task and start the activity
+                        intent.flags =
+                            Intent.FLAG_ACTIVITY_NO_HISTORY // Clear the back stack
                         startActivity(intent) // Start the activity
+                        finish() // Finish the current activity
                     }
                     .addOnFailureListener {
                         dialog.dismiss()
                         loginFailed(it)
                     }
+            } else {
+                dialog.dismiss()
+                Log.d("LoginActivity", "Login failed") // Log the failed login
             }
         }
 
@@ -81,8 +94,8 @@ class LoginAccountCreatedActivity : AppCompatActivity() {
             Log.d("LoginActivity", "Back to sign in button pressed") // Log the press
 
             // Clear error messages
-            email_editText_login.error = null // Clear error
-            password_editText_login.error = null // Clear error
+            email_editText_login_layout.error = null // Clear error
+            password_editText_login_created_layout.error = null // Clear error
 
             //Call the signup activity
             val intent = Intent(
@@ -110,8 +123,9 @@ class LoginAccountCreatedActivity : AppCompatActivity() {
                     ConversationsActivity::class.java
                 ) // Create an intent to go to the ConversationsActivity
                 intent.flags =
-                    Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK) // Clear the back stack
+                    Intent.FLAG_ACTIVITY_NO_HISTORY // Clear the back stack
                 startActivity(intent) // Start the activity
+                finish()
             }
             .addOnFailureListener {
                 loginFailed(it)
@@ -188,17 +202,24 @@ class LoginAccountCreatedActivity : AppCompatActivity() {
             if (!Patterns.EMAIL_ADDRESS.matcher(email_editText_login.text.toString())
                     .matches()
             ) { // If the email text box does not match the email pattern
-                email_editText_login.error =
+                email_editText_login_layout.isErrorEnabled = true // Enable the error
+                email_editText_login_layout.error =
                     "Email is invalid" // Set the error message of the email text box to "Email is invalid"
                 email_editText_login.requestFocus() // Request focus of the email text box
                 return // Return
             }
-        } else { // If the email text box is empty
-            email_editText_login.error =
+        }
+        if (email_editText_login.text.isNullOrEmpty()) { // If the email text box is empty
+            email_editText_login_layout.isErrorEnabled =
+                true // Enable the error message of the email text box
+            email_editText_login_layout.error =
                 "Email is required" // Set the error message of the email text box to "Email is required"
             email_editText_login.requestFocus() // Request focus of the email text box
             return // Return
-        } // End the if statement
+        } else {
+            email_editText_login_layout.isErrorEnabled =
+                false // If the email text box is not empty, set the error message to false
+        }
     }
 
 }
