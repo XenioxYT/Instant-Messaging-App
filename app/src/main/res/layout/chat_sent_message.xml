@@ -5,29 +5,30 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp">
 
+    <!--    talk about issues with the width going off the screen and having to use the maxwidth element-->
+
     <TextView
-        android:id="@+id/text_from_user"
+        android:id="@+id/text_to_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:background="@drawable/rounded_message_recieve"
+        android:layout_marginRight="4dp"
+        android:background="@drawable/rounded_message_send"
         android:maxWidth="220dp"
         android:padding="10dp"
         android:text="This is a test message :D. Hi? How are you today? I'm doing good thanks. "
         android:textColor="@color/black"
-        app:layout_constraintStart_toEndOf="@+id/image_message_received"
-        app:layout_constraintTop_toTopOf="@+id/image_message_received" />
-    <!--    talk about issues with the width going off the screen and having to use the maxwidth element-->
+        app:layout_constraintEnd_toStartOf="@+id/image_message_sent"
+        app:layout_constraintTop_toTopOf="@+id/image_message_sent" />
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/image_message_received"
+        android:id="@+id/image_message_sent"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
         app:civ_border_color="@color/black"
         app:civ_border_width="1dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/btn_dialog" />
 
