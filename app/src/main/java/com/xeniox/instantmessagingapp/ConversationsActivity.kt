@@ -13,7 +13,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_conversations.*
-import kotlinx.android.synthetic.main.nav_header.*
 
 class ConversationsActivity : AppCompatActivity() {
 
@@ -31,7 +30,7 @@ class ConversationsActivity : AppCompatActivity() {
         fetchCurrentUser()
 
 
-        changeUsernameEmailNavHeader()
+//        changeUsernameEmailNavHeader()
 
         topAppBar.setNavigationOnClickListener { // set the navigation icon on the top app bar
             drawer_layout.openDrawer(GravityCompat.START) // open the drawer
@@ -130,12 +129,6 @@ class ConversationsActivity : AppCompatActivity() {
 
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
-        val firebaseuser = FirebaseAuth.getInstance().currentUser
-        val userEmail = firebaseuser!!.email
-        Log.d("email", "$userEmail")
-        if (userEmail != null) {
-//            Log.d("email", "${email_text_nav_header.text.toString()}")
-        }
 //        email_nav_header.setText(userEmail.toString())
 
 
@@ -143,7 +136,6 @@ class ConversationsActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 currentUser = snapshot.getValue(User::class.java)
                 Log.d("ConversationsActivity", "Current User ${currentUser!!.username}")
-                username_nav_header.setText(currentUser!!.username.toString())
             }
 
             override fun onCancelled(error: DatabaseError) {

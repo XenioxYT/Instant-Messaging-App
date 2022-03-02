@@ -20,11 +20,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/email_nav_header"
+        android:id="@+id/email_text_nav_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/email_nav_header"
         android:textSize="15sp"
+        android:fontFamily="@font/outfit_light"
         app:layout_constraintStart_toStartOf="@+id/username_nav_header"
         app:layout_constraintTop_toBottomOf="@+id/username_nav_header" />
 
