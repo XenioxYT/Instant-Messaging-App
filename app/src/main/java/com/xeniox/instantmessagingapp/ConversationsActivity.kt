@@ -126,20 +126,20 @@ class ConversationsActivity : AppCompatActivity() {
             "ConversationsActivity",
             "changeUsernameEmailNavHeader"
         ) // log the changeUsernameEmailNavHeader method
-
-        val uid = FirebaseAuth.getInstance().uid
-        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+//
+//        val uid = FirebaseAuth.getInstance().uid
+//        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
 //        email_nav_header.setText(userEmail.toString())
 
 
-        ref.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                currentUser = snapshot.getValue(User::class.java)
-                Log.d("ConversationsActivity", "Current User ${currentUser!!.username}")
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-            }
-        })
+//        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//                currentUser = snapshot.getValue(User::class.java)
+//                Log.d("ConversationsActivity", "Current User ${currentUser!!.username}")
+//            }
+//
+//            override fun onCancelled(error: DatabaseError) {
+//            }
+//        })
     }
 }
