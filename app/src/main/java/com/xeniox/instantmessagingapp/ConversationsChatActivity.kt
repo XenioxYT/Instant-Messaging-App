@@ -37,6 +37,6 @@ class chatItem : Item<ViewHolder>() {
     }
 
     override fun getLayout(): Int {
-        return R.layout.chat_recieved_message
+        return R.layout.chat_from_message
     }
 }

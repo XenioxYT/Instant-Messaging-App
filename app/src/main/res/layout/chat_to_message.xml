@@ -6,19 +6,19 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/text_received_message"
+        android:id="@+id/text_to_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="This is a test :DDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
-        app:layout_constraintEnd_toStartOf="@+id/chat_received_image"
-        app:layout_constraintTop_toTopOf="@+id/chat_received_image"
+        app:layout_constraintEnd_toStartOf="@+id/chat_to_image"
+        app:layout_constraintTop_toTopOf="@+id/chat_to_image"
         android:padding="12dp"
         android:background="@drawable/chat_sent_message_rounded"
         android:maxWidth="240dp"
         android:layout_marginRight="4dp"/>
 
     <ImageView
-        android:id="@+id/chat_received_image"
+        android:id="@+id/chat_to_image"
         android:layout_width="50dp"
         android:layout_height="50dp"
         app:layout_constraintEnd_toEndOf="parent"
