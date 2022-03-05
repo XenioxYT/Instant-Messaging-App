@@ -35,9 +35,9 @@ class ConversationsChatActivity : AppCompatActivity() {
         topAppBar_chat_conversation.setNavigationOnClickListener {
             finish()
         }
+        val toUser = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)
 
 //        val username = intent.getStringExtra(NewConversationActivity.USER_KEY)
-        val toUser = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)
 
         topAppBar_chat_conversation.title = toUser?.username
         listenForMessages()
@@ -48,7 +48,9 @@ class ConversationsChatActivity : AppCompatActivity() {
     }
 
     private fun listenForMessages() {
-        val ref = FirebaseDatabase.getInstance().getReference("/messages")
+        val fromId = FirebaseAuth.getInstance().uid
+        val toId = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid
+        val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId")
         ref.addChildEventListener(object: ChildEventListener {
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
                 val chatMessage = p0.getValue(ChatMessage::class.java)
@@ -56,9 +58,11 @@ class ConversationsChatActivity : AppCompatActivity() {
                     Log.d(TAG, chatMessage.text)
 
                     if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
-                        adapter.add(ChatFromItem(chatMessage.text))
+                        val currentUser = ConversationsActivity.currentUser
+                        adapter.add(ChatToItem(chatMessage.text, currentUser!!))
                     } else {
-                        adapter.add(ChatToItem(chatMessage.text,toUser!!))
+                        val toUser = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)
+                        adapter.add(ChatFromItem(chatMessage.text,toUser!!))
                     }
                 }
             }
@@ -84,29 +88,64 @@ class ConversationsChatActivity : AppCompatActivity() {
 
 
     private fun performSendMessage() {
-        val reference = FirebaseDatabase.getInstance().getReference("/messages").push()
-
+//        val reference = FirebaseDatabase.getInstance().getReference("/messages").push()
         val fromId = FirebaseAuth.getInstance().uid
         val toId = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid
 
         if (fromId == null) {
-            Log.d(TAG, "fromId is null")
+            Log.d("chat", "fromId is null")
             return
         }
+        val reference = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId")
+            .push() // new messages node in firebase
 
-        editText_chat_conversation.text.trim().let {
-            reference.setValue(ChatMessage(reference.key!!, it.toString(), fromId, toId, System.currentTimeMillis()/1000)).addOnSuccessListener {
-                Log.d("ConversationsChatActivity", "Message sent...")
-                editText_chat_conversation.text.clear()
-                editText_chat_conversation.text.insert(0, "")
+        val toReference =
+            FirebaseDatabase.getInstance().getReference("/user-messages/$toId/$fromId")
+                .push() // new messages node in firebase
+
+        if (editText_chat_conversation.text.isNullOrEmpty()) {
+            Log.d("chat", "message is null")
+            return
+        } else {
+            editText_chat_conversation.text.trim().let {
+                reference.setValue(
+                    ChatMessage(
+                        reference.key!!,
+                        it.toString(),
+                        fromId,
+                        toId,
+                        System.currentTimeMillis() / 1000
+                    )
+                ).addOnSuccessListener {
+                    Log.d("ConversationsChatActivity", "Message sent... $it")
+                    editText_chat_conversation.text.clear()
+                    editText_chat_conversation.text.insert(0, "")
+                    recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
+                }
+                toReference.setValue(
+                    ChatMessage(
+                        toReference.key!!,
+                        it.toString(),
+                        fromId,
+                        toId,
+                        System.currentTimeMillis() / 1000
+                    )
+                ).addOnSuccessListener {
+                    Log.d("ConversationsChatActivity", "Message sent...$it")
+                }
             }
         }
     }
 }
 
-class ChatFromItem(val text: String) : Item<ViewHolder>() {
+class ChatFromItem(val text: String, val user: User) : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.text_from_message.text = text
+
+        val uri = user.profileImageUrl
+        val targetImageView = viewHolder.itemView.chat_from_image
+
+        Picasso.get().load(uri).into(targetImageView)
     }
 
     override fun getLayout(): Int {

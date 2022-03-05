@@ -26,7 +26,7 @@ class LoginActivity : AppCompatActivity() {
 
             Log.d("LoginActivity", "Login button pressed")
             // Check if username is empty
-            val email = email_editText_login.text.toString()
+            val email = email_editText_login.text.toString().trim()
             val password = password_editText_login.text.toString()
             checkEmail()
             Log.d("LoginActivity", "Login dialog") // Log the dialog
@@ -44,6 +44,7 @@ class LoginActivity : AppCompatActivity() {
             builder.setTitle(title) // Set the title
             builder.setMessage("Please wait while we log you in") // Set the message
             val dialog: AlertDialog = builder.create() // Create the dialog
+            dialog.setCancelable(false)
             dialog.show() // Show the dialog
 
 
@@ -57,9 +58,7 @@ class LoginActivity : AppCompatActivity() {
 
 
 
-            if (email_editText_login.text.toString()
-                    .isNotEmpty() && password_editText_login.text.toString()
-                    .isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
+            if (email_editText_login.text.toString().isNotEmpty() && password_editText_login.text.toString().isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
             ) { // If username and password are not empty
                 Log.d("LoginActivity", "Logging in user") // Log the login
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
@@ -150,6 +149,7 @@ class LoginActivity : AppCompatActivity() {
         builder.setTitle(title) // Set the title
         builder.setMessage("Please wait while we log you in") // Set the message
         val dialog: AlertDialog = builder.create() // Create the dialog
+        dialog.setCancelable(false)
         if (!dismiss) {
             dialog.show()
         }
@@ -179,6 +179,7 @@ class LoginActivity : AppCompatActivity() {
                 dialog.dismiss() // Dismiss the dialog
             } // End the positive button
             val dialog: AlertDialog = builder.create() // Create a dialog variable with the builder
+            dialog.setCancelable(false)
             dialog.show() // Show the dialog
         } else { // If the error message is not "A network error (such as timeout, interrupted connection or unreachable host) has occurred."
             title.setSpan(
@@ -194,6 +195,7 @@ class LoginActivity : AppCompatActivity() {
                 dialog.dismiss() // Dismiss the dialog
             } // End the positive button
             val dialog: AlertDialog = builder.create() // Create a dialog variable with the builder
+            dialog.setCancelable(false)
             dialog.show() // Show the dialog
         } // End the else statement
     } // End the loginFailedRegister function

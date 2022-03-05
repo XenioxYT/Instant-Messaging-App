@@ -65,9 +65,9 @@ class SignupActivity : AppCompatActivity() { // Start of class
 //            }
 
             val username =
-                username_editText_register.text.toString() // Set username to the text entered into the username text box
+                username_editText_register.text.toString().trim() // Set username to the text entered into the username text box
             val email =
-                email_editText_register.text.toString() // Set email to the text entered into the email text box
+                email_editText_register.text.toString().trim() // Set email to the text entered into the email text box
             val password =
                 password_editText_register.text.toString() // Set password to the text entered into the password text box
             val confirmPassword =
@@ -93,6 +93,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
                     builder.setTitle(title) // Set the title of the alert dialog to the title
                     builder.setMessage("Please wait while your account is being created.") // Set the message of the alert dialog to "Please wait while your account is being created."
                     val dialog: AlertDialog = builder.create() // Set dialog to the alert dialog created by the builder
+                    dialog.setCancelable(false) // Set the alert dialog to not be cancelable
                     dialog.show()
                     Log.d("SignupActivity", "dialog shown")
 
@@ -135,7 +136,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
                                     val profileImageUrl = filelocation.toString()
                                     val user = User(
                                         uid,
-                                        username_editText_register.text.toString(),
+                                        username_editText_register.text.toString().trim(),
                                         profileImageUrl
                                     ) // Create a user object with the user's uid and username
                                     ref.setValue(user)
@@ -265,8 +266,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
 
 
     private fun checkUsername(): Boolean { // Create a function called checkUsername
-        if (username_editText_register.text.toString()
-                .isNotEmpty()
+        if (username_editText_register.text.toString().trim().isNotEmpty()
         ) { // If the username text box is not empty
             username_editText_register_layout.isErrorEnabled = true
             if (username_editText_register.text.toString().length >= 18) { // If the length of the username is less than 6 or greater than 18
@@ -296,8 +296,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
 
     private fun checkEmail(): Boolean { // Create a function called checkEmail
         if (!email_editText_register.text.isNullOrEmpty()) { // If the email text box is not empty
-            if (!Patterns.EMAIL_ADDRESS.matcher(email_editText_register.text.toString())
-                    .matches()
+            if (!Patterns.EMAIL_ADDRESS.matcher(email_editText_register.text.toString().trim()).matches()
             ) { // If the email text box does not match the email pattern
                 email_editText_register_layout.isErrorEnabled = true
                 email_editText_register_layout.error =
@@ -424,6 +423,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
                 dialog.dismiss() // Dismiss the dialog
             } // End the positive button
             val dialog: AlertDialog = builder.create() // Create a dialog variable with the builder
+            dialog.setCancelable(false)
             dialog.show() // Show the dialog
         }
         else { // If the error message is not "A network error (such as timeout, interrupted connection or unreachable host) has occurred."
@@ -440,6 +440,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
                 dialog.dismiss() // Dismiss the dialog
             } // End the positive button
             val dialog: AlertDialog = builder.create() // Create a dialog variable with the builder
+            dialog.setCancelable(false)
             dialog.show() // Show the dialog
         } // End the else statement
     } // End the loginFailedRegister function
@@ -460,6 +461,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
             dialog.dismiss() // Dismiss the dialog
         } // End the positive button
         val dialog: AlertDialog = builder.create() // Create a dialog variable with the builder
+        dialog.setCancelable(false)
         dialog.show() // Show the dialog
     } // End the loginException function
 
@@ -480,6 +482,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
                 dialog.dismiss()
             }
             val dialog: AlertDialog = builder.create()
+            dialog.setCancelable(false)
             dialog.show()
             return false
         } else {

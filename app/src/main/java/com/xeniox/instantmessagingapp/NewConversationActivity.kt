@@ -36,6 +36,7 @@ class NewConversationActivity : AppCompatActivity() {
         builder.setTitle(title) // Set the title of the alert dialog to the title variable
         builder.setMessage("Please wait while we load the users") // Set the message of the alert dialog to "There was an error connecting to the servers. Please check your internet connection and try again."
         val dialog: AlertDialog = builder.create() // Create a dialog variable with the builder
+        dialog.setCancelable(false)
         dialog.show() // Show the dialog
 
 
