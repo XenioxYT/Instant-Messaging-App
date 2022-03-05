@@ -58,7 +58,7 @@ class ConversationsChatActivity : AppCompatActivity() {
 
                     if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
                         adapter.add(ChatToItem(chatMessage.text, ConversationsActivity.currentUser!!))
-                        // add the local user here to the smart replies ML kit
+
                         recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
                     } else {
                         adapter.add(ChatFromItem(chatMessage.text,intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!))
