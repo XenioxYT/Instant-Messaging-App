@@ -101,9 +101,6 @@ dependencies {
     implementation "com.github.lisawray.groupie:groupie-kotlin-android-extensions:2.10.0"
     implementation 'id.zelory:compressor:3.0.1'
 
-
-
-
-
-
+    //image compression
+    implementation 'com.github.dhaval2404:imagepicker:2.1'
 }

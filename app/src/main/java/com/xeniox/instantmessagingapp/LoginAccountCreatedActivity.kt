@@ -26,7 +26,7 @@ class LoginAccountCreatedActivity : AppCompatActivity() {
             // Check if username is empty
             val email = email_editText_login.text.toString().trim()
             val password = password_editText_login.text.toString()
-            checkEmail()
+            checkEmail(email)
             Log.d("LoginActivity", "Login dialog") // Log the dialog
             // Create a dialog
             val context = this
@@ -57,7 +57,7 @@ class LoginAccountCreatedActivity : AppCompatActivity() {
 
 
 
-            if (email_editText_login.text.toString()
+            if (email_editText_login.text.toString().trim()
                     .isNotEmpty() && password_editText_login.text.toString()
                     .isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
             ) { // If username and password are not empty
@@ -201,9 +201,9 @@ class LoginAccountCreatedActivity : AppCompatActivity() {
         } // End the else statement
     } // End the loginFailedRegister function
 
-    private fun checkEmail() { // Create a function called checkEmail
+    private fun checkEmail(email: String) { // Create a function called checkEmail
         if (!email_editText_login.text.isNullOrEmpty()) { // If the email text box is not empty
-            if (!Patterns.EMAIL_ADDRESS.matcher(email_editText_login.text.toString())
+            if (!Patterns.EMAIL_ADDRESS.matcher(email)
                     .matches()
             ) { // If the email text box does not match the email pattern
                 email_editText_login_layout.isErrorEnabled = true // Enable the error
@@ -213,7 +213,7 @@ class LoginAccountCreatedActivity : AppCompatActivity() {
                 return // Return
             }
         }
-        if (email_editText_login.text.isNullOrEmpty()) { // If the email text box is empty
+        if (email_editText_login.text.toString().trim().isNullOrEmpty()) { // If the email text box is empty
             email_editText_login_layout.isErrorEnabled =
                 true // Enable the error message of the email text box
             email_editText_login_layout.error =

@@ -18,6 +18,7 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
@@ -152,6 +153,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
                                                 LoginAccountCreatedActivity::class.java
                                             ) // Create an intent to the LoginAccountCreatedActivity
                                             startActivity(intent) // Start the intent
+                                            finish() // Finish the current activity
                                         } // End the addOnSuccessListener
                                         .addOnFailureListener { // Add an onFailureListener to the setValue function
                                             Log.d(
@@ -222,18 +224,25 @@ class SignupActivity : AppCompatActivity() { // Start of class
         }
 
         button_profile_picture.setOnClickListener {
-            Log.d(
-                "SignupActivity",
-                "Profile picture button clicked"
-            ) // Log the profile picture button clicked
+//            Log.d(
+//                "SignupActivity",
+//                "Profile picture button clicked"
+//            ) // Log the profile picture button clicked
+//
+//            //create an intent to open the gallery
+//            val intent = Intent(Intent.ACTION_PICK) // Set intent to an intent to open the gallery
+//            intent.type = "image/*" // Set the type of the intent to image
+//            startActivityForResult(
+//                intent,
+//                0
+//            ) // Start the activity for result with the intent and the request code
 
-            //create an intent to open the gallery
-            val intent = Intent(Intent.ACTION_PICK) // Set intent to an intent to open the gallery
-            intent.type = "image/*" // Set the type of the intent to image
-            startActivityForResult(
-                intent,
-                0
-            ) // Start the activity for result with the intent and the request code
+            ImagePicker.with(this)
+                .crop()
+                .maxResultSize(128,128)
+                .cropSquare()
+                .compress(2048)
+                .start()
         }
     }
 
@@ -243,21 +252,22 @@ class SignupActivity : AppCompatActivity() { // Start of class
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
+        if (resultCode == Activity.RESULT_OK) {
 
-            selectedPhotoUri = data.data
+            selectedPhotoUri = data?.data
             val bitmap = MediaStore.Images.Media.getBitmap(
                 contentResolver,
                 selectedPhotoUri
             ) // Get the bitmap from the uri
 
-            selectphoto_imageview_register.setImageBitmap(compressBitmap(bitmap, 10))
+            selectphoto_imageview_register.setImageBitmap(bitmap) // Set the image view to the bitmap
 
             button_profile_picture.alpha = 0f
 
+        } else if (resultCode == ImagePicker.RESULT_ERROR) {
+            Toast.makeText(this, ImagePicker.getError(data), Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(this, "Please select a photo", Toast.LENGTH_SHORT) // TODO: CHANGE TO SNACKBAR LATER ON
-                .show() // Show a toast to the user
+            Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show()
         }
     }
 
