@@ -103,4 +103,5 @@ dependencies {
 
     //image compression
     implementation 'com.github.dhaval2404:imagepicker:2.1'
+    implementation 'io.github.vadiole:colorpicker:1.0.2'
 }

@@ -12,6 +12,7 @@ import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.conversations_message_row.view.*
 
 class LatestMessageRow(val chatMessage: ChatMessage): Item<ViewHolder>() {
+    var chatPartnerUser: User? = null
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.conversations_message_row_textView.text = chatMessage.text
 
@@ -23,9 +24,9 @@ class LatestMessageRow(val chatMessage: ChatMessage): Item<ViewHolder>() {
         val ref = FirebaseDatabase.getInstance().getReference("/users/$chatPartnerId")
         ref.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val user = snapshot.getValue(User::class.java)
-                viewHolder.itemView.conversations_message_username.text = user?.username
-                val uri = user?.profileImageUrl
+                chatPartnerUser = snapshot.getValue(User::class.java)
+                viewHolder.itemView.conversations_message_username.text = chatPartnerUser?.username
+                val uri = chatPartnerUser?.profileImageUrl
                 Log.d("LatestMessageRow", "uri: $uri")
                 if (uri != null) {
                     val targetImageView = viewHolder.itemView.user_profile_picture_conversations_message_row

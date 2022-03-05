@@ -1,5 +1,6 @@
 package com.xeniox.instantmessagingapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -31,13 +32,13 @@ class ConversationsChatActivity : AppCompatActivity() {
         recyclerView_chat_conversation.adapter = adapter
 
         topAppBar_chat_conversation.setNavigationOnClickListener {
+            val intent = Intent(this, ConversationsActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
             finish()
         }
-        val toUser = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)
 
-//        val username = intent.getStringExtra(NewConversationActivity.USER_KEY)
-
-        topAppBar_chat_conversation.title = toUser?.username
+        topAppBar_chat_conversation.title = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)?.username
         listenForMessages()
         button_send_message.setOnClickListener {
             Log.d("ConversationsChatActivity", "Attempt to send message...")
@@ -56,19 +57,17 @@ class ConversationsChatActivity : AppCompatActivity() {
                     Log.d(TAG, chatMessage.text)
 
                     if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
-                        val currentUser = ConversationsActivity.currentUser
-                        adapter.add(ChatToItem(chatMessage.text, currentUser!!))
+                        adapter.add(ChatToItem(chatMessage.text, ConversationsActivity.currentUser!!))
                         // add the local user here to the smart replies ML kit
                         recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
                     } else {
-                        val toUser = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)
-                        adapter.add(ChatFromItem(chatMessage.text,toUser!!))
+                        adapter.add(ChatFromItem(chatMessage.text,intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!))
                         // add the remote user here to the smart replies ML kit
                         recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
                     }
                 }
+                recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
             }
-
             override fun onCancelled(p0: DatabaseError) {
 
             }
