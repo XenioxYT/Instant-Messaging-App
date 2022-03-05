@@ -8,6 +8,7 @@ import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
@@ -55,7 +56,8 @@ class ConversationsChatActivity : AppCompatActivity() {
                     Log.d(TAG, chatMessage.text)
 
                     if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
-                        adapter.add(ChatToItem(chatMessage.text))
+                        val toUser = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)
+                        adapter.add(ChatToItem(chatMessage.text, toUser!!))
                     } else {
                         adapter.add(ChatFromItem(chatMessage.text))
                     }
@@ -100,19 +102,6 @@ class ConversationsChatActivity : AppCompatActivity() {
                 editText_chat_conversation.text.insert(0, "")
             }
         }
-
-    }
-
-    private fun setupDummyData() {
-        val adapter = GroupAdapter<ViewHolder>()
-        adapter.add(ChatFromItem("FROM MESSAGE"))
-        adapter.add(ChatToItem("TO MESSAGE"))
-        adapter.add(ChatFromItem("FROM MESSAGE"))
-        adapter.add(ChatToItem("TO MESSAGE"))
-        adapter.add(ChatFromItem("FROM MESSAGE"))
-        adapter.add(ChatToItem("To message"))
-        adapter.add(ChatFromItem("FROM MESSAGE"))
-        recyclerView_chat_conversation.adapter = adapter
     }
 }
 
@@ -126,9 +115,14 @@ class ChatFromItem(val text: String) : Item<ViewHolder>() {
     }
 }
 
-class ChatToItem(val text: String) : Item<ViewHolder>() {
+class ChatToItem(val text: String, val user: User) : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.text_to_message.text = text
+
+        val uri = user.profileImageUrl
+        val targetImageView = viewHolder.itemView.chat_to_image
+
+        Picasso.get().load(uri).into(targetImageView)
     }
 
     override fun getLayout(): Int {
