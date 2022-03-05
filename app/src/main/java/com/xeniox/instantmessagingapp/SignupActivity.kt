@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
 import android.provider.MediaStore
 import android.text.Layout
 import android.text.SpannableString
@@ -23,6 +24,7 @@ import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_signup.*
 import java.io.ByteArrayOutputStream
 import java.util.*
@@ -513,12 +515,12 @@ class SignupActivity : AppCompatActivity() { // Start of class
 
 
 // CLASSES \\
-
+@Parcelize
 class User(
     val uid: String,
     val username: String,
     val profileImageUrl: String
-) {
+) :Parcelable {
     constructor() : this("", "", "")
     //created blank constructor as kotlin now requires this when making a class
 } // Create a class called User

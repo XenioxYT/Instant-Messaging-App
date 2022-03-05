@@ -53,6 +53,10 @@ class NewConversationActivity : AppCompatActivity() {
         fetchUsers(dialog)
     }
 
+    companion object {
+        val USER_KEY = "USER_KEY"
+    }
+
     private fun fetchUsers(dialog: AlertDialog) {
         val ref = FirebaseDatabase.getInstance().getReference("/users")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -71,7 +75,11 @@ class NewConversationActivity : AppCompatActivity() {
 
                 adapter.setOnItemClickListener { item, view ->
 
+                    val userItem = item as UserItem
+
                     val intent = Intent(view.context, ConversationsChatActivity::class.java)
+//                    intent.putExtra(USER_KEY, userItem.user.username)
+                    intent.putExtra(USER_KEY, userItem.user)
                     startActivity(intent)
                     finish()
                 }
