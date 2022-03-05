@@ -22,6 +22,8 @@ import kotlinx.android.synthetic.main.activity_settings.drawer_layout
 import kotlinx.android.synthetic.main.activity_settings.navigation_drawer
 import kotlinx.android.synthetic.main.activity_settings.topAppBar_settings
 import kotlinx.android.synthetic.main.settings_test_button.*
+import vadiole.colorpicker.ColorModel
+import vadiole.colorpicker.ColorPickerDialog
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -36,9 +38,17 @@ class SettingsActivity : AppCompatActivity() {
         recycler_view_settings.adapter = adapter
         adapter.add(SettingsItem())
 
-        button_test_colour.setOnClickListener {
-
-        }
+//        button_test_colour.setOnClickListener {
+//            val colourPicker: ColorPickerDialog.Builder = ColorPickerDialog.Builder()
+//                .setInitialColor(0x00BCD4FF)
+//                .setColorModel(ColorModel.RGB)
+//                .setButtonOkText(android.R.string.ok)
+//                .setButtonCancelText(android.R.string.cancel)
+//                .onColorSelected { color ->
+//                    Log.d("Colour", "Colour: $color")
+//                }
+//
+//        }
 
 
 
