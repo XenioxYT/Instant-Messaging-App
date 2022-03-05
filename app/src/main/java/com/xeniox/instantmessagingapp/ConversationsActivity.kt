@@ -27,21 +27,14 @@ class ConversationsActivity : AppCompatActivity() {
         verifyUserIsLoggedIn()
         super.onCreate(savedInstanceState) // call super class onCreate method
         setContentView(R.layout.activity_conversations) // set the layout of the activity
-
         fetchCurrentUser()
-
-        changeUsernameEmailNavHeader()
-
         topAppBar.setNavigationOnClickListener { // set the navigation icon on the top app bar
             drawer_layout.openDrawer(GravityCompat.START) // open the drawer
         }
-
         floating_action_button_start_chat.setOnClickListener {
             val intent = Intent(this, NewConversationActivity::class.java)
             startActivity(intent)
         }
-
-
         toggle = ActionBarDrawerToggle(
             this,
             drawer_layout,
@@ -119,26 +112,6 @@ class ConversationsActivity : AppCompatActivity() {
             finish()
         } else {
             Log.d("ConversationsActivity", "User is logged in") // log the user is logged in
-        }
-    }
-
-    private fun changeUsernameEmailNavHeader() {
-        Log.d(
-            "ConversationsActivity",
-            "changeUsernameEmailNavHeader"
-        ) // log the changeUsernameEmailNavHeader method
-
-        val email = FirebaseAuth.getInstance().currentUser?.email // get the current user's email
-        val username =
-            FirebaseAuth.getInstance().currentUser?.displayName // get the current user's username
-        Log.d("ConversationsActivity", "email: $email") // log the email
-        Log.d("ConversationsActivity", "username: $username") // log the username
-        try {
-//            setContentView(R.layout.nav_header)
-//            username_nav_header.text = email
-            Log.d("ConversationsActivity", "email set successfully") // log the email
-        } catch (e: Exception) {
-            Log.d("ConversationsActivity", "username_nav_header: $e") // log the exception
         }
     }
 }
