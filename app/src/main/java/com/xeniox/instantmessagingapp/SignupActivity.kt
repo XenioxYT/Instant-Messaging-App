@@ -3,9 +3,12 @@ package com.xeniox.instantmessagingapp
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
 import android.provider.MediaStore
 import android.text.Layout
 import android.text.SpannableString
@@ -15,11 +18,15 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.xeniox.instantmessagingapp.R
+import com.google.firebase.FirebaseApp
+import com.google.firebase.appcheck.FirebaseAppCheck
+import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_signup.*
+import java.io.ByteArrayOutputStream
 import java.util.*
 
 
@@ -33,19 +40,25 @@ class SignupActivity : AppCompatActivity() { // Start of class
         super.onCreate(savedInstanceState) // call super class onCreate
         setContentView(R.layout.activity_signup) // set the layout
 
+        FirebaseApp.initializeApp(/*context=*/this)
+        val firebaseAppCheck = FirebaseAppCheck.getInstance()
+        firebaseAppCheck.installAppCheckProviderFactory(
+            SafetyNetAppCheckProviderFactory.getInstance()
+        )
+
 
         // Listen for the create account button press
         button_create_account.setOnClickListener { // Create a new user with email and password
             Log.d("SignupActivity", "Button clicked") // Log the button press
 
-            checkUsername() // Check if the username is valid
-            Log.d("SignupActivity", "Username Checked")
-            checkEmail() // Check if the email is valid
-            Log.d("SignupActivity", "Email Checked")
-            checkPassword() // Check if the password is valid
-            Log.d("SignupActivity", "Password Checked")
-            checkPasswordsMatch() // Check if the passwords match
-            Log.d("SignupActivity", "Passwords match Checked")
+//            checkUsername() // Check if the username is valid
+//            Log.d("SignupActivity", "Username Checked")
+//            checkEmail() // Check if the email is valid
+//            Log.d("SignupActivity", "Email Checked")
+//            checkPassword() // Check if the password is valid
+//            Log.d("SignupActivity", "Password Checked")
+//            checkPasswordsMatch() // Check if the passwords match
+//            Log.d("SignupActivity", "Passwords match Checked")
             val profilepic = false
 //            if (checkProfilePicture(profilepic)) { // Check if the profile picture is valid
 //                Log.d("SignupActivity", "Profile picture Checked")
@@ -63,11 +76,12 @@ class SignupActivity : AppCompatActivity() { // Start of class
             // I have no idea why this code works, but it does
             // However, something may break if I remove it
             try { // Try to create the user
-                if (username_editText_register.text.toString().isNotEmpty() && email_editText_register.text.toString().isNotEmpty() && password_editText_register.text.toString().isNotEmpty() && confirm_password_editText_register.text.toString().isNotEmpty() && password_editText_register.text.toString() == confirm_password_editText_register.text.toString()) { // If all the fields are filled in and the passwords match
-                    Log.d("SignupActivity","Everything validated")
+                if (checkUsername() && checkEmail() && checkPassword() && checkPasswordsMatch() && checkProfilePicture()) { // If all the fields are filled in and the passwords match
+                    Log.d("SignupActivity", "Everything validated")
 
                     val context = this // Set context to this
-                    val title = SpannableString("Creating Account") // Set title to the text "Creating Account"
+                    val title =
+                        SpannableString("Creating Account") // Set title to the text "Creating Account"
                     title.setSpan( // Set the alignment of the text to center
                         AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), // Set the alignment to center
                         0, // Set the start of the alignment to 0
@@ -92,17 +106,24 @@ class SignupActivity : AppCompatActivity() { // Start of class
                         if (selectedPhotoUri == null) {
                             Log.d("SignupAcitivity", "The user has not uploaded an image")
                         }
-                        if (checkProfilePicture(profilepic)) {
+                        if (checkProfilePicture()) {
                             val filename = UUID.randomUUID().toString()
                             val ref =
                                 FirebaseStorage.getInstance().getReference("/images/$filename")
-                            val profilepic = false
+                            val bitmap = MediaStore.Images.Media.getBitmap(
+                                contentResolver,
+                                selectedPhotoUri
+                            )
+                            val compressedimage = compressBitmap(bitmap, 10)
+
+                            // add
+
                             ref.putFile(selectedPhotoUri!!).addOnSuccessListener { it ->
                                 Log.d(
                                     "SignupActivity",
                                     "Successfully uploaded image: ${it.metadata?.path}"
                                 )
-                                ref.downloadUrl.addOnSuccessListener {
+                                ref.downloadUrl.addOnSuccessListener { it ->
                                     Log.d("SignupActivity", "File Location: $it")
                                     val filelocation = it
                                     val uid = FirebaseAuth.getInstance().uid
@@ -110,7 +131,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
                                     val ref =
                                         FirebaseDatabase.getInstance("https://instant-messaging-app-7fed6-default-rtdb.europe-west1.firebasedatabase.app/")
                                             .getReference("/users/$uid") // Get the user's reference
-                                    Log.d("SignupActivity", "${filename}, ${filelocation}")
+                                    Log.d("SignupActivity", "${filename}, $filelocation")
                                     val profileImageUrl = filelocation.toString()
                                     val user = User(
                                         uid,
@@ -123,7 +144,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
                                                 "SignupActivity",
                                                 "Finally we saved the user to Firebase Database"
                                             ) // Log that the user has been saved to Firebase Database
-                                            Log.d("SignupActivity", "Intent = ${intent}")
+                                            Log.d("SignupActivity", "Intent = $intent")
                                             dialog.dismiss()
                                             val intent = Intent(
                                                 this,
@@ -153,6 +174,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
 //                        }
 
                     } .addOnFailureListener {
+                        dialog.dismiss()
                         loginFailedRegister(it)
                     }
 //                    dialog.dismiss() // Dismiss the alert dialog
@@ -221,20 +243,20 @@ class SignupActivity : AppCompatActivity() { // Start of class
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
-            selectedPhotoUri =
-                data.data // Set the selected photo uri to the uri returned from the gallery
+
+            selectedPhotoUri = data.data
             val bitmap = MediaStore.Images.Media.getBitmap(
                 contentResolver,
                 selectedPhotoUri
             ) // Get the bitmap from the uri
-            selectphoto_imageview_register.setImageBitmap(bitmap) // Set the profile picture image view to the bitmap
-            button_profile_picture.alpha = 0f // Set the alpha of the profile picture button to 0
+
+            selectphoto_imageview_register.setImageBitmap(compressBitmap(bitmap, 10))
+
+            button_profile_picture.alpha = 0f
+
         } else {
             Toast.makeText(this, "Please select a photo", Toast.LENGTH_SHORT) // TODO: CHANGE TO SNACKBAR LATER ON
                 .show() // Show a toast to the user
-            // TODO: Can I check the profile picture here and stop the user from creating an account here
-            // instead of creating about 500 errors because of my shit code?
-            // seems likely.
         }
     }
 
@@ -242,93 +264,118 @@ class SignupActivity : AppCompatActivity() { // Start of class
     ///// FUNCTIONS \\\\\
 
 
-    private fun checkUsername() { // Create a function called checkUsername
+    private fun checkUsername(): Boolean { // Create a function called checkUsername
         if (username_editText_register.text.toString()
                 .isNotEmpty()
         ) { // If the username text box is not empty
             username_editText_register_layout.isErrorEnabled = true
             if (username_editText_register.text.toString().length >= 18) { // If the length of the username is less than 6 or greater than 18
-                username_editText_register_layout.error = "Username must be no more than 18 characters" // Set the error message of the username text box to "Username must be at least 6 characters and no more than 18 characters"
+                username_editText_register_layout.error =
+                    "Username must be no more than 18 characters" // Set the error message of the username text box to "Username must be at least 6 characters and no more than 18 characters"
                 username_editText_register.requestFocus() // Request focus of the username text box
-                return // Return
+                loginException()
+                return false// Return
             }
         }
         if (username_editText_register.text.toString()
                 .isEmpty()
         ) { // If the username text box is empty
             username_editText_register_layout.isErrorEnabled = true
-            username_editText_register_layout.error = "Username cannot be empty" // Set the error message of the username text box to "Username cannot be empty"
+            username_editText_register_layout.error =
+                "Username cannot be empty" // Set the error message of the username text box to "Username cannot be empty"
             username_editText_register.requestFocus() // Request focus of the username text box
             Log.d("SignupActivity", "username is not valid")
-            return // Return
+            return false// Return
         } else {
             username_editText_register_layout.isErrorEnabled =
                 false // Clear the error message of the username text box
             Log.d("SignupActivity", "Username is valid") // Log that the username is valid
+            return true
         }
     }
 
-    private fun checkEmail() { // Create a function called checkEmail
+    private fun checkEmail(): Boolean { // Create a function called checkEmail
         if (!email_editText_register.text.isNullOrEmpty()) { // If the email text box is not empty
             if (!Patterns.EMAIL_ADDRESS.matcher(email_editText_register.text.toString())
                     .matches()
             ) { // If the email text box does not match the email pattern
                 email_editText_register_layout.isErrorEnabled = true
-                email_editText_register_layout.error = "Email is invalid" // Set the error message of the email text box to "Email is invalid"
+                email_editText_register_layout.error =
+                    "Email is invalid" // Set the error message of the email text box to "Email is invalid"
                 email_editText_register.requestFocus() // Request focus of the email text box
-                return // Return
+                loginException()
+                return false// Return
             }
         }
         if (email_editText_register.text.toString()
                 .isEmpty()
         ) { // If the email text box is empty
             email_editText_register_layout.isErrorEnabled = true
-            email_editText_register_layout.error = "Email is required" // Set the error message of the email text box to "Email is required"
+            email_editText_register_layout.error =
+                "Email is required" // Set the error message of the email text box to "Email is required"
             email_editText_register.requestFocus() // Request focus of the email text box
-            return // Return
+            loginException()
+            return false// Return
         } else {
             email_editText_register_layout.isErrorEnabled =
                 false // Clear the error message of the email text box
+            return true
         }
     }
 
-    private fun checkPassword() { // Create a function called checkPassword
-        if (password_editText_register.text.toString().isNotEmpty()) { // If the password text box is not empty
+    private fun checkPassword(): Boolean { // Create a function called checkPassword
+        if (password_editText_register.text.toString()
+                .isNotEmpty()
+        ) { // If the password text box is not empty
             if (password_editText_register.text.toString().length < 6) { // If the length of the password is less than 6
                 password_editText_register_layout.isErrorEnabled = true
-                password_editText_register_layout.error = "Password must be at least 6 characters" // Set the error message of the password text box to "Password must be at least 6 characters"
+                password_editText_register_layout.error =
+                    "Password must be at least 6 characters" // Set the error message of the password text box to "Password must be at least 6 characters"
                 password_editText_register.requestFocus() // Request focus of the password text box
-                return // Return
+                loginException()
+                return false // Return
             }
         }
         if (password_editText_register.text.toString().isEmpty()
         ) { // If the password text box is empty
             password_editText_register_layout.isErrorEnabled = true
-            password_editText_register_layout.error = "Password cannot be empty" // Set the error message of the password text box to "Password cannot be empty"
+            password_editText_register_layout.error =
+                "Password cannot be empty" // Set the error message of the password text box to "Password cannot be empty"
             password_editText_register.requestFocus() // Request focus of the password text box
-            return // Return
+            loginException()
+            return false// Return
         } else {
             password_editText_register_layout.isErrorEnabled =
                 false // Clear the error message of the password text box
+            return true
         }
     } // End the checkPassword function
 
-    private fun checkPasswordsMatch() { // Create a function called checkPasswordsMatch
-        if (confirm_password_editText_register.text.toString().isNotEmpty()) { // If the confirm password text box is not empty
+    private fun checkPasswordsMatch(): Boolean { // Create a function called checkPasswordsMatch
+        if (confirm_password_editText_register.text.toString()
+                .isNotEmpty()
+        ) { // If the confirm password text box is not empty
             if (confirm_password_editText_register.text.toString() != password_editText_register.text.toString()) { // If the confirm password text box does not match the password text box
                 confirm_password_editText_register_layout.isErrorEnabled = true
-                confirm_password_editText_register_layout.error = "Passwords do not match" // Set the error message of the confirm password text box to "Passwords do not match"
+                confirm_password_editText_register_layout.error =
+                    "Passwords do not match" // Set the error message of the confirm password text box to "Passwords do not match"
                 confirm_password_editText_register.requestFocus() // Request focus of the confirm password text box
-                return // Return
+                loginException()
+                return false// Return
             } // End the if statement
         }
-        if (confirm_password_editText_register.text.toString().isEmpty()) { // If the confirm password text box is empty
+        if (confirm_password_editText_register.text.toString()
+                .isEmpty()
+        ) { // If the confirm password text box is empty
             confirm_password_editText_register_layout.isErrorEnabled = true
-            confirm_password_editText_register_layout.error = "Confirm Password cannot be empty" // Set the error message of the confirm password text box to "Confirm Password cannot be empty"
+            confirm_password_editText_register_layout.error =
+                "Confirm Password cannot be empty" // Set the error message of the confirm password text box to "Confirm Password cannot be empty"
             confirm_password_editText_register.requestFocus() // Request focus of the confirm password text box
-            return // Return
+            loginException()
+            return false // Return
         } else {
             confirm_password_editText_register_layout.isErrorEnabled = false // Clear the error message of the confirm password text box
+            return true
         }
     } // End the checkPasswordsMatch function
 
@@ -408,7 +455,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
         ) // End the setSpan function
         val builder = AlertDialog.Builder(context) // Create a builder variable
         builder.setTitle(title) // Set the title of the alert dialog to the title variable
-        builder.setMessage("There was an error creating your account. Please try again in a few minutes.") // Set the message of the alert dialog to "There was an error creating your account. Please try again in a few minutes."
+        builder.setMessage("There was an error creating your account. Please check your details and try again.") // Set the message of the alert dialog to "There was an error creating your account. Please try again in a few minutes."
         builder.setPositiveButton("OK") { dialog, _ -> // Create a positive button with an OK listener
             dialog.dismiss() // Dismiss the dialog
         } // End the positive button
@@ -416,7 +463,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
         dialog.show() // Show the dialog
     } // End the loginException function
 
-    private fun checkProfilePicture(profilepic: Boolean): Boolean {
+    private fun checkProfilePicture(): Boolean {
         if (selectedPhotoUri == null) {
             val context = this
             val title = SpannableString("No profile picture was selected")
@@ -435,12 +482,17 @@ class SignupActivity : AppCompatActivity() { // Start of class
             val dialog: AlertDialog = builder.create()
             dialog.show()
             return false
-        }
-        else {
+        } else {
             return true
         }
     }
 
+    private fun compressBitmap(bitmap: Bitmap, quality: Int): Bitmap? {
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, quality, stream)
+        val byteArray = stream.toByteArray()
+        return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+    }
 
 
 //    private fun uploadImageToFirebase() {
@@ -462,14 +514,16 @@ class SignupActivity : AppCompatActivity() { // Start of class
 }
 
 
-
 // CLASSES \\
-
+@Parcelize
 class User(
     val uid: String,
     val username: String,
     val profileImageUrl: String
-) // Create a class called User
+) :Parcelable {
+    constructor() : this("", "", "")
+    //created blank constructor as kotlin now requires this when making a class
+} // Create a class called User
 
 
 // TODO: PROBLEM DESCRIPTION BELOW AS TO WHY THE PROGRAM CRASHES WHEN CREATING AN ACCOUNT:

@@ -33,6 +33,7 @@
 
     <!-- Note: A RecyclerView can also be used -->
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_all_conversations"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -59,6 +60,7 @@
             android:layout_marginBottom="24dp"
             android:layout_marginEnd="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
             app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

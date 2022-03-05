@@ -7,7 +7,6 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import com.xeniox.instantmessagingapp.R
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_settings.*
 
@@ -36,16 +35,17 @@ class SettingsActivity : AppCompatActivity() {
                 R.id.conversations -> { // if the item was the second item
                     val intent = Intent(this, ConversationsActivity::class.java) // create an intent to go to the Conversations activity
                     startActivity(intent) // start the intent
+                    drawer_layout.closeDrawer(GravityCompat.START)
                 }
                 R.id.settings -> { // if the item was the third item
-                    val intent = Intent(this, SettingsActivity::class.java) // create an intent to go to the Settings activity
-                    startActivity(intent) // start the intent
+                    drawer_layout.closeDrawer(GravityCompat.START)
                 }
                 R.id.logout -> { // if the item was the fourth item
                     val intent = Intent(this, LoginActivity::class.java) // create an intent to go to the login activity
                     FirebaseAuth.getInstance().signOut()
                     Log.d("Logout", "Logged out") // log the user out
                     startActivity(intent) // start the intent
+                    drawer_layout.closeDrawer(GravityCompat.START)
 
                 }
             }

@@ -3,14 +3,22 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/Tom/StudioProjects/instant-messaging-app/app/src/main/res/layout/activity_new_conversation.xml" value="0.2504528985507246" />
-        <entry key="..\:/Users/Tom/StudioProjects/instant-messaging-app/app/src/main/res/layout/activity_signup.xml" value="0.3605072463768116" />
+        <entry key="..\:/Users/Tom/StudioProjects/instant-messaging-app/app/src/main/res/layout/activity_conversations_chat.xml" value="0.24126984126984127" />
+        <entry key="..\:/Users/Tom/StudioProjects/instant-messaging-app/app/src/main/res/layout/activity_new_conversation.xml" value="0.12222222222222222" />
+        <entry key="..\:/Users/Tom/StudioProjects/instant-messaging-app/app/src/main/res/layout/activity_signup.xml" value="0.1" />
+        <entry key="..\:/Users/Tom/StudioProjects/instant-messaging-app/app/src/main/res/layout/chat_recieved_message.xml" value="0.5" />
+        <entry key="..\:/Users/Tom/StudioProjects/instant-messaging-app/app/src/main/res/layout/user_row_new_conversation.xml" value="0.33" />
+        <entry key="..\:/Users/Tom/StudioProjects/instant-messaging-app/app/src/main/res/menu/actionbar_menu.xml" value="0.21296296296296297" />
+        <entry key="..\:/Users/Tom/StudioProjects/instant-messaging-app/app/src/main/res/menu/chat_menu.xml" value="0.365625" />
         <entry key="..\:/Users/tomlo/AndroidStudioProjects/InstantMessagingApp/app/src/main/res/layout/activity_login.xml" value="0.3546875" />
         <entry key="..\:/Users/tomlo/AndroidStudioProjects/InstantMessagingApp/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/tomlo/Desktop/StudioProjects/app/src/main/res/layout/activity_conversations.xml" value="0.23232323232323232" />
         <entry key="..\:/Users/tomlo/Desktop/StudioProjects/app/src/main/res/menu/nav_menu.xml" value="0.33" />
         <entry key="..\:/Users/tomlo/StudioProjects/instant-messaging-app/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.281" />
+        <entry key="..\:/Users/tomlo/StudioProjects/instant-messaging-app/app/src/main/res/drawable/chat_recieved_message_rounded.xml" value="0.3645" />
+        <entry key="..\:/Users/tomlo/StudioProjects/instant-messaging-app/app/src/main/res/drawable/chat_sent_message_rounded.xml" value="0.3645" />
         <entry key="..\:/Users/tomlo/StudioProjects/instant-messaging-app/app/src/main/res/drawable/ic_launcher_background.xml" value="0.281" />
+        <entry key="..\:/Users/tomlo/StudioProjects/instant-messaging-app/app/src/main/res/drawable/rounded_profile_picture_button.xml" value="0.3645" />
         <entry key="..\:/Users/tomlo/StudioProjects/instant-messaging-app/app/src/main/res/font-v26/font.xml" value="0.536" />
         <entry key="..\:/Users/tomlo/StudioProjects/instant-messaging-app/app/src/main/res/font/font.xml" value="0.3958333333333333" />
         <entry key="..\:/Users/tomlo/StudioProjects/instant-messaging-app/app/src/main/res/font/fonts.xml" value="0.3958333333333333" />
@@ -21,10 +29,14 @@
         <entry key="..\:/Users/tomlo/StudioProjects/instant-messaging-app/app/src/main/res/layout/activity_settings.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/tomlo/StudioProjects/instant-messaging-app/app/src/main/res/layout/activity_signup.xml" value="0.22" />
         <entry key="..\:/Users/tomlo/StudioProjects/instant-messaging-app/app/src/main/res/layout/activity_welcome.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/tomlo/StudioProjects/instant-messaging-app/app/src/main/res/layout/chat_recieved_message.xml" value="0.35778985507246375" />
+        <entry key="..\:/Users/tomlo/StudioProjects/instant-messaging-app/app/src/main/res/layout/chat_sent_message.xml" value="0.3374094202898551" />
+        <entry key="..\:/Users/tomlo/StudioProjects/instant-messaging-app/app/src/main/res/layout/chat_to_message.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/tomlo/StudioProjects/instant-messaging-app/app/src/main/res/layout/fragment_signup.xml" value="0.33" />
         <entry key="..\:/Users/tomlo/StudioProjects/instant-messaging-app/app/src/main/res/layout/login_activity.xml" value="0.33" />
         <entry key="..\:/Users/tomlo/StudioProjects/instant-messaging-app/app/src/main/res/layout/nav_header.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/tomlo/StudioProjects/instant-messaging-app/app/src/main/res/layout/settings_activity.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/tomlo/StudioProjects/instant-messaging-app/app/src/main/res/layout/user_row_new_conversation.xml" value="0.5" />
         <entry key="..\:/Users/tomlo/StudioProjects/instant-messaging-app/app/src/main/res/menu/actionbar_menu.xml" value="0.34074074074074073" />
         <entry key="..\:/Users/tomlo/StudioProjects/instant-messaging-app/app/src/main/res/menu/nav_menu.xml" value="0.3138888888888889" />
         <entry key="..\:/Users/tomlo/StudioProjects/instant-messaging-app/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2125" />

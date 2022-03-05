@@ -64,7 +64,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/password_editText_login_layout"
+        android:id="@+id/password_editText_login_created_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -81,6 +81,7 @@
         app:layout_constraintStart_toStartOf="@id/email_editText_login_layout"
         app:layout_constraintTop_toBottomOf="@id/email_editText_login_layout"
         app:startIconDrawable="@drawable/ic_lock_black_24dp"
+        app:errorEnabled="true"
         tools:override="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -114,9 +115,9 @@
         android:text="@string/button_login_signupActivity"
         android:textColor="@color/white"
         android:theme="@style/Theme.InstantMessagingApp.Day"
-        app:layout_constraintEnd_toEndOf="@+id/password_editText_login_layout"
-        app:layout_constraintStart_toStartOf="@+id/password_editText_login_layout"
-        app:layout_constraintTop_toBottomOf="@+id/password_editText_login_layout" />
+        app:layout_constraintEnd_toEndOf="@+id/password_editText_login_created_layout"
+        app:layout_constraintStart_toStartOf="@+id/password_editText_login_created_layout"
+        app:layout_constraintTop_toBottomOf="@+id/password_editText_login_created_layout" />
     <TextView
         android:id="@+id/text_need_account"
         android:layout_width="wrap_content"

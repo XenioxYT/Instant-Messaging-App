@@ -14,43 +14,35 @@
         android:theme="@style/Theme.InstantMessagingApp"
         tools:targetApi="30">
         <activity
-            android:name="com.xeniox.instantmessagingapp.NewConversationActivity"
-            android:exported="false"/>
-
+            android:name=".ConversationsChatActivity"
+            android:exported="false" />
         <activity
-            android:name="com.xeniox.instantmessagingapp.SettingsActivity"
-            android:exported="false"/>
-
+            android:name=".NewConversationActivity"
+            android:exported="false" />
         <activity
-            android:name="com.xeniox.instantmessagingapp.ConversationsActivity"
+            android:name=".SettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ConversationsActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="com.xeniox.instantmessagingapp.LoginAccountCreatedActivity"
-            android:exported="false"/>
-
+            android:name=".LoginAccountCreatedActivity"
+            android:exported="false" />
         <activity
-            android:name="com.xeniox.instantmessagingapp.WelcomeActivity"
-            android:exported="false"/>
-
+            android:name=".WelcomeActivity"
+            android:exported="false" />
         <activity
-            android:name="com.xeniox.instantmessagingapp.LoginActivity"
-            android:exported="false"/>
+            android:name=".LoginActivity"
+            android:exported="false" />
         <activity
-            android:name="com.xeniox.instantmessagingapp.SignupActivity"
-            android:exported="false"/>
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+            android:name=".SignupActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

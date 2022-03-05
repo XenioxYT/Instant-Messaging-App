@@ -3,17 +3,12 @@ package com.xeniox.instantmessagingapp
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
 import android.view.MenuItem
-import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import com.xeniox.instantmessagingapp.R
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_conversations.*
-import kotlinx.android.synthetic.main.nav_header.*
-import kotlinx.android.synthetic.main.nav_header.view.*
 
 class ConversationsActivity : AppCompatActivity() {
 
@@ -23,6 +18,8 @@ class ConversationsActivity : AppCompatActivity() {
         verifyUserIsLoggedIn()
         super.onCreate(savedInstanceState) // call super class onCreate method
         setContentView(R.layout.activity_conversations) // set the layout of the activity
+
+        changeUsernameEmailNavHeader()
 
         topAppBar.setNavigationOnClickListener { // set the navigation icon on the top app bar
             drawer_layout.openDrawer(GravityCompat.START) // open the drawer
@@ -56,6 +53,7 @@ class ConversationsActivity : AppCompatActivity() {
                         SettingsActivity::class.java
                     ) // create an intent to go to the conversations activity
                     startActivity(intent) // start the intent
+                    drawer_layout.closeDrawer(GravityCompat.START)
                 }
                 R.id.logout -> { // if logout was clicked
                     FirebaseAuth.getInstance().signOut() // sign out of firebase
@@ -63,6 +61,7 @@ class ConversationsActivity : AppCompatActivity() {
                     intent.flags =
                         Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // set the flags
                     startActivity(intent) // start the intent
+                    drawer_layout.closeDrawer(GravityCompat.START)
                 }
             }
             //drawer_layout.closeDrawer(navigation_drawer) // close the drawer
@@ -97,22 +96,23 @@ class ConversationsActivity : AppCompatActivity() {
         }
     }
 
-//    private fun changeUsernameEmailNavHeader() {
-//        Log.d(
-//            "ConversationsActivity",
-//            "changeUsernameEmailNavHeader"
-//        ) // log the changeUsernameEmailNavHeader method
-//
-//        val email = FirebaseAuth.getInstance().currentUser?.email // get the current user's email
-//        val username = FirebaseAuth.getInstance().currentUser?.displayName // get the current user's username
-//        Log.d("ConversationsActivity", "email: $email") // log the email
-//        Log.d("ConversationsActivity", "username: $username") // log the username
-//        try {
+    private fun changeUsernameEmailNavHeader() {
+        Log.d(
+            "ConversationsActivity",
+            "changeUsernameEmailNavHeader"
+        ) // log the changeUsernameEmailNavHeader method
+
+        val email = FirebaseAuth.getInstance().currentUser?.email // get the current user's email
+        val username =
+            FirebaseAuth.getInstance().currentUser?.displayName // get the current user's username
+        Log.d("ConversationsActivity", "email: $email") // log the email
+        Log.d("ConversationsActivity", "username: $username") // log the username
+        try {
 //            setContentView(R.layout.nav_header)
 //            username_nav_header.text = email
-//            Log.d("ConversationsActivity", "email set successfully") // log the email
-//        }
-//        catch (e: Exception) {
-//            Log.d("ConversationsActivity", "username_nav_header: $e") // log the exception
-//        }
+            Log.d("ConversationsActivity", "email set successfully") // log the email
+        } catch (e: Exception) {
+            Log.d("ConversationsActivity", "username_nav_header: $e") // log the exception
+        }
+    }
 }

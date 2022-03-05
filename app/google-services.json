@@ -8,41 +8,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:396005832312:android:351d356ed2963d42cb1f8d",
-        "android_client_info": {
-          "package_name": "com.example.instantmessagingapp"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "396005832312-pvcsaq0gf29tggft26cdomeqiu71rgj4.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyC0-xlTqz4TZBwPPbxABPT5zx9cVoUvCis"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "396005832312-pvcsaq0gf29tggft26cdomeqiu71rgj4.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:396005832312:android:aeae0e1a4325c279cb1f8d",
         "android_client_info": {
           "package_name": "com.xeniox.instantmessagingapp"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "396005832312-f565i588pksiude0lq493rd471jqem1m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.xeniox.instantmessagingapp",
+            "certificate_hash": "1cf821b69ff694012a88cfe5ef0ac01478cff45a"
+          }
+        },
         {
           "client_id": "396005832312-pvcsaq0gf29tggft26cdomeqiu71rgj4.apps.googleusercontent.com",
           "client_type": 3
