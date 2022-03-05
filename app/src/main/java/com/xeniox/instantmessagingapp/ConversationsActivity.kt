@@ -9,11 +9,13 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
+import com.squareup.picasso.Picasso
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.Item
+import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_conversations.*
+import kotlinx.android.synthetic.main.conversations_message_row.view.*
 
 class ConversationsActivity : AppCompatActivity() {
 
@@ -28,6 +30,13 @@ class ConversationsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState) // call super class onCreate method
         setContentView(R.layout.activity_conversations) // set the layout of the activity
         fetchCurrentUser()
+
+        recycler_view_all_conversations.adapter = adapter // set the adapter to the recycler view
+
+//        setupDummyRows()
+
+        listenForConversations()
+
         topAppBar.setNavigationOnClickListener { // set the navigation icon on the top app bar
             drawer_layout.openDrawer(GravityCompat.START) // open the drawer
         }
@@ -73,6 +82,78 @@ class ConversationsActivity : AppCompatActivity() {
         }
     }
 
+    val latestMessagesMap = HashMap<String, ChatMessage>()
+
+    private fun listenForConversations() {
+        val fromId = FirebaseAuth.getInstance().uid // get the current user's id
+        val ref = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId") // get the reference to the user-conversations node
+        ref.addChildEventListener(object: ChildEventListener {
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                val chatMessage = snapshot.getValue(ChatMessage::class.java) ?: return // get the chat message
+                latestMessagesMap[snapshot.key!!] = chatMessage // add the chat message to the map
+                refreshRecyclerViewMessages() // refresh the recycler view
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                val chatMessage = snapshot.getValue(ChatMessage::class.java) ?: return // get the chat message
+                latestMessagesMap[snapshot.key!!] = chatMessage // add the chat message to the map
+                refreshRecyclerViewMessages() // refresh the recycler view
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+            }
+        })
+    }
+
+    private fun refreshRecyclerViewMessages() {
+        adapter.clear() // clear the adapter
+        latestMessagesMap.values.forEach {
+            adapter.add(LatestMessageRow(it))
+        }
+    }
+
+    class LatestMessageRow(val chatMessage: ChatMessage): Item<ViewHolder>() {
+        override fun bind(viewHolder: ViewHolder, position: Int) {
+            viewHolder.itemView.conversations_message_row_textView.text = chatMessage.text
+
+            val chatPartnerId = if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
+                chatMessage.toId
+            } else {
+                chatMessage.fromId
+            }
+            val ref = FirebaseDatabase.getInstance().getReference("/users/$chatPartnerId")
+            ref.addListenerForSingleValueEvent(object: ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val user = snapshot.getValue(User::class.java)
+                    viewHolder.itemView.conversations_message_username.text = user?.username
+                    val uri = user?.profileImageUrl
+                    Log.d("LatestMessageRow", "uri: $uri")
+                    if (uri != null) {
+                        val targetImageView = viewHolder.itemView.user_profile_picture_conversations_message_row
+                        Picasso.get().load(uri).into(targetImageView)
+                    } else {
+                        val targetImageView = viewHolder.itemView.user_profile_picture_conversations_message_row
+                        Picasso.get().load(R.drawable.ic_account_circle_black_24dp).into(targetImageView)
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
+        }
+        override fun getLayout(): Int {
+            return R.layout.conversations_message_row
+        }
+
+    }
+
+    val adapter = GroupAdapter<ViewHolder>() // create a new group adapter
+
     private fun fetchCurrentUser() {
         val ref = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -89,13 +170,6 @@ class ConversationsActivity : AppCompatActivity() {
     }
 
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean { // override the onOptionsItemSelected method
-
-        if (toggle.onOptionsItemSelected(item)) { // if the toggle was selected
-            return true // return true
-        }
-        return super.onOptionsItemSelected(item) // return the super class onOptionsItemSelected method
-    }
 
     private fun verifyUserIsLoggedIn() { // verify the user is logged in
         val uid = FirebaseAuth.getInstance().uid // get the current user's uid
@@ -114,4 +188,17 @@ class ConversationsActivity : AppCompatActivity() {
             Log.d("ConversationsActivity", "User is logged in") // log the user is logged in
         }
     }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean { // override the onOptionsItemSelected method
+
+        if (toggle.onOptionsItemSelected(item)) { // if the toggle was selected
+            return true // return true
+        }
+        return super.onOptionsItemSelected(item) // return the super class onOptionsItemSelected method
+    }
+
+
+
+
 }

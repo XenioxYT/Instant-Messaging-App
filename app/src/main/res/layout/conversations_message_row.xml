@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="90dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/user_profile_picture_conversations_message_row"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/conversations_message_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Username"
+        app:layout_constraintBottom_toTopOf="@+id/conversations_message_row_textView"
+        app:layout_constraintStart_toEndOf="@+id/user_profile_picture_conversations_message_row"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_marginLeft="8dp"
+        android:fontFamily="@font/outfit_bold"
+        android:textColor="@color/black"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/conversations_message_row_textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Last message received"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/user_profile_picture_conversations_message_row"
+        app:layout_constraintTop_toBottomOf="@+id/conversations_message_username"
+        android:layout_marginLeft="8dp"
+        android:fontFamily="@font/outfit_regular"
+        android:textSize="14sp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

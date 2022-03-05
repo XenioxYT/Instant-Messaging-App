@@ -24,8 +24,6 @@ class ConversationsChatActivity : AppCompatActivity() {
 
     val adapter = GroupAdapter<ViewHolder>()
 
-    val toUser: User? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_conversations_chat)
@@ -60,9 +58,11 @@ class ConversationsChatActivity : AppCompatActivity() {
                     if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
                         val currentUser = ConversationsActivity.currentUser
                         adapter.add(ChatToItem(chatMessage.text, currentUser!!))
+                        // add the local user here to the smart replies ML kit
                     } else {
                         val toUser = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)
                         adapter.add(ChatFromItem(chatMessage.text,toUser!!))
+                        // add the remote user here to the smart replies ML kit
                     }
                 }
             }
@@ -122,17 +122,12 @@ class ConversationsChatActivity : AppCompatActivity() {
                     editText_chat_conversation.text.insert(0, "")
                     recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
                 }
-                toReference.setValue(
-                    ChatMessage(
-                        toReference.key!!,
-                        it.toString(),
-                        fromId,
-                        toId,
-                        System.currentTimeMillis() / 1000
-                    )
-                ).addOnSuccessListener {
-                    Log.d("ConversationsChatActivity", "Message sent...$it")
-                }
+                toReference.setValue(ChatMessage(toReference.key!!, it.toString(), fromId, toId, System.currentTimeMillis() / 1000))
+                val latestMessageRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId/$toId")
+                latestMessageRef.setValue(ChatMessage(reference.key!!, editText_chat_conversation.text.toString(), fromId, toId, System.currentTimeMillis() / 1000))
+                val latestMessageToRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$toId/$fromId")
+                latestMessageToRef.setValue(ChatMessage(toReference.key!!, editText_chat_conversation.text.toString(), fromId, toId, System.currentTimeMillis() / 1000))
+
             }
         }
     }
