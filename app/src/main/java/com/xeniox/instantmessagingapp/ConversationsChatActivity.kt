@@ -59,10 +59,12 @@ class ConversationsChatActivity : AppCompatActivity() {
                         val currentUser = ConversationsActivity.currentUser
                         adapter.add(ChatToItem(chatMessage.text, currentUser!!))
                         // add the local user here to the smart replies ML kit
+                        recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
                     } else {
                         val toUser = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)
                         adapter.add(ChatFromItem(chatMessage.text,toUser!!))
                         // add the remote user here to the smart replies ML kit
+                        recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
                     }
                 }
             }
