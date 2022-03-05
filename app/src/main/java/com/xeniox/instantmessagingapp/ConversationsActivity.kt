@@ -4,13 +4,22 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_conversations.*
 
 class ConversationsActivity : AppCompatActivity() {
+
+    companion object {
+        var currentUser: User? = null
+    }
 
     lateinit var toggle: ActionBarDrawerToggle
 
@@ -18,6 +27,8 @@ class ConversationsActivity : AppCompatActivity() {
         verifyUserIsLoggedIn()
         super.onCreate(savedInstanceState) // call super class onCreate method
         setContentView(R.layout.activity_conversations) // set the layout of the activity
+
+        fetchCurrentUser()
 
         changeUsernameEmailNavHeader()
 
@@ -67,6 +78,21 @@ class ConversationsActivity : AppCompatActivity() {
             //drawer_layout.closeDrawer(navigation_drawer) // close the drawer
             true // return true to indicate that the item was selected
         }
+    }
+
+    private fun fetchCurrentUser() {
+        val ref = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                currentUser = p0.getValue(User::class.java)
+                Log.d("ConversationsActivity","Current user: ${currentUser?.username}")
+                navigation_drawer.getHeaderView(0).findViewById<TextView>(R.id.username_nav_header).text = currentUser?.username
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+                Log.d("ConversationsActivity", "Error: ${p0.message}")
+            }
+        })
     }
 
 

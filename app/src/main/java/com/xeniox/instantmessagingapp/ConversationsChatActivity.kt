@@ -24,6 +24,8 @@ class ConversationsChatActivity : AppCompatActivity() {
 
     val adapter = GroupAdapter<ViewHolder>()
 
+    val toUser: User? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_conversations_chat)
@@ -35,11 +37,9 @@ class ConversationsChatActivity : AppCompatActivity() {
         }
 
 //        val username = intent.getStringExtra(NewConversationActivity.USER_KEY)
-        val user = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)
+        val toUser = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)
 
-        topAppBar_chat_conversation.title = user?.username
-
-//        setupDummyData()
+        topAppBar_chat_conversation.title = toUser?.username
         listenForMessages()
         button_send_message.setOnClickListener {
             Log.d("ConversationsChatActivity", "Attempt to send message...")
@@ -56,10 +56,9 @@ class ConversationsChatActivity : AppCompatActivity() {
                     Log.d(TAG, chatMessage.text)
 
                     if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
-                        val toUser = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)
-                        adapter.add(ChatToItem(chatMessage.text, toUser!!))
-                    } else {
                         adapter.add(ChatFromItem(chatMessage.text))
+                    } else {
+                        adapter.add(ChatToItem(chatMessage.text,toUser!!))
                     }
                 }
             }
