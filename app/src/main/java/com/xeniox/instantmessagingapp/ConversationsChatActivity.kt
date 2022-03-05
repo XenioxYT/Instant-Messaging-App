@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
@@ -15,12 +18,16 @@ import kotlinx.android.synthetic.main.chat_to_message.view.*
 class ConversationsChatActivity : AppCompatActivity() {
 
     companion object{
-        val TAG = "ConversationsChatActivity"
+        const val TAG = "ConversationsChatActivity"
     }
+
+    val adapter = GroupAdapter<ViewHolder>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_conversations_chat)
+
+        recyclerView_chat_conversation.adapter = adapter
 
         topAppBar_chat_conversation.setNavigationOnClickListener {
             finish()
@@ -31,17 +38,49 @@ class ConversationsChatActivity : AppCompatActivity() {
 
         topAppBar_chat_conversation.title = user?.username
 
-        setupDummyData()
-
+//        setupDummyData()
+        listenForMessages()
         button_send_message.setOnClickListener {
             Log.d("ConversationsChatActivity", "Attempt to send message...")
             performSendMessage()
         }
     }
 
-    class chatMssage(val id: String, val text:String, val fromId: String, val toId: String, val timestamp: Long) {
-        constructor() : this("", "", "", "", -1)
+    private fun listenForMessages() {
+        val ref = FirebaseDatabase.getInstance().getReference("/messages")
+        ref.addChildEventListener(object: ChildEventListener {
+            override fun onChildAdded(p0: DataSnapshot, p1: String?) {
+                val chatMessage = p0.getValue(ChatMessage::class.java)
+                if (chatMessage != null) {
+                    Log.d(TAG, chatMessage.text)
+
+                    if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
+                        adapter.add(ChatToItem(chatMessage.text))
+                    } else {
+                        adapter.add(ChatFromItem(chatMessage.text))
+                    }
+                }
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+
+            override fun onChildChanged(p0: DataSnapshot, p1: String?) {
+
+            }
+
+            override fun onChildMoved(p0: DataSnapshot, p1: String?) {
+
+            }
+
+            override fun onChildRemoved(p0: DataSnapshot) {
+
+            }
+        })
     }
+
+
 
     private fun performSendMessage() {
         val reference = FirebaseDatabase.getInstance().getReference("/messages").push()
@@ -55,7 +94,7 @@ class ConversationsChatActivity : AppCompatActivity() {
         }
 
         editText_chat_conversation.text.trim().let {
-            reference.setValue(chatMssage(reference.key!!, it.toString(), fromId, toId, System.currentTimeMillis()/1000)).addOnSuccessListener {
+            reference.setValue(ChatMessage(reference.key!!, it.toString(), fromId, toId, System.currentTimeMillis()/1000)).addOnSuccessListener {
                 Log.d("ConversationsChatActivity", "Message sent...")
                 editText_chat_conversation.text.clear()
                 editText_chat_conversation.text.insert(0, "")
@@ -66,18 +105,18 @@ class ConversationsChatActivity : AppCompatActivity() {
 
     private fun setupDummyData() {
         val adapter = GroupAdapter<ViewHolder>()
-        adapter.add(chatFromItem("FROM MESSAGE"))
-        adapter.add(chatToItem("TO MESSAGE"))
-        adapter.add(chatFromItem("FROM MESSAGE"))
-        adapter.add(chatToItem("TO MESSAGE"))
-        adapter.add(chatFromItem("FROM MESSAGE"))
-        adapter.add(chatToItem("To message"))
-        adapter.add(chatFromItem("FROM MESSAGE"))
+        adapter.add(ChatFromItem("FROM MESSAGE"))
+        adapter.add(ChatToItem("TO MESSAGE"))
+        adapter.add(ChatFromItem("FROM MESSAGE"))
+        adapter.add(ChatToItem("TO MESSAGE"))
+        adapter.add(ChatFromItem("FROM MESSAGE"))
+        adapter.add(ChatToItem("To message"))
+        adapter.add(ChatFromItem("FROM MESSAGE"))
         recyclerView_chat_conversation.adapter = adapter
     }
 }
 
-class chatFromItem(val text: String) : Item<ViewHolder>() {
+class ChatFromItem(val text: String) : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.text_from_message.text = text
     }
@@ -87,7 +126,7 @@ class chatFromItem(val text: String) : Item<ViewHolder>() {
     }
 }
 
-class chatToItem(val text: String) : Item<ViewHolder>() {
+class ChatToItem(val text: String) : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.text_to_message.text = text
     }
