@@ -64,6 +64,9 @@ class LoginActivity : AppCompatActivity() {
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener {
                         dialog.dismiss()
+                        val uid = FirebaseAuth.getInstance().uid
+                        val email = FirebaseAuth.getInstance().currentUser?.email
+                        val user = User(uid.toString(), "", "", email.toString())
                         if (!it.isSuccessful) return@addOnCompleteListener
 
                         Log.d(

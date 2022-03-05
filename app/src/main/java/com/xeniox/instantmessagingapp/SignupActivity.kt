@@ -138,7 +138,8 @@ class SignupActivity : AppCompatActivity() { // Start of class
                                     val user = User(
                                         uid,
                                         username_editText_register.text.toString().trim(),
-                                        profileImageUrl
+                                        profileImageUrl,
+                                        email
                                     ) // Create a user object with the user's uid and username
                                     ref.setValue(user)
                                         .addOnSuccessListener { // Add an onSuccessListener to the setValue function
@@ -248,7 +249,6 @@ class SignupActivity : AppCompatActivity() { // Start of class
 
     private var selectedPhotoUri: Uri? = null // Create a variable to hold the selected photo uri
 
-    @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -532,9 +532,10 @@ class SignupActivity : AppCompatActivity() { // Start of class
 class User(
     val uid: String,
     val username: String,
-    val profileImageUrl: String
+    val profileImageUrl: String,
+    val email: String,
 ) :Parcelable {
-    constructor() : this("", "", "")
+    constructor() : this("", "", "","")
     //created blank constructor as kotlin now requires this when making a class
 } // Create a class called User
 

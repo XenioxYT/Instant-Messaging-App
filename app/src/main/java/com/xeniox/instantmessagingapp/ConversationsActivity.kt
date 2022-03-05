@@ -8,9 +8,11 @@ import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
+import com.xeniox.instantmessagingapp.NewConversationActivity.Companion.USER_KEY
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
@@ -32,6 +34,19 @@ class ConversationsActivity : AppCompatActivity() {
         fetchCurrentUser()
 
         recycler_view_all_conversations.adapter = adapter // set the adapter to the recycler view
+        recycler_view_all_conversations.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+
+        adapter.setOnItemClickListener { item, view ->
+            val intent = Intent(this, ConversationsChatActivity::class.java)
+
+            // we are missing the chat partner user
+
+            val row = item as LatestMessageRow
+            row.chatPartnerUser?.let {
+                intent.putExtra(USER_KEY, it)
+                startActivity(intent)
+            }
+        }
 
 //        setupDummyRows()
 
@@ -118,39 +133,7 @@ class ConversationsActivity : AppCompatActivity() {
         }
     }
 
-    class LatestMessageRow(val chatMessage: ChatMessage): Item<ViewHolder>() {
-        override fun bind(viewHolder: ViewHolder, position: Int) {
-            viewHolder.itemView.conversations_message_row_textView.text = chatMessage.text
 
-            val chatPartnerId = if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
-                chatMessage.toId
-            } else {
-                chatMessage.fromId
-            }
-            val ref = FirebaseDatabase.getInstance().getReference("/users/$chatPartnerId")
-            ref.addListenerForSingleValueEvent(object: ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val user = snapshot.getValue(User::class.java)
-                    viewHolder.itemView.conversations_message_username.text = user?.username
-                    val uri = user?.profileImageUrl
-                    Log.d("LatestMessageRow", "uri: $uri")
-                    if (uri != null) {
-                        val targetImageView = viewHolder.itemView.user_profile_picture_conversations_message_row
-                        Picasso.get().load(uri).into(targetImageView)
-                    } else {
-                        val targetImageView = viewHolder.itemView.user_profile_picture_conversations_message_row
-                        Picasso.get().load(R.drawable.ic_account_circle_black_24dp).into(targetImageView)
-                    }
-                }
-                override fun onCancelled(error: DatabaseError) {
-                }
-            })
-        }
-        override fun getLayout(): Int {
-            return R.layout.conversations_message_row
-        }
-
-    }
 
     val adapter = GroupAdapter<ViewHolder>() // create a new group adapter
 
@@ -160,7 +143,10 @@ class ConversationsActivity : AppCompatActivity() {
             override fun onDataChange(p0: DataSnapshot) {
                 currentUser = p0.getValue(User::class.java)
                 Log.d("ConversationsActivity","Current user: ${currentUser?.username}")
-                navigation_drawer.getHeaderView(0).findViewById<TextView>(R.id.username_nav_header).text = currentUser?.username
+                navigation_drawer.findViewById<TextView>(R.id.username_nav_header).text = currentUser?.username
+                val email = currentUser?.email
+                Log.d("ConversationsActivity","Current user email: $email")
+                navigation_drawer.findViewById<TextView>(R.id.email_nav_header).text = currentUser?.email
             }
 
             override fun onCancelled(p0: DatabaseError) {
@@ -197,8 +183,4 @@ class ConversationsActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item) // return the super class onOptionsItemSelected method
     }
-
-
-
-
 }

@@ -4,23 +4,59 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.Item
+import com.xwray.groupie.ViewHolder
+import kotlinx.android.synthetic.main.activity_conversations.*
 import kotlinx.android.synthetic.main.activity_settings.*
+import kotlinx.android.synthetic.main.activity_settings.drawer_layout
+import kotlinx.android.synthetic.main.activity_settings.navigation_drawer
+import kotlinx.android.synthetic.main.activity_settings.topAppBar_settings
+import kotlinx.android.synthetic.main.settings_test_button.*
+import vadiole.colorpicker.ColorModel
+import vadiole.colorpicker.ColorPickerDialog
 
 class SettingsActivity : AppCompatActivity() {
 
     lateinit var toggle: ActionBarDrawerToggle
 
+    val adapter = GroupAdapter<ViewHolder>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState) // call super class onCreate method
         setContentView(R.layout.activity_settings) // set the layout of the activity
 
+        recycler_view_settings.adapter = adapter
+        adapter.add(SettingsItem())
+
+//        button_test_colour.setOnClickListener {
+//            val colourPicker: ColorPickerDialog.Builder = ColorPickerDialog.Builder()
+//                .setInitialColor(0x00BCD4FF)
+//                .setColorModel(ColorModel.RGB)
+//                .setButtonOkText(android.R.string.ok)
+//                .setButtonCancelText(android.R.string.cancel)
+//                .onColorSelected { color ->
+//                    Log.d("Colour", "Colour: $color")
+//                }
+//
+//        }
+
+
+
         verifyUserIsLoggedIn()
 
-        topAppBar.setNavigationOnClickListener { // set the navigation icon on the top app bar
+        fetchUserInfo()
+
+        topAppBar_settings.setNavigationOnClickListener { // set the navigation icon on the top app bar
             drawer_layout.openDrawer(GravityCompat.START) // open the drawer
         }
 
@@ -73,5 +109,32 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(intent) // start the intent
         }
     }
+
+    private fun fetchUserInfo() {
+        val ref = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                ConversationsActivity.currentUser = p0.getValue(User::class.java)
+                Log.d("ConversationsActivity","Current user: ${ConversationsActivity.currentUser?.username}")
+                navigation_drawer.findViewById<TextView>(R.id.username_nav_header).text = ConversationsActivity.currentUser?.username
+                val email = ConversationsActivity.currentUser?.email
+                Log.d("ConversationsActivity","Current user email: $email")
+                navigation_drawer.findViewById<TextView>(R.id.email_nav_header).text = ConversationsActivity.currentUser?.email
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+                Log.d("ConversationsActivity", "Error: ${p0.message}")
+            }
+        })
+    }
+
+class SettingsItem() : Item<ViewHolder>() {
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.settings_test_button
+    }
+}
 
 }
