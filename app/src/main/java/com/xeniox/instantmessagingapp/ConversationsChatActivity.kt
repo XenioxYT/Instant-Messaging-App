@@ -31,9 +31,9 @@ class ConversationsChatActivity : AppCompatActivity() {
 
     val adapter = GroupAdapter<ViewHolder>()
     var conversations:ArrayList<TextMessage> = ArrayList()
-    lateinit var suggestion1: SmartReplySuggestion
-    lateinit var suggestion2: SmartReplySuggestion
-    lateinit var suggestion3: SmartReplySuggestion
+    var suggestion1: SmartReplySuggestion? = null
+    var suggestion2: SmartReplySuggestion? = null
+    var suggestion3: SmartReplySuggestion? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -70,42 +70,89 @@ class ConversationsChatActivity : AppCompatActivity() {
                             fromId!!
                         )
                     )
-//                       recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
+                       recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
 
                 }
                 smartReplyGenerator.suggestReplies(conversations).addOnSuccessListener {
                     Log.d(TAG, "Suggestions: ${it.suggestions}")
                     Log.d(TAG, "Status: ${it.status}")
+                    Log.d(TAG, conversations.toString())
+                    Log.d(TAG, "Size: ${conversations.size}")
 
-                    if (it.status == STATUS_NOT_SUPPORTED_LANGUAGE) {
-                        Log.d(TAG, "Not supported language")
-                    } else if (it.status == STATUS_SUCCESS) {
-                        Log.d(TAG, "Success")
-                        var reply = ""
-                        for (suggestion: SmartReplySuggestion in it.suggestions) {
-                            reply += suggestion.text + "\n"
+                    if (conversations.size > 150) {
+                        Log.d(TAG, "Size: ${conversations.size}")
+                        Log.d(TAG, "cleared the array")
+                        conversations.clear()
+                    }
+
+                    when (it.status) {
+                        STATUS_NOT_SUPPORTED_LANGUAGE -> {
+                            Log.d(TAG, "Not supported language")
+                            button_reply1.visibility = View.GONE
+                            button_reply2.visibility = View.GONE
+                            button_reply3.visibility = View.GONE
+                            button_reply1.height = 0
+                            button_reply2.height = 0
+                            button_reply3.height = 0
                         }
-                        Log.d(TAG, reply)
-                        var suggestion1 = it.suggestions[0].text
-                        var suggestion2 = it.suggestions[1].text
-                        var suggestion3 = it.suggestions[2].text
-                        button_reply1.text = suggestion1
-                        button_reply2.text = suggestion2
-                        button_reply3.text = suggestion3
-                        button_reply1.setOnClickListener {
-                            Log.d(TAG, "Reply 1")
-                            button_reply1.text = suggestion1
-                            editText_chat_conversation.setText(suggestion1)
+                        STATUS_SUCCESS -> {
+                            button_reply1.visibility = View.VISIBLE
+                            button_reply2.visibility = View.VISIBLE
+                            button_reply3.visibility = View.VISIBLE
+                            button_reply1.height = 40
+                            button_reply2.height = 40
+                            button_reply3.height = 40
+                            Log.d(TAG, "Success")
+                            var reply = ""
+                            for (suggestion: SmartReplySuggestion in it.suggestions) {
+                                reply += suggestion.text + "\n"
+                            }
+                            Log.d(TAG, reply)
+                            var suggestion1 = it.suggestions[0].text
+                            if (suggestion1.isNullOrEmpty()) {
+                                button_reply1.visibility = View.GONE
+                                button_reply1.height = 0
+                            } else {
+                                button_reply1.text = suggestion1
+                            }
+                            var suggestion2 = it.suggestions[1].text
+                            if (suggestion2.isNullOrEmpty()) {
+                                button_reply2.visibility = View.GONE
+                                button_reply2.height = 0
+                            } else {
+                                button_reply2.text = suggestion2
+                            }
+                            var suggestion3 = it.suggestions[2].text
+                            if (suggestion3.isNullOrEmpty()) {
+                                button_reply3.visibility = View.GONE
+                                button_reply3.height = 0
+                            } else {
+                                button_reply3.text = suggestion3
+                            }
+                            button_reply1.setOnClickListener {
+                                Log.d(TAG, "Reply 1")
+                                button_reply1.text = suggestion1
+                                editText_chat_conversation.append(suggestion1)
+                            }
+                            button_reply2.setOnClickListener {
+                                Log.d(TAG, "Reply 2")
+                                button_reply2.text = suggestion2
+                                editText_chat_conversation.append(suggestion2)
+                            }
+                            button_reply3.setOnClickListener {
+                                Log.d(TAG, "Reply 3")
+                                button_reply3.text = suggestion3
+                                editText_chat_conversation.append(suggestion3)
+                            }
                         }
-                        button_reply2.setOnClickListener {
-                            Log.d(TAG, "Reply 2")
-                            button_reply2.text = suggestion2
-                            editText_chat_conversation.setText(suggestion2)
-                        }
-                        button_reply3.setOnClickListener {
-                            Log.d(TAG, "Reply 3")
-                            button_reply3.text = suggestion3
-                            editText_chat_conversation.setText(suggestion3)
+                        else -> {
+                            Log.d(TAG, "Error")
+                            button_reply1.visibility = View.GONE
+                            button_reply2.visibility = View.GONE
+                            button_reply3.visibility = View.GONE
+                            button_reply1.height = 0
+                            button_reply2.height = 0
+                            button_reply3.height = 0
                         }
                     }
                 }
@@ -148,21 +195,17 @@ class ConversationsChatActivity : AppCompatActivity() {
             performSendMessage()
         }
 
-        try {
-            button_reply1.setOnClickListener {
-                Log.d(TAG, "Reply 1")
-                editText_chat_conversation.setText(suggestion1.text)
-            }
-            button_reply2.setOnClickListener {
-                Log.d(TAG, "Reply 2")
-                editText_chat_conversation.setText(suggestion2.text)
-            }
-            button_reply3.setOnClickListener {
-                Log.d(TAG, "Reply 3")
-                editText_chat_conversation.setText(suggestion3.text)
-            }
-        } catch (e: Exception) {
-            Log.d(TAG, "Error: ${e.message}")
+        if (suggestion1?.text.isNullOrEmpty()) {
+            button_reply1.visibility = View.GONE
+            button_reply1.height = 0
+        }
+        if (suggestion2?.text.isNullOrEmpty()) {
+            button_reply2.visibility = View.GONE
+            button_reply2.height = 0
+        }
+        if (suggestion3?.text.isNullOrEmpty()) {
+            button_reply3.visibility = View.GONE
+            button_reply3.height = 0
         }
     }
 
