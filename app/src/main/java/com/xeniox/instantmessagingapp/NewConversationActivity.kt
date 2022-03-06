@@ -7,6 +7,7 @@ import android.text.Layout
 import android.text.SpannableString
 import android.text.style.AlignmentSpan
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -88,7 +89,7 @@ class NewConversationActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(p0: DatabaseError) {
-                TODO("Not yet implemented")
+                Toast.makeText(this@NewConversationActivity, "Failed to read value.", Toast.LENGTH_SHORT).show()
             }
 
         })

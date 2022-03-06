@@ -44,22 +44,28 @@
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
     <Button
+        style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
+        android:textColor="@color/black"
         android:id="@+id/button_send_message"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="4dp"
         android:text="Send"
+        app:strokeColor="@color/black"
+        app:strokeWidth="1dp"
+        app:cornerRadius="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
+
         android:id="@+id/editText_chat_conversation"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginBottom="4dp"
         android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
         android:background="@color/white"
         android:ems="10"
         android:hint="Enter message"
@@ -70,53 +76,63 @@
 
     <Button
         android:id="@+id/button_reply1"
+        style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
         android:layout_width="wrap_content"
-
-        android:layout_height="40dp"
+        android:layout_height="50dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:fontFamily="@font/outfit_regular"
+        android:minWidth="0dp"
         android:padding="6dp"
         android:text=""
-        android:textSize="12sp"
-        android:minWidth="0dp"
-        android:layout_marginBottom="4dp"
         android:textAllCaps="false"
-        android:fontFamily="@font/outfit_regular"
-        android:layout_marginRight="8dp"
-        android:background="@drawable/smart_reply_button"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        app:cornerRadius="50dp"
         app:layout_constraintBottom_toTopOf="@id/editText_chat_conversation"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:strokeColor="@color/black"
+        app:strokeWidth="1dp" />
 
     <Button
         android:id="@+id/button_reply2"
-
-        android:background="@drawable/smart_reply_button"
+        style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:textAllCaps="false"
-        android:padding="6dp"
-        android:fontFamily="@font/outfit_regular"
-        android:text=""
-        android:textSize="12sp"
-        android:minWidth="0dp"
+        android:layout_height="50dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
+        android:fontFamily="@font/outfit_regular"
+        android:minWidth="10dp"
+        android:padding="6dp"
+        android:text=""
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        app:cornerRadius="50dp"
         app:layout_constraintBottom_toTopOf="@id/editText_chat_conversation"
-        app:layout_constraintEnd_toStartOf="@+id/button_reply1" />
+        app:layout_constraintEnd_toStartOf="@+id/button_reply1"
+        app:strokeColor="@color/black"
+        app:strokeWidth="1dp" />
 
     <Button
         android:id="@+id/button_reply3"
-        android:textAllCaps="false"
+        style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
         android:layout_width="wrap_content"
-        android:minWidth="10dp"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
         android:fontFamily="@font/outfit_regular"
+        android:minWidth="10dp"
         android:padding="6dp"
         android:text=""
-        android:textSize="12sp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginRight="4dp"
-        android:background="@drawable/smart_reply_button"
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        app:cornerRadius="50dp"
         app:layout_constraintBottom_toTopOf="@id/editText_chat_conversation"
-        app:layout_constraintEnd_toStartOf="@+id/button_reply2" />
+        app:layout_constraintEnd_toStartOf="@+id/button_reply2"
+        app:strokeColor="@color/black"
+        app:strokeWidth="1dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
