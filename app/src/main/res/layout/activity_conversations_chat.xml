@@ -14,6 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:elevation="10dp"
         app:liftOnScroll="false">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -35,42 +36,53 @@
         android:id="@+id/recyclerView_chat_conversation"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="8dp"
         android:background="#eaeaea"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/button_reply1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:windowSoftInputMode="adjustResize"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
     <Button
-        style="@style/TextAppearance.AppCompat.Widget.Button.Colored"
-        android:textColor="@color/black"
         android:id="@+id/button_send_message"
+        style="@style/Theme.MaterialComponents"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="4dp"
         android:hapticFeedbackEnabled="true"
-        android:text="Send"
-        app:strokeColor="@color/black"
-        app:strokeWidth="1dp"
-        app:cornerRadius="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:minWidth="0dp"
+        android:padding="9dp"
+        android:textColor="@color/black"
+        app:cornerRadius="500dp"
+        app:icon="@drawable/ic_send_black_24dp"
+        app:iconPadding="0dp"
+        app:iconSize="30dp"
+        android:gravity="center"
+        android:layout_marginTop="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/editText_chat_conversation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/editText_chat_conversation"
+        app:layout_constraintTop_toTopOf="@+id/editText_chat_conversation" />
 
     <EditText
 
         android:id="@+id/editText_chat_conversation"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginRight="4dp"
-        android:layout_marginBottom="4dp"
-        android:background="@color/white"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/edit_text_send_message_rounded"
         android:ems="10"
+        android:elevation="2dp"
         android:hint="Enter message"
         android:inputType="textCapSentences"
+        android:paddingStart="8dp"
+        android:shadowColor="#8C8C8C"
+        android:windowSoftInputMode="adjustResize"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_send_message"
         app:layout_constraintStart_toStartOf="parent" />
@@ -92,9 +104,7 @@
         android:textColor="@color/black"
         app:cornerRadius="50dp"
         app:layout_constraintBottom_toTopOf="@id/editText_chat_conversation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:strokeColor="@color/black"
-        app:strokeWidth="1dp" />
+        app:layout_constraintEnd_toEndOf="@id/button_send_message" />
 
     <Button
         android:id="@+id/button_reply2"
@@ -113,9 +123,7 @@
         android:textColor="@color/black"
         app:cornerRadius="50dp"
         app:layout_constraintBottom_toTopOf="@id/editText_chat_conversation"
-        app:layout_constraintEnd_toStartOf="@+id/button_reply1"
-        app:strokeColor="@color/black"
-        app:strokeWidth="1dp" />
+        app:layout_constraintEnd_toStartOf="@+id/button_reply1" />
 
     <Button
         android:id="@+id/button_reply3"
@@ -134,9 +142,7 @@
         android:textColor="@color/black"
         app:cornerRadius="50dp"
         app:layout_constraintBottom_toTopOf="@id/editText_chat_conversation"
-        app:layout_constraintEnd_toStartOf="@+id/button_reply2"
-        app:strokeColor="@color/black"
-        app:strokeWidth="1dp" />
+        app:layout_constraintEnd_toStartOf="@+id/button_reply2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
