@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="This is a test :DDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
+        android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@+id/chat_from_image"
         app:layout_constraintTop_toTopOf="@+id/chat_from_image"
         android:padding="12dp"

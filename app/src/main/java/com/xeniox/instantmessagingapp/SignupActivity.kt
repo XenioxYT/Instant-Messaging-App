@@ -410,7 +410,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
 //            } // End the addOnSuccessListener
 //            .addOnFailureListener { // Add an onFailureListener to the setValue function
 //                Log.d("SignupActivity", "Failed to set value to database: ${it.message}") // Log that the user has failed to be saved to Firebase Database
-//                //TODO: Handle failure and show error message to user
+//                //TODO Handle failure and show error message to user
 //            } // End the addOnFailureListener
 //    } // End the loginSuccessfulRegister function
 
@@ -540,7 +540,7 @@ class User(
 } // Create a class called User
 
 
-// TODO: PROBLEM DESCRIPTION BELOW AS TO WHY THE PROGRAM CRASHES WHEN CREATING AN ACCOUNT:
+// TODO PROBLEM DESCRIPTION BELOW AS TO WHY THE PROGRAM CRASHES WHEN CREATING AN ACCOUNT:
 //the issue starts when the user tries to create an account once all the details have been filled in correctly.
 //The user account is created, the profile picture uploaded, however then the loginSuccessfulRegister() function is called on line 402
 //when the image has been uploaded successfully;
