@@ -38,7 +38,7 @@
         android:layout_marginBottom="4dp"
         android:background="#eaeaea"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/editText_chat_conversation"
+        app:layout_constraintBottom_toTopOf="@+id/button_reply1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
@@ -67,6 +67,56 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_send_message"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button_reply1"
+        android:layout_width="wrap_content"
+
+        android:layout_height="40dp"
+        android:padding="6dp"
+        android:text=""
+        android:textSize="12sp"
+        android:minWidth="0dp"
+        android:layout_marginBottom="4dp"
+        android:textAllCaps="false"
+        android:fontFamily="@font/outfit_regular"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/smart_reply_button"
+        app:layout_constraintBottom_toTopOf="@id/editText_chat_conversation"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/button_reply2"
+
+        android:background="@drawable/smart_reply_button"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:textAllCaps="false"
+        android:padding="6dp"
+        android:fontFamily="@font/outfit_regular"
+        android:text=""
+        android:textSize="12sp"
+        android:minWidth="0dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toTopOf="@id/editText_chat_conversation"
+        app:layout_constraintEnd_toStartOf="@+id/button_reply1" />
+
+    <Button
+        android:id="@+id/button_reply3"
+        android:textAllCaps="false"
+        android:layout_width="wrap_content"
+        android:minWidth="10dp"
+        android:layout_height="40dp"
+        android:fontFamily="@font/outfit_regular"
+        android:padding="6dp"
+        android:text=""
+        android:textSize="12sp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginRight="4dp"
+        android:background="@drawable/smart_reply_button"
+        app:layout_constraintBottom_toTopOf="@id/editText_chat_conversation"
+        app:layout_constraintEnd_toStartOf="@+id/button_reply2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -58,7 +58,7 @@
             android:id="@+id/email_editText_login"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:inputType="text"
+            android:inputType="textEmailAddress"
             android:textColorHint="@color/black"
             android:textCursorDrawable="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
