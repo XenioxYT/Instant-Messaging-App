@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Parcel
 import android.os.Parcelable
 import android.provider.MediaStore
 import android.text.Layout
@@ -30,13 +31,8 @@ import kotlinx.android.synthetic.main.activity_signup.*
 import java.io.ByteArrayOutputStream
 import java.util.*
 
-
-// ...
-// Initialize Firebase Auth
-
-
 // Main class for the SignupActivity
-class SignupActivity : AppCompatActivity() { // Start of class
+class SignupActivity() : AppCompatActivity() { // Start of class
     override fun onCreate(savedInstanceState: Bundle?) { // onCreate method
         super.onCreate(savedInstanceState) // call super class onCreate
         setContentView(R.layout.activity_signup) // set the layout
@@ -52,19 +48,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
         button_create_account.setOnClickListener { // Create a new user with email and password
             Log.d("SignupActivity", "Button clicked") // Log the button press
 
-//            checkUsername() // Check if the username is valid
-//            Log.d("SignupActivity", "Username Checked")
-//            checkEmail() // Check if the email is valid
-//            Log.d("SignupActivity", "Email Checked")
-//            checkPassword() // Check if the password is valid
-//            Log.d("SignupActivity", "Password Checked")
-//            checkPasswordsMatch() // Check if the passwords match
-//            Log.d("SignupActivity", "Passwords match Checked")
             val profilepic = false
-//            if (checkProfilePicture(profilepic)) { // Check if the profile picture is valid
-//                Log.d("SignupActivity", "Profile picture Checked")
-//            }
-
             val username =
                 username_editText_register.text.toString().trim() // Set username to the text entered into the username text box
             val email =
@@ -139,7 +123,8 @@ class SignupActivity : AppCompatActivity() { // Start of class
                                         uid,
                                         username_editText_register.text.toString().trim(),
                                         profileImageUrl,
-                                        email
+                                        email,
+                                        "-16728876"
                                     ) // Create a user object with the user's uid and username
                                     ref.setValue(user)
                                         .addOnSuccessListener { // Add an onSuccessListener to the setValue function
@@ -249,6 +234,10 @@ class SignupActivity : AppCompatActivity() { // Start of class
 
     private var selectedPhotoUri: Uri? = null // Create a variable to hold the selected photo uri
 
+    constructor(parcel: Parcel) : this() {
+        selectedPhotoUri = parcel.readParcelable(Uri::class.java.classLoader)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -287,7 +276,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
                 return false// Return
             }
         }
-        if (username_editText_register.text.toString()
+        return if (username_editText_register.text.toString()
                 .isEmpty()
         ) { // If the username text box is empty
             username_editText_register_layout.isErrorEnabled = true
@@ -295,12 +284,12 @@ class SignupActivity : AppCompatActivity() { // Start of class
                 "Username cannot be empty" // Set the error message of the username text box to "Username cannot be empty"
             username_editText_register.requestFocus() // Request focus of the username text box
             Log.d("SignupActivity", "username is not valid")
-            return false// Return
+            false// Return
         } else {
             username_editText_register_layout.isErrorEnabled =
                 false // Clear the error message of the username text box
             Log.d("SignupActivity", "Username is valid") // Log that the username is valid
-            return true
+            true
         }
     }
 
@@ -387,32 +376,6 @@ class SignupActivity : AppCompatActivity() { // Start of class
             return true
         }
     } // End the checkPasswordsMatch function
-
-
-
-//    private fun loginSuccessfulRegister(profileImageUrl: String) { // Create a function called loginSuccessfulRegister
-//        val uid = FirebaseAuth.getInstance().uid ?: "" // Get the user's uid
-//        val ref =
-//            FirebaseDatabase.getInstance("https://instant-messaging-app-7fed6-default-rtdb.europe-west1.firebasedatabase.app/")
-//                .getReference("/users/$uid") // Get the user's reference
-//
-//        val user = User(uid, username_editText_register.text.toString(), profileImageUrl) // Create a user object with the user's uid and username
-//        ref.setValue(user) // Set the user's reference to the user object
-//            .addOnSuccessListener { // Add an onSuccessListener to the setValue function
-//                Log.d(
-//                    "SignupActivity",
-//                    "Finally we saved the user to Firebase Database"
-//                ) // Log that the user has been saved to Firebase Database
-//                if (intent.toString().isEmpty()) {
-//                    val intent = Intent(this, LoginAccountCreatedActivity::class.java) // Create an intent to the LoginAccountCreatedActivity
-//                    startActivity(intent) // Start the intent
-//                }
-//            } // End the addOnSuccessListener
-//            .addOnFailureListener { // Add an onFailureListener to the setValue function
-//                Log.d("SignupActivity", "Failed to set value to database: ${it.message}") // Log that the user has failed to be saved to Firebase Database
-//                //TODO Handle failure and show error message to user
-//            } // End the addOnFailureListener
-//    } // End the loginSuccessfulRegister function
 
     private fun loginFailedRegister(it: java.lang.Exception) { // Create a function called loginFailedRegister
         Log.d("SignupActivity", "Failed to create user: ${it.message}") // Log that the user has failed to be created
@@ -506,39 +469,9 @@ class SignupActivity : AppCompatActivity() { // Start of class
         val byteArray = stream.toByteArray()
         return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
     }
-
-
-//    private fun uploadImageToFirebase() {
-//        if (selectedPhotoUri == null) return
-//        val filename = UUID.randomUUID().toString()
-//        val ref = FirebaseStorage.getInstance().getReference("/images/$filename")
-//        ref.putFile(selectedPhotoUri!!)
-//            .addOnSuccessListener { it ->
-//                Log.d("SignupActivity", "Successfully uploaded image: ${it.metadata?.path}")
-//                ref.downloadUrl.addOnSuccessListener {
-//                    Log.d("SignupActivity", "File Location: $it")
-//                    loginSuccessfulRegister(it)
-//                }
-//            }
-//            .addOnFailureListener {
-//                Log.d("Activity", "Failed to upload image to storage: ${it.message}")
-//            }
-//    }
 }
 
-
 // CLASSES \\
-@Parcelize
-class User(
-    val uid: String,
-    val username: String,
-    val profileImageUrl: String,
-    val email: String,
-) :Parcelable {
-    constructor() : this("", "", "","")
-    //created blank constructor as kotlin now requires this when making a class
-} // Create a class called User
-
 
 // TODO PROBLEM DESCRIPTION BELOW AS TO WHY THE PROGRAM CRASHES WHEN CREATING AN ACCOUNT:
 //the issue starts when the user tries to create an account once all the details have been filled in correctly.

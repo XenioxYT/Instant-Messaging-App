@@ -1,13 +1,19 @@
 package com.xeniox.instantmessagingapp
 
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Color.BLACK
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.fragment.app.FragmentManager
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -21,7 +27,10 @@ import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.android.synthetic.main.activity_settings.drawer_layout
 import kotlinx.android.synthetic.main.activity_settings.navigation_drawer
 import kotlinx.android.synthetic.main.activity_settings.topAppBar_settings
+import kotlinx.android.synthetic.main.activity_settings.view.*
+import kotlinx.android.synthetic.main.activity_welcome.*
 import kotlinx.android.synthetic.main.settings_test_button.*
+import kotlinx.android.synthetic.main.settings_test_button.view.*
 import vadiole.colorpicker.ColorModel
 import vadiole.colorpicker.ColorPickerDialog
 
@@ -29,26 +38,53 @@ class SettingsActivity : AppCompatActivity() {
 
     lateinit var toggle: ActionBarDrawerToggle
 
-    val adapter = GroupAdapter<ViewHolder>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState) // call super class onCreate method
         setContentView(R.layout.activity_settings) // set the layout of the activity
 
-        recycler_view_settings.adapter = adapter
-        adapter.add(SettingsItem())
+        val user = FirebaseAuth.getInstance().currentUser?.uid
+        val ref = FirebaseDatabase.getInstance().getReference("/users/$user")
+        var color = ref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                val color = p0.getValue(User::class.java)
+                if (color?.color != null) {
+                    Log.d("SettingsActivity", "Color is: ${color.color}")
+                    var color = color.color
+                    Log.d("SettingsActivity", "Color is: $color")
+                } else {
+                    Log.d("SettingsActivity", "Color is: null")
+                }
+            }
 
-//        button_test_colour.setOnClickListener {
-//            val colourPicker: ColorPickerDialog.Builder = ColorPickerDialog.Builder()
-//                .setInitialColor(0x00BCD4FF)
-//                .setColorModel(ColorModel.RGB)
-//                .setButtonOkText(android.R.string.ok)
-//                .setButtonCancelText(android.R.string.cancel)
-//                .onColorSelected { color ->
-//                    Log.d("Colour", "Colour: $color")
-//                }
-//
-//        }
+            override fun onCancelled(p0: DatabaseError) {
+                Log.d("SettingsActivity", "Failed to read color")
+            }
+        })
+
+        button_color.setOnClickListener {
+            ColorPickerDialog.Builder()
+                .setInitialColor(0x00BCD4)
+                .setColorModel(ColorModel.RGB)
+                .setButtonOkText(android.R.string.ok)
+                .setButtonCancelText(android.R.string.cancel)
+                .onColorSelected { color ->
+                    Log.d("Colour", "Colour: $color")
+                    val colorInt = color.toString()
+                    val colorobj = GlobalColor(colorInt)
+                    Log.d("Colour", "Colour: ${colorobj.color}")
+                    val ref = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/color")
+                    ref.setValue(colorInt).addOnSuccessListener {
+                        Log.d("Colour", "Colour: $colorInt")
+                        button_color.setBackgroundColor(color)
+                    } .addOnFailureListener {
+                        Log.d("Colour", "Colour: $it")
+                    }
+                    topAppBar_settings.setBackgroundColor(color)
+                }
+                .create()
+                .show(supportFragmentManager, "color_picker")
+        }
+        Log.d("SettingsActivity", "Color is: $user")
 
 
 
@@ -128,13 +164,8 @@ class SettingsActivity : AppCompatActivity() {
         })
     }
 
-class SettingsItem() : Item<ViewHolder>() {
-    override fun bind(viewHolder: ViewHolder, position: Int) {
-    }
+    private fun colourPicker() {
 
-    override fun getLayout(): Int {
-        return R.layout.settings_test_button
     }
-}
 
 }

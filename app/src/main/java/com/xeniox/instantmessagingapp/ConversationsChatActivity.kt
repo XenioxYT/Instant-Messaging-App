@@ -41,6 +41,12 @@ class ConversationsChatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_conversations_chat)
 
+        recyclerView_chat_conversation.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            recyclerView_chat_conversation.scrollToPosition(
+                adapter.itemCount - 1
+            )
+        }
+
 
         val fromId = FirebaseAuth.getInstance().uid
         val toId = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid

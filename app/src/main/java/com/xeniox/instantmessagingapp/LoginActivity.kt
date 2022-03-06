@@ -66,7 +66,8 @@ class LoginActivity : AppCompatActivity() {
                         dialog.dismiss()
                         val uid = FirebaseAuth.getInstance().uid
                         val email = FirebaseAuth.getInstance().currentUser?.email
-                        val user = User(uid.toString(), "", "", email.toString())
+//                        val color = ""
+                        val user = User(uid.toString(), "", "", email.toString(),"")
                         if (!it.isSuccessful) return@addOnCompleteListener
 
                         Log.d(
