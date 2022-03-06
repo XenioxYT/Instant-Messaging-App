@@ -104,6 +104,7 @@ class ConversationsChatActivity : AppCompatActivity() {
                                 button_reply1.height = 40
                                 button_reply2.height = 40
                                 button_reply3.height = 40
+                                recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
                                 Log.d(TAG, "Success")
                                 var reply = ""
                                 for (suggestion: SmartReplySuggestion in it.suggestions) {
@@ -114,6 +115,7 @@ class ConversationsChatActivity : AppCompatActivity() {
                                 if (suggestion1.isNullOrEmpty()) {
                                     button_reply1.visibility = View.GONE
                                     button_reply1.height = 0
+                                    recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
                                 } else {
                                     button_reply1.text = suggestion1
                                 }
@@ -121,6 +123,7 @@ class ConversationsChatActivity : AppCompatActivity() {
                                 if (suggestion2.isNullOrEmpty()) {
                                     button_reply2.visibility = View.GONE
                                     button_reply2.height = 0
+                                    recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
                                 } else {
                                     button_reply2.text = suggestion2
                                 }
@@ -128,20 +131,24 @@ class ConversationsChatActivity : AppCompatActivity() {
                                 if (suggestion3.isNullOrEmpty()) {
                                     button_reply3.visibility = View.GONE
                                     button_reply3.height = 0
+                                    recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
                                 } else {
                                     button_reply3.text = suggestion3
                                 }
                                 button_reply1.setOnClickListener {
+                                    recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
                                     Log.d(TAG, "Reply 1")
                                     button_reply1.text = suggestion1
                                     editText_chat_conversation.append(suggestion1)
                                 }
                                 button_reply2.setOnClickListener {
+                                    recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
                                     Log.d(TAG, "Reply 2")
                                     button_reply2.text = suggestion2
                                     editText_chat_conversation.append(suggestion2)
                                 }
                                 button_reply3.setOnClickListener {
+                                    recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
                                     Log.d(TAG, "Reply 3")
                                     button_reply3.text = suggestion3
                                     editText_chat_conversation.append(suggestion3)
@@ -155,6 +162,7 @@ class ConversationsChatActivity : AppCompatActivity() {
                                 button_reply1.height = 0
                                 button_reply2.height = 0
                                 button_reply3.height = 0
+                                recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
                             }
                         }
                     }
@@ -206,14 +214,17 @@ class ConversationsChatActivity : AppCompatActivity() {
         if (suggestion1?.text.isNullOrEmpty()) {
             button_reply1.visibility = View.GONE
             button_reply1.height = 0
+            recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
         }
         if (suggestion2?.text.isNullOrEmpty()) {
             button_reply2.visibility = View.GONE
             button_reply2.height = 0
+            recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
         }
         if (suggestion3?.text.isNullOrEmpty()) {
             button_reply3.visibility = View.GONE
             button_reply3.height = 0
+            recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
         }
     }
 
