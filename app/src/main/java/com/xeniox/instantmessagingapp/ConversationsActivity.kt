@@ -9,6 +9,9 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.google.firebase.FirebaseApp
+import com.google.firebase.appcheck.FirebaseAppCheck
+import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
@@ -28,6 +31,11 @@ class ConversationsActivity : AppCompatActivity() {
     lateinit var toggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        FirebaseApp.initializeApp(/*context=*/this)
+        val firebaseAppCheck = FirebaseAppCheck.getInstance()
+        firebaseAppCheck.installAppCheckProviderFactory(
+            SafetyNetAppCheckProviderFactory.getInstance()
+        )
         verifyUserIsLoggedIn()
         super.onCreate(savedInstanceState) // call super class onCreate method
         setContentView(R.layout.activity_conversations) // set the layout of the activity
@@ -143,10 +151,14 @@ class ConversationsActivity : AppCompatActivity() {
             override fun onDataChange(p0: DataSnapshot) {
                 currentUser = p0.getValue(User::class.java)
                 Log.d("ConversationsActivity","Current user: ${currentUser?.username}")
-                navigation_drawer.findViewById<TextView>(R.id.username_nav_header).text = currentUser?.username
-                val email = currentUser?.email
-                Log.d("ConversationsActivity","Current user email: $email")
-                navigation_drawer.findViewById<TextView>(R.id.email_nav_header).text = currentUser?.email
+                if (currentUser?.username != null && currentUser?.email != null) {
+                    navigation_drawer.findViewById<TextView>(R.id.username_nav_header).text =
+                        currentUser?.username
+                    val email = currentUser?.email
+                    Log.d("ConversationsActivity", "Current user email: $email")
+                    navigation_drawer.findViewById<TextView>(R.id.email_nav_header).text =
+                        currentUser?.email
+                }
             }
 
             override fun onCancelled(p0: DatabaseError) {
