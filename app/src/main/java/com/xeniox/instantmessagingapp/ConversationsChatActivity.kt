@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
@@ -17,15 +19,16 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.mlkit.nl.smartreply.SmartReply
 import com.google.mlkit.nl.smartreply.SmartReplySuggestion
-import com.google.mlkit.nl.smartreply.SmartReplySuggestionResult
-import com.google.mlkit.nl.smartreply.SmartReplySuggestionResult.*
+import com.google.mlkit.nl.smartreply.SmartReplySuggestionResult.STATUS_NOT_SUPPORTED_LANGUAGE
+import com.google.mlkit.nl.smartreply.SmartReplySuggestionResult.STATUS_SUCCESS
+import com.google.mlkit.nl.smartreply.TextMessage
 import com.squareup.picasso.Picasso
+import com.xeniox.instantmessagingapp.NewConversationActivity.Companion.USER_KEY
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
-import com.google.mlkit.nl.smartreply.TextMessage
-import com.xeniox.instantmessagingapp.NewConversationActivity.Companion.USER_KEY
 import kotlinx.android.synthetic.main.activity_conversations_chat.*
+import kotlinx.android.synthetic.main.bottom_sheet_user_profile.*
 import kotlinx.android.synthetic.main.chat_from_message.view.*
 import kotlinx.android.synthetic.main.chat_to_message.view.*
 
@@ -42,6 +45,7 @@ class ConversationsChatActivity : AppCompatActivity() {
     var suggestion3: SmartReplySuggestion? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         FirebaseApp.initializeApp(/*context=*/this)
         val firebaseAppCheck = FirebaseAppCheck.getInstance()
         firebaseAppCheck.installAppCheckProviderFactory(
@@ -50,6 +54,8 @@ class ConversationsChatActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_conversations_chat)
+
+
 
         recyclerView_chat_conversation.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
             recyclerView_chat_conversation.scrollToPosition(
@@ -60,9 +66,30 @@ class ConversationsChatActivity : AppCompatActivity() {
         topAppBar_chat_conversation.setOnMenuItemClickListener {
             when(it.itemId){
                 R.id.view_profile -> {
-                    val intent = Intent(this, UserProfileActivity::class.java)
-                    intent.putExtra(USER_KEY, intent.getParcelableExtra<User>(USER_KEY))
-                    startActivity(intent)
+//                    val intent = Intent(this, UserProfileActivity::class.java)
+//                    intent.putExtra(NewConversationActivity.USER_KEY, intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY))
+//                    startActivity(intent)
+                    //TODO: Add bottom sheet to view profile
+                    val dialog = BottomSheetDialog(this)
+                    val view = layoutInflater.inflate(R.layout.bottom_sheet_user_profile, null)
+                    val btnClose = view.findViewById<Button>(R.id.idBtnDismiss)
+                    val username = intent.getParcelableExtra<User>(USER_KEY)?.username
+                    val userImage = intent.getParcelableExtra<User>(USER_KEY)?.profileImageUrl
+                    val userEmail = intent.getParcelableExtra<User>(USER_KEY)?.email
+
+                    if (username != null) {
+                        text_username_profile.text = username.toString()
+                    } else if (userEmail != null) {
+                        text_email_profile.text = userEmail.toString()
+                    } else if (userImage != null) {
+                        Picasso.get().load(userImage.toString()).into(user_profile_image)
+                    }
+                    btnClose.setOnClickListener {
+                        dialog.dismiss()
+                    }
+                    dialog.setCancelable(true)
+                    dialog.setContentView(view)
+                    dialog.show()
                 }
                 R.id.search_chat -> {
 //                    FirebaseAuth.getInstance().signOut()
@@ -441,9 +468,9 @@ class ConversationsChatActivity : AppCompatActivity() {
 
         when (item.itemId) {
             R.id.view_profile -> {
-                val intent = Intent(this, UserProfileActivity::class.java)
-                intent.putExtra(USER_KEY, intent.getParcelableExtra<User>(USER_KEY))
-                startActivity(intent)
+//                val intent = Intent(this, UserProfileActivity::class.java)
+//                intent.putExtra(NewConversationActivity.USER_KEY, intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY))
+//                startActivity(intent)
             }
             R.id.search_chat -> {
                 // handle menu item press here

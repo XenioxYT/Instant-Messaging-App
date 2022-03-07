@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp">
+
+        <!--image view for displaying course image-->
+        <ImageView
+            android:id="@+id/user_profile_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <!--text view for displaying course name-->
+        <TextView
+            android:id="@+id/text_username_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@id/user_profile_image"
+            android:layout_toRightOf="@id/user_profile_image"
+            android:fontFamily="@font/outfit_black"
+            android:text="Username"
+            android:textColor="@color/black"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+        <!--text view for displaying course tracks-->
+        <TextView
+            android:id="@+id/text_email_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_username_profile"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@id/user_profile_image"
+            android:layout_toRightOf="@id/user_profile_image"
+            android:fontFamily="@font/outfit_bold"
+            android:text="Email"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <!--text view for displaying course duration-->
+        <TextView
+            android:id="@+id/bio_user_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_email_profile"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@id/user_profile_image"
+            android:layout_toRightOf="@id/user_profile_image"
+            android:fontFamily="@font/outfit_medium"
+            android:text="Bio"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
+        <!--button for dismissing our dialog-->
+        <Button
+            android:id="@+id/idBtnDismiss"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/user_profile_image"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="Dismiss dialog"
+            android:textAllCaps="false" />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
