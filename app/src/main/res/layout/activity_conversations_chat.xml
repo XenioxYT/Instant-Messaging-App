@@ -20,6 +20,8 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBar_chat_conversation"
             style="@style/MyToolbar"
+            app:subtitle="Email"
+            app:subtitleCentered="true"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:theme="@style/ItemBackground"

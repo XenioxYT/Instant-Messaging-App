@@ -3,6 +3,7 @@ package com.xeniox.instantmessagingapp
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +24,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import com.google.mlkit.nl.smartreply.TextMessage
+import com.xeniox.instantmessagingapp.NewConversationActivity.Companion.USER_KEY
 import kotlinx.android.synthetic.main.activity_conversations_chat.*
 import kotlinx.android.synthetic.main.chat_from_message.view.*
 import kotlinx.android.synthetic.main.chat_to_message.view.*
@@ -55,11 +57,34 @@ class ConversationsChatActivity : AppCompatActivity() {
             )
         }
 
+        topAppBar_chat_conversation.setOnMenuItemClickListener {
+            when(it.itemId){
+                R.id.view_profile -> {
+                    val intent = Intent(this, UserProfileActivity::class.java)
+                    intent.putExtra(USER_KEY, intent.getParcelableExtra<User>(USER_KEY))
+                    startActivity(intent)
+                }
+                R.id.search_chat -> {
+//                    FirebaseAuth.getInstance().signOut()
+//                    val intent = Intent(this, MainActivity::class.java)
+//                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                    startActivity(intent)
+                }
+                R.id.mute_notifications -> {
+                    Toast.makeText(this, "Mute Notifications", Toast.LENGTH_SHORT).show()
+                }
+            }
+            true
+        }
+
+
 
         val fromId = FirebaseAuth.getInstance().uid
         val toId = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid
         val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId")
         val smartReplyGenerator = SmartReply.getClient()
+        val otherUserEmail = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.email
+        topAppBar_chat_conversation.subtitle = otherUserEmail
         try{
             ref.addChildEventListener(object : ChildEventListener {
                 override fun onChildAdded(p0: DataSnapshot, p1: String?) {
@@ -95,7 +120,7 @@ class ConversationsChatActivity : AppCompatActivity() {
                         Log.d(TAG, conversations.toString())
                         Log.d(TAG, "Size: ${conversations.size}")
 
-                        if (conversations.size > 150) {
+                        if (conversations.size > 50) {
                             Log.d(TAG, "Size: ${conversations.size}")
                             Log.d(TAG, "cleared the array")
                             conversations.clear()
@@ -410,6 +435,25 @@ class ConversationsChatActivity : AppCompatActivity() {
 
             }
         }
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+            R.id.view_profile -> {
+                val intent = Intent(this, UserProfileActivity::class.java)
+                intent.putExtra(USER_KEY, intent.getParcelableExtra<User>(USER_KEY))
+                startActivity(intent)
+            }
+            R.id.search_chat -> {
+                // handle menu item press here
+            }
+            R.id.mute_notifications -> {
+                // handle menu item press here
+            }
+        }
+
+        return super.onContextItemSelected(item)
     }
 
 }

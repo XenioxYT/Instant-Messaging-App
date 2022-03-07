@@ -32,6 +32,7 @@ import kotlinx.android.synthetic.main.activity_settings.navigation_drawer
 import kotlinx.android.synthetic.main.activity_settings.topAppBar_settings
 import kotlinx.android.synthetic.main.activity_settings.view.*
 import kotlinx.android.synthetic.main.activity_welcome.*
+import kotlinx.android.synthetic.main.nav_header.*
 import kotlinx.android.synthetic.main.settings_test_button.*
 import kotlinx.android.synthetic.main.settings_test_button.view.*
 import vadiole.colorpicker.ColorModel
@@ -88,6 +89,7 @@ class SettingsActivity : AppCompatActivity() {
                         Log.d("Colour", "Colour: $it")
                     }
                     topAppBar_settings.setBackgroundColor(color)
+                    header_layout.setBackgroundColor(color)
                 }
                 .create()
                 .show(supportFragmentManager, "color_picker")

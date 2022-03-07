@@ -9,6 +9,7 @@ import android.text.style.AlignmentSpan
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
@@ -20,6 +21,7 @@ import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
+import kotlinx.android.synthetic.main.activity_conversations.*
 import kotlinx.android.synthetic.main.activity_new_conversation.*
 import kotlinx.android.synthetic.main.user_row_new_conversation.view.*
 
@@ -32,6 +34,8 @@ class NewConversationActivity : AppCompatActivity() {
         firebaseAppCheck.installAppCheckProviderFactory(
             SafetyNetAppCheckProviderFactory.getInstance()
         )
+
+        recyclerView_new_conversation.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
         val title =
             SpannableString("Loading") // Set the title variable to "No internet connection"
@@ -107,6 +111,7 @@ class NewConversationActivity : AppCompatActivity() {
 class UserItem(val user: User) : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.text_username_new_conversation.text = user.username
+        viewHolder.itemView.text_email_new_conversation.text = user.email
         Picasso.get().load(user.profileImageUrl).into(viewHolder.itemView.imageView)
     }
 
