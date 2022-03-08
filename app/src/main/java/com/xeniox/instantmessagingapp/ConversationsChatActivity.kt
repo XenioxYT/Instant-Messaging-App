@@ -6,8 +6,11 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
@@ -55,6 +58,9 @@ class ConversationsChatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_conversations_chat)
 
+        val toolbar = findViewById<MaterialToolbar>(R.id.topAppBar_chat_conversation)
+        setSupportActionBar(toolbar)
+
 
 
         recyclerView_chat_conversation.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
@@ -63,30 +69,33 @@ class ConversationsChatActivity : AppCompatActivity() {
             )
         }
 
+
+
+        val fromId = FirebaseAuth.getInstance().uid
+        val toId = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid
+        val username = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.username
+        val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId")
+        val smartReplyGenerator = SmartReply.getClient()
+        val otherUserEmail = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.email
+        val userProfileImageUrl = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.profileImageUrl
+        topAppBar_chat_conversation.subtitle = otherUserEmail
+
         topAppBar_chat_conversation.setOnMenuItemClickListener {
             when(it.itemId){
                 R.id.view_profile -> {
-//                    val intent = Intent(this, UserProfileActivity::class.java)
-//                    intent.putExtra(NewConversationActivity.USER_KEY, intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY))
-//                    startActivity(intent)
-                    //TODO: Add bottom sheet to view profile
                     val dialog = BottomSheetDialog(this)
                     val view = layoutInflater.inflate(R.layout.bottom_sheet_user_profile, null)
-                    val btnClose = view.findViewById<Button>(R.id.idBtnDismiss)
-                    val username = intent.getParcelableExtra<User>(USER_KEY)?.username
-                    val userImage = intent.getParcelableExtra<User>(USER_KEY)?.profileImageUrl
-                    val userEmail = intent.getParcelableExtra<User>(USER_KEY)?.email
+                    Log.d(TAG, "onCreate: $toId")
+                    Log.d(TAG, "onCreate: $otherUserEmail")
 
-                    if (username != null) {
-                        text_username_profile.text = username.toString()
-                    } else if (userEmail != null) {
-                        text_email_profile.text = userEmail.toString()
-                    } else if (userImage != null) {
-                        Picasso.get().load(userImage.toString()).into(user_profile_image)
-                    }
-                    btnClose.setOnClickListener {
-                        dialog.dismiss()
-                    }
+                    val textEmail = view.findViewById<TextView>(R.id.text_email_profile)
+                    val textUsername = view.findViewById<TextView>(R.id.text_username_profile)
+                    val userProfileImage = view.findViewById<ImageView>(R.id.user_profile_image)
+
+                    textEmail.text = otherUserEmail.toString()
+                    textUsername.text = username.toString()
+                    Picasso.get().load(userProfileImageUrl).into(userProfileImage)
+
                     dialog.setCancelable(true)
                     dialog.setContentView(view)
                     dialog.show()
@@ -103,15 +112,6 @@ class ConversationsChatActivity : AppCompatActivity() {
             }
             true
         }
-
-
-
-        val fromId = FirebaseAuth.getInstance().uid
-        val toId = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid
-        val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId")
-        val smartReplyGenerator = SmartReply.getClient()
-        val otherUserEmail = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.email
-        topAppBar_chat_conversation.subtitle = otherUserEmail
         try{
             ref.addChildEventListener(object : ChildEventListener {
                 override fun onChildAdded(p0: DataSnapshot, p1: String?) {
@@ -259,12 +259,12 @@ class ConversationsChatActivity : AppCompatActivity() {
 
         recyclerView_chat_conversation.adapter = adapter
 
-        topAppBar_chat_conversation.setNavigationOnClickListener {
-            val intent = Intent(this, ConversationsActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-            finish()
-        }
+//        topAppBar_chat_conversation.setNavigationOnClickListener {
+//            val intent = Intent(this, ConversationsActivity::class.java)
+//            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+//            startActivity(intent)
+//            finish()
+//        }
 
 
 //        srgen(conversations)
@@ -331,48 +331,6 @@ class ConversationsChatActivity : AppCompatActivity() {
         })
     }
 
-//    private fun srgen(conversations: ArrayList<TextMessage>) {
-//        val smartReplyGenerator = SmartReply.getClient()
-//        smartReplyGenerator.suggestReplies(conversations).addOnSuccessListener {
-//            Log.d(TAG, "Suggestions: ${it.suggestions}")
-//            Log.d(TAG, "Status: ${it.status}")
-//
-//            if (it.status == STATUS_NOT_SUPPORTED_LANGUAGE) {
-//                Log.d(TAG, "Not supported language")
-//            } else if (it.status == STATUS_SUCCESS) {
-//                Log.d(TAG, "Success")
-//                var reply = ""
-//                for (suggestion:SmartReplySuggestion in it.suggestions) {
-//                    reply += suggestion.text + "\n"
-//                }
-//                Log.d(TAG, reply)
-//                val suggestion1 = it.suggestions[0]
-//                val suggestion2 = it.suggestions[1]
-//                val suggestion3 = it.suggestions[2]
-//
-//                button_reply1.text = suggestion1.text
-//
-//                button_reply1.setOnClickListener {
-//                    editText_chat_conversation.setText(suggestion1.text)
-//                }
-////                button_reply2.text = suggestion2.text
-////                button_reply3.text = suggestion3.text
-////
-////                button_reply1.setOnClickListener {
-////                    performSendMessageSR(suggestion1.text)
-////                }
-////                button_reply2.setOnClickListener {
-////                    performSendMessageSR(suggestion2.text)
-////                }
-////                button_reply3.setOnClickListener {
-////                    performSendMessageSR(suggestion3.text)
-////                }
-//
-//            }
-//        }
-//    }
-
-
 
     private fun performSendMessage() {
 //        val reference = FirebaseDatabase.getInstance().getReference("/messages").push()
@@ -390,7 +348,7 @@ class ConversationsChatActivity : AppCompatActivity() {
             FirebaseDatabase.getInstance().getReference("/user-messages/$toId/$fromId")
                 .push() // new messages node in firebase
 
-        if (editText_chat_conversation.text.isNullOrEmpty()) {
+        if (editText_chat_conversation.text.trim().isNullOrEmpty()) {
             Log.d("chat", "message is null")
             return
         } else {

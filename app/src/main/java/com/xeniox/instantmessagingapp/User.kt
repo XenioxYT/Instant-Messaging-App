@@ -10,7 +10,8 @@ class User(
     val profileImageUrl: String,
     val email: String,
     val color: String,
+    val bio: String
 ) : Parcelable {
-    constructor() : this("", "", "","","")
+    constructor() : this("", "", "","","","")
     //created blank constructor as kotlin now requires this when making a class
 } // Create a class called User

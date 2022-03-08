@@ -53,13 +53,15 @@ class SettingsActivity : AppCompatActivity() {
 
         val user = FirebaseAuth.getInstance().currentUser?.uid
         val ref = FirebaseDatabase.getInstance().getReference("/users/$user")
-        var color = ref.addValueEventListener(object : ValueEventListener {
+        var getcolor = ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 val color = p0.getValue(User::class.java)
                 if (color?.color != null) {
                     Log.d("SettingsActivity", "Color is: ${color.color}")
-                    var color = color.color
+                    val userColor = color.color
                     Log.d("SettingsActivity", "Color is: $color")
+                    val topappbar = findViewById<MaterialToolbar>(R.id.topAppBar_settings)
+                    topappbar.setBackgroundColor(color.color.toInt())
                 } else {
                     Log.d("SettingsActivity", "Color is: null")
                 }
@@ -69,6 +71,9 @@ class SettingsActivity : AppCompatActivity() {
                 Log.d("SettingsActivity", "Failed to read color")
             }
         })
+
+        val toolbar = findViewById<MaterialToolbar>(R.id.topAppBar_settings)
+        setSupportActionBar(toolbar)
 
         button_color.setOnClickListener {
             ColorPickerDialog.Builder()
@@ -94,7 +99,6 @@ class SettingsActivity : AppCompatActivity() {
                 .create()
                 .show(supportFragmentManager, "color_picker")
         }
-        Log.d("SettingsActivity", "Color is: $user")
 
 
 

@@ -9,6 +9,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
@@ -43,6 +44,9 @@ class ConversationsActivity : AppCompatActivity() {
 
         recycler_view_all_conversations.adapter = adapter // set the adapter to the recycler view
         recycler_view_all_conversations.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+
+        val toolbar = findViewById<MaterialToolbar>(R.id.topAppBar)
+        setSupportActionBar(toolbar)
 
         adapter.setOnItemClickListener { item, view ->
             val intent = Intent(this, ConversationsChatActivity::class.java)

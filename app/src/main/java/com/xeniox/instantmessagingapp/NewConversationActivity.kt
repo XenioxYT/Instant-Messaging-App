@@ -56,11 +56,11 @@ class NewConversationActivity : AppCompatActivity() {
 
 
 
-        topAppBar_new_conversation.setNavigationOnClickListener { // set the navigation icon on the top app bar
-            val intent = Intent(this, ConversationsActivity::class.java) // end the activity
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
-        }
+//        topAppBar_new_conversation.setNavigationOnClickListener { // set the navigation icon on the top app bar
+//            val intent = Intent(this, ConversationsActivity::class.java) // end the activity
+//            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+//            startActivity(intent)
+//        }
 
 //        val intent = Intent(this, SignupActivity::class.java)
 //        startActivity(intent)

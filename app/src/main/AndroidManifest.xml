@@ -19,10 +19,12 @@
             android:exported="false" />
         <activity
             android:name=".ConversationsChatActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".ConversationsActivity"/>
         <activity
             android:name=".NewConversationActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".ConversationsActivity"/>
         <activity
             android:name=".SettingsActivity"
             android:exported="false" />
