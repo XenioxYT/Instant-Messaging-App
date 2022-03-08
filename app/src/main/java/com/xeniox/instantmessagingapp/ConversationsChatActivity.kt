@@ -5,35 +5,34 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.graphics.drawable.DrawableCompat
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.google.mlkit.nl.smartreply.SmartReply
 import com.google.mlkit.nl.smartreply.SmartReplySuggestion
 import com.google.mlkit.nl.smartreply.SmartReplySuggestionResult.STATUS_NOT_SUPPORTED_LANGUAGE
 import com.google.mlkit.nl.smartreply.SmartReplySuggestionResult.STATUS_SUCCESS
 import com.google.mlkit.nl.smartreply.TextMessage
 import com.squareup.picasso.Picasso
-import com.xeniox.instantmessagingapp.NewConversationActivity.Companion.USER_KEY
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_conversations_chat.*
-import kotlinx.android.synthetic.main.bottom_sheet_user_profile.*
 import kotlinx.android.synthetic.main.chat_from_message.view.*
 import kotlinx.android.synthetic.main.chat_to_message.view.*
+
 
 class ConversationsChatActivity : AppCompatActivity() {
 
@@ -55,11 +54,58 @@ class ConversationsChatActivity : AppCompatActivity() {
             SafetyNetAppCheckProviderFactory.getInstance()
         )
 
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_conversations_chat)
 
-        val toolbar = findViewById<MaterialToolbar>(R.id.topAppBar_chat_conversation)
-        setSupportActionBar(toolbar)
+//        val toolbar = findViewById<MaterialToolbar>(R.id.topAppBar_chat_conversation)
+//        setSupportActionBar(toolbar)
+
+
+//         Set custom colours here:
+        val user = FirebaseAuth.getInstance().currentUser?.uid
+        val refColor = FirebaseDatabase.getInstance().getReference("/users/$user")
+        var getcolor = refColor.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                val color = p0.getValue(User::class.java)
+                if (color?.color != null) {
+                    Log.d("SettingsActivity", "Color is: ${color.color}")
+                    val userColor = color.color
+                    Log.d("SettingsActivity", "Color is: $color")
+
+                    // Set the colour of the toolbar
+                    val topappbar = findViewById<MaterialToolbar>(R.id.topAppBar_chat_conversation)
+                    topappbar.setBackgroundColor(color.color.toInt())
+
+                    // Set the colour of the status bar.
+                    val window = window
+                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                    window.statusBarColor = color.color.toInt()
+
+                    // Set other colours here
+                    button_send_message.setBackgroundColor(color.color.toInt())
+                    button_reply1.setBackgroundColor(color.color.toInt())
+                    button_reply2.setBackgroundColor(color.color.toInt())
+                    button_reply3.setBackgroundColor(color.color.toInt())
+                    val unwrappedDrawable =
+                        AppCompatResources.getDrawable(
+                            this@ConversationsChatActivity,
+                            R.drawable.chat_received_message_rounded
+                        )
+                    val wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable!!)
+                    DrawableCompat.setTint(wrappedDrawable, color.color.toInt())
+                    val userPic = findViewById<CircleImageView>(R.id.chat_from_image)
+
+
+                } else {
+                    Log.d("SettingsActivity", "Color is: null")
+                }
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+                Log.d("SettingsActivity", "Failed to read color")
+            }
+        })
 
 
 
@@ -71,9 +117,11 @@ class ConversationsChatActivity : AppCompatActivity() {
 
 
 
+
         val fromId = FirebaseAuth.getInstance().uid
         val toId = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid
         val username = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.username
+        val bio = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.bio
         val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId")
         val smartReplyGenerator = SmartReply.getClient()
         val otherUserEmail = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.email
@@ -91,9 +139,12 @@ class ConversationsChatActivity : AppCompatActivity() {
                     val textEmail = view.findViewById<TextView>(R.id.text_email_profile)
                     val textUsername = view.findViewById<TextView>(R.id.text_username_profile)
                     val userProfileImage = view.findViewById<ImageView>(R.id.user_profile_image)
+                    val textBio = view.findViewById<TextView>(R.id.text_bio_profile)
 
                     textEmail.text = otherUserEmail.toString()
                     textUsername.text = username.toString()
+                    textBio.text = bio.toString()
+
                     Picasso.get().load(userProfileImageUrl).into(userProfileImage)
 
                     dialog.setCancelable(true)
@@ -249,22 +300,30 @@ class ConversationsChatActivity : AppCompatActivity() {
                 override fun onCancelled(error: DatabaseError) {
                     //make a toast saying that there was a database error
                     Log.d(TAG, "Failed to read value.", error.toException())
-                    Toast.makeText(this@ConversationsChatActivity, "Failed to read value. $error", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@ConversationsChatActivity,
+                        "Failed to read value. $error",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             })
         } catch (e: Exception) {
             Log.d(TAG, "Failed to read value.", e)
-            Toast.makeText(this@ConversationsChatActivity, "Failed to read value. $e", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this@ConversationsChatActivity,
+                "Failed to read value. $e",
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         recyclerView_chat_conversation.adapter = adapter
 
-//        topAppBar_chat_conversation.setNavigationOnClickListener {
-//            val intent = Intent(this, ConversationsActivity::class.java)
-//            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-//            startActivity(intent)
-//            finish()
-//        }
+        topAppBar_chat_conversation.setNavigationOnClickListener {
+            val intent = Intent(this, ConversationsActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            finish()
+        }
 
 
 //        srgen(conversations)

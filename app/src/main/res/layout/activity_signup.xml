@@ -212,7 +212,6 @@
         android:id="@+id/selectphoto_imageview_register"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        app:civ_border_width="4dp"
         app:layout_constraintBottom_toBottomOf="@+id/button_profile_picture"
         app:layout_constraintEnd_toEndOf="@+id/button_profile_picture"
         app:layout_constraintStart_toStartOf="@+id/button_profile_picture"

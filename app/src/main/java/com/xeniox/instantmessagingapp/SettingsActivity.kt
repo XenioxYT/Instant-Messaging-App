@@ -1,18 +1,14 @@
 package com.xeniox.instantmessagingapp
 
-import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.Color.BLACK
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.widget.Button
+import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import androidx.fragment.app.FragmentManager
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
@@ -22,19 +18,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.Item
-import com.xwray.groupie.ViewHolder
-import kotlinx.android.synthetic.main.activity_conversations.*
 import kotlinx.android.synthetic.main.activity_settings.*
-import kotlinx.android.synthetic.main.activity_settings.drawer_layout
-import kotlinx.android.synthetic.main.activity_settings.navigation_drawer
-import kotlinx.android.synthetic.main.activity_settings.topAppBar_settings
-import kotlinx.android.synthetic.main.activity_settings.view.*
-import kotlinx.android.synthetic.main.activity_welcome.*
 import kotlinx.android.synthetic.main.nav_header.*
-import kotlinx.android.synthetic.main.settings_test_button.*
-import kotlinx.android.synthetic.main.settings_test_button.view.*
 import vadiole.colorpicker.ColorModel
 import vadiole.colorpicker.ColorPickerDialog
 
@@ -62,6 +47,12 @@ class SettingsActivity : AppCompatActivity() {
                     Log.d("SettingsActivity", "Color is: $color")
                     val topappbar = findViewById<MaterialToolbar>(R.id.topAppBar_settings)
                     topappbar.setBackgroundColor(color.color.toInt())
+                    val window = window
+                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                    window.statusBarColor = color.color.toInt()
+                    button_color.setBackgroundColor(color.color.toInt())
+//                    val headerlayout = findViewById<Constraints>(R.id.header_layout)
+                    header_layout.setBackgroundColor(color.color.toInt())
                 } else {
                     Log.d("SettingsActivity", "Color is: null")
                 }

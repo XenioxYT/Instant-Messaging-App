@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -15,13 +16,11 @@ import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.squareup.picasso.Picasso
 import com.xeniox.instantmessagingapp.NewConversationActivity.Companion.USER_KEY
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_conversations.*
-import kotlinx.android.synthetic.main.conversations_message_row.view.*
+import kotlinx.android.synthetic.main.nav_header.*
 
 class ConversationsActivity : AppCompatActivity() {
 
@@ -37,13 +36,62 @@ class ConversationsActivity : AppCompatActivity() {
         firebaseAppCheck.installAppCheckProviderFactory(
             SafetyNetAppCheckProviderFactory.getInstance()
         )
+
         verifyUserIsLoggedIn()
         super.onCreate(savedInstanceState) // call super class onCreate method
         setContentView(R.layout.activity_conversations) // set the layout of the activity
-        fetchCurrentUser()
+
+
+        val user = FirebaseAuth.getInstance().currentUser?.uid
+        val refColor = FirebaseDatabase.getInstance().getReference("/users/$user")
+        var getcolor = refColor.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                val color = p0.getValue(User::class.java)
+                if (color?.username != null && color?.email != null) {
+                    navigation_drawer.findViewById<TextView>(R.id.username_nav_header).text =
+                        color?.username
+                    val email = color?.email
+                    Log.d("ConversationsActivity", "Current user email: $email")
+                    navigation_drawer.findViewById<TextView>(R.id.email_nav_header).text =
+                        color?.email
+                }
+                if (color?.color != null) {
+                    Log.d("SettingsActivity", "Color is: ${color.color}")
+                    val userColor = color.color
+                    Log.d("SettingsActivity", "Color is: $color")
+
+                    // Set the colour of the toolbar
+                    val topappbar = findViewById<MaterialToolbar>(R.id.topAppBar)
+                    topappbar.setBackgroundColor(color.color.toInt())
+
+                    // Set the colour of the nav header
+                    header_layout.setBackgroundColor(color.color.toInt())
+
+                    // Set the colour of the status bar.
+                    val window = window
+                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                    window.statusBarColor = color.color.toInt()
+
+                    // Set other colours here
+
+
+                } else {
+                    Log.d("SettingsActivity", "Color is: null")
+                }
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+                Log.d("SettingsActivity", "Failed to read color")
+            }
+        })
 
         recycler_view_all_conversations.adapter = adapter // set the adapter to the recycler view
-        recycler_view_all_conversations.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        recycler_view_all_conversations.addItemDecoration(
+            DividerItemDecoration(
+                this,
+                DividerItemDecoration.VERTICAL
+            )
+        )
 
         val toolbar = findViewById<MaterialToolbar>(R.id.topAppBar)
         setSupportActionBar(toolbar)
@@ -59,6 +107,8 @@ class ConversationsActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+        fetchCurrentUser()
+
 
 //        setupDummyRows()
 
@@ -160,8 +210,8 @@ class ConversationsActivity : AppCompatActivity() {
                         currentUser?.username
                     val email = currentUser?.email
                     Log.d("ConversationsActivity", "Current user email: $email")
-                    navigation_drawer.findViewById<TextView>(R.id.email_nav_header).text =
-                        currentUser?.email
+//                    navigation_drawer.findViewById<TextView>(R.id.email_nav_header).text =
+//                        currentUser?.email
                 }
             }
 

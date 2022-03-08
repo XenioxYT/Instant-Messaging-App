@@ -7,12 +7,15 @@ import android.text.Layout
 import android.text.SpannableString
 import android.text.style.AlignmentSpan
 import android.util.Log
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -21,7 +24,6 @@ import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
-import kotlinx.android.synthetic.main.activity_conversations.*
 import kotlinx.android.synthetic.main.activity_new_conversation.*
 import kotlinx.android.synthetic.main.user_row_new_conversation.view.*
 
@@ -35,7 +37,45 @@ class NewConversationActivity : AppCompatActivity() {
             SafetyNetAppCheckProviderFactory.getInstance()
         )
 
-        recyclerView_new_conversation.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+
+        val user = FirebaseAuth.getInstance().currentUser?.uid
+        val refColor = FirebaseDatabase.getInstance().getReference("/users/$user")
+        var getcolor = refColor.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                val color = p0.getValue(User::class.java)
+                if (color?.color != null) {
+                    Log.d("SettingsActivity", "Color is: ${color.color}")
+                    val userColor = color.color
+                    Log.d("SettingsActivity", "Color is: $color")
+
+                    // Set the colour of the toolbar
+                    val topappbar = findViewById<MaterialToolbar>(R.id.topAppBar_new_conversation)
+                    topappbar.setBackgroundColor(color.color.toInt())
+
+                    // Set the colour of the status bar.
+                    val window = window
+                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                    window.statusBarColor = color.color.toInt()
+
+                } else {
+                    Log.d("SettingsActivity", "Color is: null")
+                }
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+                Log.d("SettingsActivity", "Failed to read color")
+            }
+        })
+
+        recyclerView_new_conversation.addItemDecoration(
+            DividerItemDecoration(
+                this,
+                DividerItemDecoration.VERTICAL
+            )
+        )
+
+//        val toolbar = findViewById<MaterialToolbar>(R.id.topAppBar_new_conversation)
+//        setSupportActionBar(toolbar)
 
         val title =
             SpannableString("Loading") // Set the title variable to "No internet connection"
@@ -53,17 +93,12 @@ class NewConversationActivity : AppCompatActivity() {
         dialog.show() // Show the dialog
 
 
+        topAppBar_new_conversation.setNavigationOnClickListener { // set the navigation icon on the top app bar
+            val intent = Intent(this, ConversationsActivity::class.java) // end the activity
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        }
 
-
-
-//        topAppBar_new_conversation.setNavigationOnClickListener { // set the navigation icon on the top app bar
-//            val intent = Intent(this, ConversationsActivity::class.java) // end the activity
-//            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-//            startActivity(intent)
-//        }
-
-//        val intent = Intent(this, SignupActivity::class.java)
-//        startActivity(intent)
         fetchUsers(dialog)
     }
 

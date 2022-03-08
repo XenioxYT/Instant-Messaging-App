@@ -22,7 +22,7 @@
         android:id="@+id/text_username_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/outfit_extrabold"
         android:text="Username"
         android:textColor="@color/black"
@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Email"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:textColor="@color/black"
         android:fontFamily="@font/outfit_bold"
         android:textSize="20sp"
@@ -46,16 +46,19 @@
 
     <TextView
         android:id="@+id/text_bio_profile"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="32dp"
         android:layout_marginBottom="35dp"
         android:fontFamily="@font/outfit_regular"
+        android:gravity="center"
         android:text="Bio"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/text_email_profile"
-        app:layout_constraintStart_toStartOf="@+id/text_email_profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_email_profile" />
 
 

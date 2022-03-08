@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <id android:name="chat_received_message_rounded" />
     <solid android:color="@color/lightblue" />
     <corners android:radius="20dp" />
 
