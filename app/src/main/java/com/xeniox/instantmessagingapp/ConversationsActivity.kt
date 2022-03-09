@@ -1,7 +1,11 @@
 package com.xeniox.instantmessagingapp
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.Layout
+import android.text.SpannableString
+import android.text.style.AlignmentSpan
 import android.util.Log
 import android.view.MenuItem
 import android.view.WindowManager
@@ -41,20 +45,27 @@ class ConversationsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState) // call super class onCreate method
         setContentView(R.layout.activity_conversations) // set the layout of the activity
 
+        val title =
+            SpannableString("Loading") // Set the title variable to "No internet connection"
+        title.setSpan(
+            AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), // Set the alignment of the text to center
+            0, // Start at the beginning of the string
+            title.length, // End at the end of the string
+            0 // No flags
+        ) // End the setSpan function
+        val builder = AlertDialog.Builder(this) // Create a builder variable
+        builder.setTitle(title) // Set the title of the alert dialog to the title variable
+        builder.setMessage("Please wait while we load the users") // Set the message of the alert dialog to "There was an error connecting to the servers. Please check your internet connection and try again."
+        val dialog: AlertDialog = builder.create() // Create a dialog variable with the builder
+        dialog.setCancelable(false)
+        dialog.show() // Show the dialog
+
 
         val user = FirebaseAuth.getInstance().currentUser?.uid
         val refColor = FirebaseDatabase.getInstance().getReference("/users/$user")
         var getcolor = refColor.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 val color = p0.getValue(User::class.java)
-                if (color?.username != null && color?.email != null) {
-                    navigation_drawer.findViewById<TextView>(R.id.username_nav_header).text =
-                        color?.username
-                    val email = color?.email
-                    Log.d("ConversationsActivity", "Current user email: $email")
-                    navigation_drawer.findViewById<TextView>(R.id.email_nav_header).text =
-                        color?.email
-                }
                 if (color?.color != null) {
                     Log.d("SettingsActivity", "Color is: ${color.color}")
                     val userColor = color.color
@@ -107,7 +118,7 @@ class ConversationsActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
-        fetchCurrentUser()
+        fetchCurrentUser(dialog)
 
 
 //        setupDummyRows()
@@ -154,7 +165,7 @@ class ConversationsActivity : AppCompatActivity() {
                     drawer_layout.closeDrawer(GravityCompat.START)
                 }
             }
-            //drawer_layout.closeDrawer(navigation_drawer) // close the drawer
+            //drawer_layout.closeDrawer(navigation_drawer_conversations) // close the drawer
             true // return true to indicate that the item was selected
         }
     }
@@ -199,7 +210,7 @@ class ConversationsActivity : AppCompatActivity() {
 
     val adapter = GroupAdapter<ViewHolder>() // create a new group adapter
 
-    private fun fetchCurrentUser() {
+    private fun fetchCurrentUser(dialog: AlertDialog) {
         val ref = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
@@ -210,8 +221,9 @@ class ConversationsActivity : AppCompatActivity() {
                         currentUser?.username
                     val email = currentUser?.email
                     Log.d("ConversationsActivity", "Current user email: $email")
-//                    navigation_drawer.findViewById<TextView>(R.id.email_nav_header).text =
+//                    navigation_drawer_conversations.findViewById<TextView>(R.id.email_nav_header).text =
 //                        currentUser?.email
+                    dialog.dismiss()
                 }
             }
 

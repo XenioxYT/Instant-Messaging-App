@@ -5,11 +5,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.WindowManager
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
@@ -18,6 +21,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.android.synthetic.main.nav_header.*
 import vadiole.colorpicker.ColorModel
@@ -50,9 +55,21 @@ class SettingsActivity : AppCompatActivity() {
                     val window = window
                     window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
                     window.statusBarColor = color.color.toInt()
+//                    window.setFlags(
+//                        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+//                        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+//                    )
                     button_color.setBackgroundColor(color.color.toInt())
 //                    val headerlayout = findViewById<Constraints>(R.id.header_layout)
                     header_layout.setBackgroundColor(color.color.toInt())
+                    val userSettingsImage = findViewById<CircleImageView>(R.id.user_profile_image_settings)
+                    Picasso.get().load(color.profileImageUrl).into(userSettingsImage)
+                    val userSettingsName = findViewById<TextView>(R.id.text_username_settings)
+                    userSettingsName.text = color.username
+                    val userSettingsEmail = findViewById<TextView>(R.id.text_email_settings)
+                    userSettingsEmail.text = color.email
+                    val userSettingsBio = findViewById<EditText>(R.id.edit_text_bio_settings)
+                    userSettingsBio.setText(color.bio)
                 } else {
                     Log.d("SettingsActivity", "Color is: null")
                 }
@@ -106,6 +123,7 @@ class SettingsActivity : AppCompatActivity() {
         toggle.syncState() // sync the toggle state
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true) // enable the back button on the top app bar
+
 
         navigation_drawer.setNavigationItemSelectedListener { // Set the navigation click listener
             when(it.itemId){ // check which item was clicked
