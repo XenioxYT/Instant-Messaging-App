@@ -221,8 +221,8 @@ class ConversationsActivity : AppCompatActivity() {
                         currentUser?.username
                     val email = currentUser?.email
                     Log.d("ConversationsActivity", "Current user email: $email")
-//                    navigation_drawer_conversations.findViewById<TextView>(R.id.email_nav_header).text =
-//                        currentUser?.email
+                    navigation_drawer.findViewById<TextView>(R.id.email_nav_header).text =
+                        currentUser?.email
                     dialog.dismiss()
                 }
             }
