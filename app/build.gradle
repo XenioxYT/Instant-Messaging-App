@@ -21,8 +21,8 @@ android {
         applicationId "com.xeniox.instantmessagingapp"
         minSdk 24
         targetSdk 30
-        versionCode 8
-        versionName "2.4.0"
+        versionCode 9
+        versionName "2.4.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -98,6 +98,7 @@ dependencies {
 
     //noinspection GradleDependency
     implementation 'com.github.lisawray.groupie:groupie:2.1.0'
+    //noinspection GradleDependency
     implementation 'com.github.lisawray.groupie:groupie:2.1.0'
     //noinspection GradleDependency
     implementation 'com.github.lisawray.groupie:groupie-viewbinding:2.10.0'
