@@ -2,6 +2,8 @@ package com.xeniox.instantmessagingapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -115,7 +117,34 @@ class ConversationsChatActivity : AppCompatActivity() {
             )
         }
 
+        button_send_message.visibility = View.GONE
 
+        editText_chat_conversation.addTextChangedListener(
+            object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {
+                    if (s.toString().isNotEmpty()) {
+                        button_send_message.visibility = View.VISIBLE
+                    } else {
+                        button_send_message.visibility = View.GONE
+                    }
+                    val user = FirebaseAuth.getInstance().currentUser?.uid
+                    val refColor = FirebaseDatabase.getInstance().getReference("/users/$user/isTyping")
+                    refColor.setValue(false)
+                }
+
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                    val user = FirebaseAuth.getInstance().currentUser?.uid
+                    val refColor = FirebaseDatabase.getInstance().getReference("/users/$user/isTyping")
+                    refColor.setValue(false)
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    val user = FirebaseAuth.getInstance().currentUser?.uid
+                    val refColor = FirebaseDatabase.getInstance().getReference("/users/$user/isTyping")
+                    refColor.setValue(true)
+                }
+            }
+        )
 
 
         val fromId = FirebaseAuth.getInstance().uid
