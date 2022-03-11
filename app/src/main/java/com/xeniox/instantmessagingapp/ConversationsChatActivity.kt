@@ -1,5 +1,6 @@
 package com.xeniox.instantmessagingapp
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -21,7 +22,6 @@ import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.google.firebase.ktx.Firebase
 import com.google.mlkit.nl.smartreply.SmartReply
 import com.google.mlkit.nl.smartreply.SmartReplySuggestion
 import com.google.mlkit.nl.smartreply.SmartReplySuggestionResult.STATUS_NOT_SUPPORTED_LANGUAGE
@@ -33,8 +33,11 @@ import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_conversations_chat.*
+import kotlinx.android.synthetic.main.chat_from_message.*
 import kotlinx.android.synthetic.main.chat_from_message.view.*
+import kotlinx.android.synthetic.main.chat_to_message.*
 import kotlinx.android.synthetic.main.chat_to_message.view.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -130,18 +133,20 @@ class ConversationsChatActivity : AppCompatActivity() {
         val otherUserEmail = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.email
         val userProfileImageUrl = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.profileImageUrl
 
-        val typingRef = FirebaseDatabase.getInstance().getReference("/users/$toId/isTyping")
+        val typingRef = FirebaseDatabase.getInstance().getReference("/users/$toId/")
         typingRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 val toId = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid
                 val user = p0.getValue(User::class.java)
                 if (user?.typing != null) {
                     Log.d("SettingsActivity", "Typing is: ${user.typing}")
-                    if (user.typing == toId) {
+                    if (user.typing == fromId) {
+
+//                        Toast.makeText(this@ConversationsChatActivity, "Typing...", Toast.LENGTH_SHORT).show()
 
                         //display the typing indicator
 
-//                        topAppBar_chat_conversation.subtitle = "$username is typing..."
+                        topAppBar_chat_conversation.subtitle = "Typing..."
                         // 10/03/22 - Typing displays globally and not just in the conversation
                         // TODO: Fix this
                         // This can be done by checking the UID of the user who is typing and then
@@ -181,7 +186,7 @@ class ConversationsChatActivity : AppCompatActivity() {
             object : TextWatcher {
 
                 private var timer: Timer = Timer()
-                private val DELAY: Long = 3000 // Milliseconds
+                private val DELAY: Long = 1000 // Milliseconds
 
 
                 override fun afterTextChanged(s: Editable?) {
@@ -232,7 +237,7 @@ class ConversationsChatActivity : AppCompatActivity() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     val user = FirebaseAuth.getInstance().currentUser?.uid
-                    val refTyping = FirebaseDatabase.getInstance().getReference("/users/$user/isTyping")
+                    val refTyping = FirebaseDatabase.getInstance().getReference("/users/$user/typing")
                     refTyping.setValue(toId)
                 }
             }
@@ -265,10 +270,7 @@ class ConversationsChatActivity : AppCompatActivity() {
                     dialog.show()
                 }
                 R.id.search_chat -> {
-//                    FirebaseAuth.getInstance().signOut()
-//                    val intent = Intent(this, MainActivity::class.java)
-//                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                    startActivity(intent)
+
                 }
                 R.id.mute_notifications -> {
                     Toast.makeText(this, "Mute Notifications", Toast.LENGTH_SHORT).show()
@@ -368,20 +370,38 @@ class ConversationsChatActivity : AppCompatActivity() {
                                 button_reply1.setOnClickListener {
                                     recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
                                     Log.d(TAG, "Reply 1")
+                                    performSendMessageSR(suggestion1)
+                                    button_reply1.text = suggestion1
+                                }
+                                button_reply1.setOnLongClickListener {
+                                    Log.d(TAG, "Reply 1 long")
                                     button_reply1.text = suggestion1
                                     editText_chat_conversation.append(suggestion1)
+                                    true
                                 }
                                 button_reply2.setOnClickListener {
                                     recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
                                     Log.d(TAG, "Reply 2")
+                                    performSendMessageSR(suggestion2)
+                                    button_reply2.text = suggestion2
+                                }
+                                button_reply2.setOnLongClickListener {
+                                    Log.d(TAG, "Reply 2 long")
                                     button_reply2.text = suggestion2
                                     editText_chat_conversation.append(suggestion2)
+                                    true
                                 }
                                 button_reply3.setOnClickListener {
                                     recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
                                     Log.d(TAG, "Reply 3")
+                                    performSendMessageSR(suggestion3)
+                                    button_reply3.text = suggestion3
+                                }
+                                button_reply3.setOnLongClickListener {
+                                    Log.d(TAG, "Reply 3 long")
                                     button_reply3.text = suggestion3
                                     editText_chat_conversation.append(suggestion3)
+                                    true
                                 }
                             }
                             else -> {
@@ -442,10 +462,13 @@ class ConversationsChatActivity : AppCompatActivity() {
 //        srgen(conversations)
         topAppBar_chat_conversation.title =
             intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)?.username
+
+
         listenForMessages()
 
         button_send_message.setOnClickListener {
             Log.d("ConversationsChatActivity", "Attempt to send message...")
+
             performSendMessage()
         }
 
@@ -473,19 +496,49 @@ class ConversationsChatActivity : AppCompatActivity() {
         val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId")
         val smartReplyGenerator = SmartReply.getClient()
         ref.addChildEventListener(object: ChildEventListener {
+            @SuppressLint("SimpleDateFormat")
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
                 val chatMessage = p0.getValue(ChatMessage::class.java)
                 if (chatMessage != null) {
                     Log.d(TAG, chatMessage.text)
 
                     if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
-                        adapter.add(ChatToItem(chatMessage.text, ConversationsActivity.currentUser!!))
+                        val timeAndDate = getDateTime(chatMessage.timestamp)
+                        val date = Date(System.currentTimeMillis())
+                        val format = SimpleDateFormat("EE dd MMM YYYY - HH:mm")
+                        val currentDate = format.format(date)
+                        // check if the current date is the same as the date of the message and remove the date from the message if it is
+                        if (currentDate.substring(0, 18) == timeAndDate.substring(0, 18)) {
+                            adapter.add(ChatToItem(chatMessage.text, ConversationsActivity.currentUser!!, timeAndDate.substring(18, timeAndDate.length)))
+                        } else {
+                            adapter.add(
+                                ChatToItem(
+                                    chatMessage.text,
+                                    ConversationsActivity.currentUser!!,
+                                    timeAndDate
+                                )
+                            )
 //                        conversations.add(TextMessage.createForLocalUser(chatMessage.text, System.currentTimeMillis()))
+                        }
                         recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
                         return
                     } else {
-                        adapter.add(ChatFromItem(chatMessage.text,intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!))
+                        val timeAndDate = getDateTime(chatMessage.timestamp)
+                        val date = Date(System.currentTimeMillis())
+                        val format = SimpleDateFormat("EE dd MMM YYYY - HH:mm")
+                        val currentDate = format.format(date)
+                        if (currentDate.substring(0, 18) == timeAndDate.substring(0, 18)) {
+                            adapter.add(ChatFromItem(chatMessage.text, ConversationsActivity.currentUser!!, timeAndDate.substring(18, timeAndDate.length)))
+                        } else {
+                            adapter.add(
+                                ChatFromItem(
+                                    chatMessage.text,
+                                    intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!,
+                                    timeAndDate
+                                )
+                            )
 //                        conversations.add(TextMessage.createForRemoteUser(chatMessage.text, System.currentTimeMillis(), fromId!!))
+                        }
                         recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
                         return
                     }
@@ -538,6 +591,7 @@ class ConversationsChatActivity : AppCompatActivity() {
                     editText_chat_conversation.text.clear()
                     editText_chat_conversation.text.insert(0, "")
                     recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
+
                 }
                 toReference.setValue(ChatMessage(toReference.key!!, it.toString(), fromId, toId, System.currentTimeMillis() / 1000))
                 val latestMessageRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId/$toId")
@@ -564,34 +618,35 @@ class ConversationsChatActivity : AppCompatActivity() {
         val toReference =
             FirebaseDatabase.getInstance().getReference("/user-messages/$toId/$fromId")
                 .push() // new messages node in firebase
-
-        if (editText_chat_conversation.text.isNullOrEmpty()) {
-            Log.d("chat", "message is null")
-            return
-        } else {
-            reply.trim().let {
+            editText_chat_conversation.text.trim().let {
                 reference.setValue(
                     ChatMessage(
                         reference.key!!,
-                        it.toString(),
+                        reply.toString(),
                         fromId,
                         toId,
                         System.currentTimeMillis() / 1000
                     )
                 ).addOnSuccessListener {
-                    Log.d("ConversationsChatActivity", "Message sent")
+                    Log.d("ConversationsChatActivity", "Message sent... $it")
                     editText_chat_conversation.text.clear()
                     editText_chat_conversation.text.insert(0, "")
                     recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
-                }
-                toReference.setValue(ChatMessage(toReference.key!!, it.toString(), fromId, toId, System.currentTimeMillis() / 1000))
-                val latestMessageRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId/$toId")
-                latestMessageRef.setValue(ChatMessage(reference.key!!, editText_chat_conversation.text.toString(), fromId, toId, System.currentTimeMillis() / 1000))
-                val latestMessageToRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$toId/$fromId")
-                latestMessageToRef.setValue(ChatMessage(toReference.key!!, editText_chat_conversation.text.toString(), fromId, toId, System.currentTimeMillis() / 1000))
 
+                }
+                toReference.setValue(ChatMessage(toReference.key!!, reply, fromId, toId, System.currentTimeMillis() / 1000))
+                val latestMessageRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId/$toId")
+                latestMessageRef.setValue(ChatMessage(reference.key!!, reply.toString(), fromId, toId, System.currentTimeMillis() / 1000))
+                val latestMessageToRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$toId/$fromId")
+                latestMessageToRef.setValue(ChatMessage(toReference.key!!, reply.toString(), fromId, toId, System.currentTimeMillis() / 1000))
             }
-        }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getDateTime(timestamp: Long): String {
+        val date = Date(timestamp.toLong() * 1000)
+        val format = SimpleDateFormat("EE dd MMM YYYY - HH:mm")
+        return format.format(date)
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
@@ -615,9 +670,10 @@ class ConversationsChatActivity : AppCompatActivity() {
 
 }
 
-class ChatFromItem(val text: String, val user: User) : Item<ViewHolder>() {
+class ChatFromItem(val text: String, val user: User, val timedate: String) : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.text_from_message.text = text
+        viewHolder.itemView.text_from_message_date_time.text = timedate
 
         val uri = user.profileImageUrl
         val targetImageView = viewHolder.itemView.chat_from_image
@@ -630,9 +686,10 @@ class ChatFromItem(val text: String, val user: User) : Item<ViewHolder>() {
     }
 }
 
-class ChatToItem(val text: String, val user: User) : Item<ViewHolder>() {
+class ChatToItem(val text: String, val user: User, val timedate: String) : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.text_to_message.text = text
+        viewHolder.itemView.text_to_message_date_time.text = timedate
 
         val uri = user.profileImageUrl
         val targetImageView = viewHolder.itemView.chat_to_image

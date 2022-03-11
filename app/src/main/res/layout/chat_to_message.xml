@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:text="This is a test :"
         android:textColor="@color/black"
+        android:fontFamily="@font/outfit_regular"
         app:layout_constraintEnd_toStartOf="@+id/chat_to_image"
         app:layout_constraintTop_toTopOf="@+id/chat_to_image"
         android:padding="12dp"
@@ -27,5 +28,16 @@
         app:srcCompat="@android:drawable/btn_dialog"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp" />
+    <TextView
+        android:id="@+id/text_to_message_date_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sent:"
+        android:textSize="12sp"
+        android:fontFamily="@font/outfit_regular"
+        android:layout_marginTop="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/text_to_message"
+        app:layout_constraintTop_toBottomOf="@+id/text_to_message" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

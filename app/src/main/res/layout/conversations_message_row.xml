@@ -31,7 +31,7 @@
     <TextView
         android:id="@+id/conversations_message_row_textView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="17dp"
         android:layout_marginTop="8dp"
         android:text="Last message received"
         app:layout_constraintBottom_toBottomOf="parent"
