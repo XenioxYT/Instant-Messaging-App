@@ -20,6 +20,7 @@ import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.squareup.picasso.Picasso
 import com.xeniox.instantmessagingapp.NewConversationActivity.Companion.USER_KEY
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -224,6 +225,7 @@ class ConversationsActivity : AppCompatActivity() {
                     navigation_drawer.findViewById<TextView>(R.id.email_nav_header).text =
                         currentUser?.email
                     dialog.dismiss()
+                    Picasso.get().load(currentUser?.profileImageUrl)
                 }
             }
 

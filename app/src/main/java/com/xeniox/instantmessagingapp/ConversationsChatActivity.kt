@@ -21,6 +21,7 @@ import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.ktx.Firebase
 import com.google.mlkit.nl.smartreply.SmartReply
 import com.google.mlkit.nl.smartreply.SmartReplySuggestion
 import com.google.mlkit.nl.smartreply.SmartReplySuggestionResult.STATUS_NOT_SUPPORTED_LANGUAGE
@@ -34,6 +35,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_conversations_chat.*
 import kotlinx.android.synthetic.main.chat_from_message.view.*
 import kotlinx.android.synthetic.main.chat_to_message.view.*
+import java.util.*
 
 
 class ConversationsChatActivity : AppCompatActivity() {
@@ -67,7 +69,7 @@ class ConversationsChatActivity : AppCompatActivity() {
 //         Set custom colours here:
         val user = FirebaseAuth.getInstance().currentUser?.uid
         val refColor = FirebaseDatabase.getInstance().getReference("/users/$user")
-        var getcolor = refColor.addValueEventListener(object : ValueEventListener {
+        refColor.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 val color = p0.getValue(User::class.java)
                 if (color?.color != null) {
@@ -119,34 +121,6 @@ class ConversationsChatActivity : AppCompatActivity() {
 
         button_send_message.visibility = View.GONE
 
-        editText_chat_conversation.addTextChangedListener(
-            object : TextWatcher {
-                override fun afterTextChanged(s: Editable?) {
-                    if (s.toString().isNotEmpty()) {
-                        button_send_message.visibility = View.VISIBLE
-                    } else {
-                        button_send_message.visibility = View.GONE
-                    }
-                    val user = FirebaseAuth.getInstance().currentUser?.uid
-                    val refColor = FirebaseDatabase.getInstance().getReference("/users/$user/isTyping")
-                    refColor.setValue(false)
-                }
-
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                    val user = FirebaseAuth.getInstance().currentUser?.uid
-                    val refColor = FirebaseDatabase.getInstance().getReference("/users/$user/isTyping")
-                    refColor.setValue(false)
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    val user = FirebaseAuth.getInstance().currentUser?.uid
-                    val refColor = FirebaseDatabase.getInstance().getReference("/users/$user/isTyping")
-                    refColor.setValue(true)
-                }
-            }
-        )
-
-
         val fromId = FirebaseAuth.getInstance().uid
         val toId = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid
         val username = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.username
@@ -155,6 +129,116 @@ class ConversationsChatActivity : AppCompatActivity() {
         val smartReplyGenerator = SmartReply.getClient()
         val otherUserEmail = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.email
         val userProfileImageUrl = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.profileImageUrl
+
+        val typingRef = FirebaseDatabase.getInstance().getReference("/users/$toId/isTyping")
+        typingRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                val toId = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid
+                val user = p0.getValue(User::class.java)
+                if (user?.typing != null) {
+                    Log.d("SettingsActivity", "Typing is: ${user.typing}")
+                    if (user.typing == toId) {
+
+                        //display the typing indicator
+
+//                        topAppBar_chat_conversation.subtitle = "$username is typing..."
+                        // 10/03/22 - Typing displays globally and not just in the conversation
+                        // TODO: Fix this
+                        // This can be done by checking the UID of the user who is typing and then
+                        // checking if it is the same as the UID of the user who is logged in.
+                        // If it is the same, then don't show the typing indicator.
+                        // If it is not the same, then show the typing indicator.
+                        // This is because the typing indicator is only displayed in the conversation
+                        // and not globally.
+                        // If the typing indicator is displayed globally, then the user will see
+                        // the typing indicator for every conversation they are in.
+                        // This is not ideal.
+
+
+                        // Something like this should be done:
+                        // If the typingToId is the same as the UID of the user who is being messaged,
+                        // then show the typing indicator.
+                        // If the typingToId is not the same as the UID of the user who is being messaged,
+                        // then don't show the typing indicator.
+
+                        Log.d("SettingsActivity", "Typing is: true")
+//                        textView_typing.visibility = View.VISIBLE
+                    } else {
+                        Log.d("SettingsActivity", "Typing is: false")
+//                        textView_typing.visibility = View.GONE
+                        topAppBar_chat_conversation.subtitle = otherUserEmail
+                    }
+                } else {
+                    Log.d("SettingsActivity", "Typing is: null")
+                }
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+            }
+        })
+
+        editText_chat_conversation.addTextChangedListener(
+            object : TextWatcher {
+
+                private var timer: Timer = Timer()
+                private val DELAY: Long = 3000 // Milliseconds
+
+
+                override fun afterTextChanged(s: Editable?) {
+                    if (s.toString().isNotEmpty()) {
+                        button_send_message.visibility = View.VISIBLE
+                    } else {
+                        button_send_message.visibility = View.GONE
+                    }
+                    timer.cancel()
+                    timer = Timer()
+                    timer.schedule(
+                        object : TimerTask() {
+                            override fun run() {
+                                // TODO: Do what you need here (refresh list).
+                                // You will probably need to use
+                                // runOnUiThread(Runnable action) for some
+                                // specific actions (e.g., manipulating views).
+                                val user = FirebaseAuth.getInstance().currentUser?.uid
+                                val refTyping = FirebaseDatabase.getInstance().getReference("/users/$user/typing")
+                                refTyping.setValue("null")
+                            }
+                        },
+                        DELAY
+                    )
+//                    val user = FirebaseAuth.getInstance().currentUser?.uid
+//                    val refColor = FirebaseDatabase.getInstance().getReference("/users/$user/isTyping")
+//                    refColor.setValue(false)
+                }
+
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                    timer.cancel()
+                    timer = Timer()
+                    timer.schedule(
+                        object : TimerTask() {
+                            override fun run() {
+                                // TODO: Do what you need here (refresh list).
+                                // You will probably need to use
+                                // runOnUiThread(Runnable action) for some
+                                // specific actions (e.g., manipulating views).
+                                val user = FirebaseAuth.getInstance().currentUser?.uid
+                                val refTyping = FirebaseDatabase.getInstance().getReference("/users/$user/typing")
+                                refTyping.setValue("null")
+                            }
+                        },
+                        DELAY
+                    )
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    val user = FirebaseAuth.getInstance().currentUser?.uid
+                    val refTyping = FirebaseDatabase.getInstance().getReference("/users/$user/isTyping")
+                    refTyping.setValue(toId)
+                }
+            }
+        )
+
+
         topAppBar_chat_conversation.subtitle = otherUserEmail
 
         topAppBar_chat_conversation.setOnMenuItemClickListener {
