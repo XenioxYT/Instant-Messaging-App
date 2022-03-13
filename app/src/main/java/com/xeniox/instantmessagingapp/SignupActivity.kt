@@ -124,7 +124,9 @@ class SignupActivity() : AppCompatActivity() { // Start of class
                                         email,
                                         "-16728876",
                                         "Hi there, I'm using Recivo. I'm new to this app. I'm looking for a new friend to chat with.",
-                                        "null"
+                                        "null",
+                                        true,
+                                        -1
                                     ) // Create a user object with the user's uid and username
                                     ref.setValue(user)
                                         .addOnSuccessListener { // Add an onSuccessListener to the setValue function
@@ -232,6 +234,15 @@ class SignupActivity() : AppCompatActivity() { // Start of class
                     builder.create().dismiss() // Dismiss the alert dialog
                 }
                 builder.show() // show the dialog
+            } else{
+                //create an intent to open the login activity
+                val intent = Intent(
+                    this,
+                    LoginActivity::class.java
+                ) // Set intent to an intent to open the login activity
+                intent.flags =
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK // Set the flags of the intent to clear the task and start a new task
+                startActivity(intent) // Start the login activity
             }
         }
 

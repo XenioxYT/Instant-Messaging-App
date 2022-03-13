@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.WindowManager
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -56,7 +57,14 @@ class ConversationsActivity : AppCompatActivity() {
         ) // End the setSpan function
         val builder = AlertDialog.Builder(this) // Create a builder variable
         builder.setTitle(title) // Set the title of the alert dialog to the title variable
-        builder.setMessage("Please wait while we load the users") // Set the message of the alert dialog to "There was an error connecting to the servers. Please check your internet connection and try again."
+        val message = SpannableString("Please wait while we load your conversations") // Set the message variable to "Please wait while we load your conversations"
+        message.setSpan(
+            AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), // Set the alignment of the text to center
+            0, // Start at the beginning of the string
+            message.length, // End at the end of the string
+            0 // No flags
+        ) // End the setSpan function
+        builder.setMessage(message) // Set the message of the alert dialog to "There was an error connecting to the servers. Please check your internet connection and try again."
         val dialog: AlertDialog = builder.create() // Create a dialog variable with the builder
         dialog.setCancelable(false)
         dialog.show() // Show the dialog
@@ -266,6 +274,27 @@ class ConversationsActivity : AppCompatActivity() {
                 Log.d("ConversationsActivity", "Error: ${p0.message}")
             }
         })
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("ConversationsActivity", "onStop")
+        Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show()
+        updateUserStatus(false, System.currentTimeMillis() / 1000)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("ConversationsActivity", "onResume")
+        Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show()
+        updateUserStatus(false, -1)
+    }
+
+    private fun updateUserStatus(status: Boolean, lastSeen: Long?) {
+        val refStatus = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/status")
+        refStatus.setValue(status)
+        val refLastSeen = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/lastSeen")
+        refLastSeen.setValue(lastSeen)
     }
 
 

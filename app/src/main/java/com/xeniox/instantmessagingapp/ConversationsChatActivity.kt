@@ -135,16 +135,33 @@ class ConversationsChatActivity : AppCompatActivity() {
 
         val typingRef = FirebaseDatabase.getInstance().getReference("/users/$toId/")
         typingRef.addValueEventListener(object : ValueEventListener {
+            @SuppressLint("SimpleDateFormat")
             override fun onDataChange(p0: DataSnapshot) {
                 val toId = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid
                 val user = p0.getValue(User::class.java)
                 if (user?.typing != null) {
                     Log.d("SettingsActivity", "Typing is: ${user.typing}")
+                    val topappbar = findViewById<MaterialToolbar>(R.id.topAppBar_chat_conversation)
+                    // Set online status
+                    Log.d("SettingsActivity", "user is ${user.status}")
+                    if (user.status) {
+                        topappbar.subtitle = "Online"
+                    } else {
+                        topappbar.subtitle = "Offline"
+                    }
+                    if (user.lastSeen.toString() == "-1") {
+                        val lastSeen = user.lastSeen
+                        Log.d("SettingsActivity", "last seen is: $lastSeen")
+                        val lastSeenDate = Date(lastSeen)
+                        val lastSeenFormatted = SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(lastSeenDate)
+                        topappbar.subtitle = "Last seen: ${lastSeenFormatted.toString()}"
+                    }
                     if (user.typing == fromId) {
 
 //                        Toast.makeText(this@ConversationsChatActivity, "Typing...", Toast.LENGTH_SHORT).show()
 
                         //display the typing indicator
+
 
                         topAppBar_chat_conversation.subtitle = "Typing..."
                         // 10/03/22 - Typing displays globally and not just in the conversation
