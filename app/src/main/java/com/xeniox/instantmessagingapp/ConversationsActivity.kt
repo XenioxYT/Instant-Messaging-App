@@ -27,6 +27,7 @@ import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_conversations.*
 import kotlinx.android.synthetic.main.nav_header.*
 
+
 class ConversationsActivity : AppCompatActivity() {
 
     companion object {
@@ -42,7 +43,6 @@ class ConversationsActivity : AppCompatActivity() {
             SafetyNetAppCheckProviderFactory.getInstance()
         )
 
-        verifyUserIsLoggedIn()
         super.onCreate(savedInstanceState) // call super class onCreate method
         setContentView(R.layout.activity_conversations) // set the layout of the activity
 
@@ -63,31 +63,40 @@ class ConversationsActivity : AppCompatActivity() {
 
 
         val user = FirebaseAuth.getInstance().currentUser?.uid
-        val refColor = FirebaseDatabase.getInstance().getReference("/users/$user")
-        var getcolor = refColor.addValueEventListener(object : ValueEventListener {
+        val refColor = FirebaseDatabase.getInstance("https://instant-messaging-app-7fed6-default-rtdb.europe-west1.firebasedatabase.app/").getReference("/users/$user")
+        refColor.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 val color = p0.getValue(User::class.java)
-                if (color?.color != null) {
-                    Log.d("SettingsActivity", "Color is: ${color.color}")
-                    val userColor = color.color
-                    Log.d("SettingsActivity", "Color is: $color")
+                try {
+                    if (color?.color != null) {
+                        Log.d("SettingsActivity", "Color is: ${color.color}")
+                        val userColor = color.color
+                        Log.d("SettingsActivity", "Color is: $color")
 
-                    // Set the colour of the toolbar
-                    val topappbar = findViewById<MaterialToolbar>(R.id.topAppBar)
-                    topappbar.setBackgroundColor(color.color.toInt())
+                        // Set the colour of the toolbar
+                        val topappbar = findViewById<MaterialToolbar>(R.id.topAppBar)
+                        topappbar.setBackgroundColor(color.color.toInt())
 
-                    // Set the colour of the nav header
-                    header_layout.setBackgroundColor(color.color.toInt())
+                        //TODO: There was a crash here, but I don't know why. I think it was because the color was null, as it could not get any data from the database as the user was not logged in first.
+                        // There was a fix which was to move verifyUserIsLoggedIn() to the top of the function, but it still crashed.
+                        // Then I moved it to the login activity, and it worked, then set login activity as the start activity, and it worked.
+                        // So we're all good now.
 
-                    // Set the colour of the status bar.
-                    val window = window
-                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                    window.statusBarColor = color.color.toInt()
+                        // Set the colour of the nav header
+                        header_layout.setBackgroundColor(color.color.toInt())
 
-                    // Set other colours here
+                        // Set the colour of the status bar.
+                        val window = window
+                        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                        window.statusBarColor = color.color.toInt()
+
+                        // Set other colours here
 
 
-                } else {
+                    } else {
+                        Log.d("SettingsActivity", "Color is: null")
+                    }
+                } catch (e: Exception) {
                     Log.d("SettingsActivity", "Color is: null")
                 }
             }
@@ -158,12 +167,36 @@ class ConversationsActivity : AppCompatActivity() {
                     drawer_layout.closeDrawer(GravityCompat.START)
                 }
                 R.id.logout -> { // if logout was clicked
-                    FirebaseAuth.getInstance().signOut() // sign out of firebase
-                    val intent = Intent(this, LoginActivity::class.java) // create an intent to go to the login activity
-                    intent.flags =
-                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // set the flags
-                    startActivity(intent) // start the intent
-                    drawer_layout.closeDrawer(GravityCompat.START)
+
+                    // Create a dialog to confirm the user wants to log out
+                    val builder = AlertDialog.Builder(this)
+                    val title =
+                        SpannableString("Log out?") // Set title to the text "Creating Account"
+                    title.setSpan( // Set the alignment of the text to center
+                        AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), // Set the alignment to center
+                        0, // Set the start of the alignment to 0
+                        title.length, // Set the end of the alignment to the length of the text
+                        0 // Set the flags to 0
+                    ) // End the alignment
+                    builder.setTitle(title)
+                    val message = SpannableString("Are you sure you want to log out?")
+                    message.setSpan( // Set the alignment of the text to center
+                        AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), // Set the alignment to center
+                        0, // Set the start of the alignment to 0
+                        message.length, // Set the end of the alignment to the length of the text
+                        0 // Set the flags to 0
+                    ) // End the alignment
+                    builder.setMessage(message)
+                    builder.setPositiveButton("Yes") { _, _ ->
+                        FirebaseAuth.getInstance().signOut() // log out the user
+                        val intent = Intent(this, LoginActivity::class.java) // create an intent to go to the login activity
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK) // clear the task and start the login activity
+                        startActivity(intent) // start the intent
+                    }
+                    builder.setNegativeButton("No") { _, _ ->
+                        drawer_layout.closeDrawer(GravityCompat.START) // close the drawer
+                    }
+                    builder.show() // show the dialog
                 }
             }
             //drawer_layout.closeDrawer(navigation_drawer_conversations) // close the drawer

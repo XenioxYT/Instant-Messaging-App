@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.InstantMessagingApp"
         android:name=".Global"
-        tools:targetApi="30">
+        tools:targetApi="s">
         <activity
             android:name=".UserProfileActivity"
             android:exported="false" />
@@ -31,12 +31,7 @@
             android:exported="false" />
         <activity
             android:name=".ConversationsActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:exported="false">
         </activity>
         <activity
             android:name=".LoginAccountCreatedActivity"
@@ -46,7 +41,13 @@
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
-            android:exported="false" />
+            android:exported="true" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <activity
             android:name=".SignupActivity"
             android:exported="false" />

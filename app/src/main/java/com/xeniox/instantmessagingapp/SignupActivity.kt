@@ -6,10 +6,8 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Parcel
-import android.os.Parcelable
 import android.provider.MediaStore
 import android.text.Layout
 import android.text.SpannableString
@@ -17,8 +15,8 @@ import android.text.style.AlignmentSpan
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
@@ -26,7 +24,7 @@ import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.android.parcel.Parcelize
+import kotlinx.android.synthetic.main.activity_conversations.*
 import kotlinx.android.synthetic.main.activity_signup.*
 import java.io.ByteArrayOutputStream
 import java.util.*
@@ -191,24 +189,50 @@ class SignupActivity() : AppCompatActivity() { // Start of class
         button_login_signupActivity.setOnClickListener { // Set the onClickListener of the login button to the following
             Log.d("SignupActivity", "Login button clicked") // Log the login button clicked
 
-            // Clear the text boxes and set remove error message
-            username_editText_register_layout.error =
-                null // Clear the error message of the username text box
-            email_editText_register_layout.error =
-                null // Clear the error message of the email text box
-            password_editText_register_layout.error =
-                null // Clear the error message of the password text box
-            confirm_password_editText_register_layout.error =
-                null // Clear the error message of the confirm password text box
+            if (username_editText_register.text.toString().isNotEmpty() || email_editText_register.text.toString().isNotEmpty() || password_editText_register.text.toString().isNotEmpty() || confirm_password_editText_register.text.toString().isNotEmpty()) {
+                val builder = AlertDialog.Builder(this)
+                val title =
+                    SpannableString("Discard information?")
+                title.setSpan( // Set the alignment of the text to center
+                    AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), // Set the alignment to center
+                    0, // Set the start of the alignment to 0
+                    title.length, // Set the end of the alignment to the length of the text
+                    0 // Set the flags to 0
+                ) // End the alignment
+                builder.setTitle(title)
+                val message = SpannableString("Are you sure you want to discard the information you entered?")
+                message.setSpan( // Set the alignment of the text to center
+                    AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), // Set the alignment to center
+                    0, // Set the start of the alignment to 0
+                    message.length, // Set the end of the alignment to the length of the text
+                    0 // Set the flags to 0
+                ) // End the alignment
+                builder.setMessage(message)
+                builder.setPositiveButton("Yes") { _, _ ->
+                    // Clear the text boxes and set remove error message
+                    username_editText_register_layout.error =
+                        null // Clear the error message of the username text box
+                    email_editText_register_layout.error =
+                        null // Clear the error message of the email text box
+                    password_editText_register_layout.error =
+                        null // Clear the error message of the password text box
+                    confirm_password_editText_register_layout.error =
+                        null // Clear the error message of the confirm password text box
 
-            //create an intent to open the login activity
-            val intent = Intent(
-                this,
-                LoginActivity::class.java
-            ) // Set intent to an intent to open the login activity
-            intent.flags =
-                Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK // Set the flags of the intent to clear the task and start a new task
-            startActivity(intent) // Start the login activity
+                    //create an intent to open the login activity
+                    val intent = Intent(
+                        this,
+                        LoginActivity::class.java
+                    ) // Set intent to an intent to open the login activity
+                    intent.flags =
+                        Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK // Set the flags of the intent to clear the task and start a new task
+                    startActivity(intent) // Start the login activity
+                }
+                builder.setNegativeButton("No") { _, _ ->
+                    builder.create().dismiss() // Dismiss the alert dialog
+                }
+                builder.show() // show the dialog
+            }
         }
 
         button_profile_picture.setOnClickListener {

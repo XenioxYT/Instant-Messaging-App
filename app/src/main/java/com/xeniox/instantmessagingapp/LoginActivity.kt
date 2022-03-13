@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
-import com.xeniox.instantmessagingapp.R
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.login_activity.*
 
@@ -25,11 +24,13 @@ class LoginActivity : AppCompatActivity() {
         firebaseAppCheck.installAppCheckProviderFactory(
             SafetyNetAppCheckProviderFactory.getInstance()
         )
+        verifyUserIsLoggedIn()
 
 
 
         // Listen for the login button press
         button_login_loginActivity.setOnClickListener {
+
 
 
             Log.d("LoginActivity", "Login button pressed")
@@ -233,6 +234,23 @@ class LoginActivity : AppCompatActivity() {
         } else {
             email_editText_login_layout.isErrorEnabled =
                 false // If the email text box is not empty, set the error message to false
+        }
+    }
+    private fun verifyUserIsLoggedIn() { // verify the user is logged in
+        val uid = FirebaseAuth.getInstance().uid // get the current user's uid
+        Log.d("ConversationsActivity", "uid: $uid") // log the uid
+        if (uid != null) { // if the user is not logged in
+            Log.d("ConversationsActivity", "User is logged in") // log the user is not logged in
+            val intent = Intent(
+                this,
+                ConversationsActivity::class.java
+            ) // create an intent to go to the login activity
+            intent.flags =
+                Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK) // clear the task and start a new one
+            startActivity(intent) // start the intent
+            finish()
+        } else {
+            Log.d("ConversationsActivity", "User is not logged in") // log the user is logged in
         }
     }
 
