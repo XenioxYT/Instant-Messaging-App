@@ -287,7 +287,7 @@ class ConversationsActivity : AppCompatActivity() {
         super.onResume()
         Log.d("ConversationsActivity", "onResume")
         Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show()
-        updateUserStatus(false, -1)
+        updateUserStatus(true, -1)
     }
 
     private fun updateUserStatus(status: Boolean, lastSeen: Long?) {
@@ -295,26 +295,6 @@ class ConversationsActivity : AppCompatActivity() {
         refStatus.setValue(status)
         val refLastSeen = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/lastSeen")
         refLastSeen.setValue(lastSeen)
-    }
-
-
-
-    private fun verifyUserIsLoggedIn() { // verify the user is logged in
-        val uid = FirebaseAuth.getInstance().uid // get the current user's uid
-        Log.d("ConversationsActivity", "uid: $uid") // log the uid
-        if (uid == null) { // if the user is not logged in
-            Log.d("ConversationsActivity", "User is not logged in") // log the user is not logged in
-            val intent = Intent(
-                this,
-                LoginActivity::class.java
-            ) // create an intent to go to the login activity
-            intent.flags =
-                Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK) // clear the task and start a new one
-            startActivity(intent) // start the intent
-            finish()
-        } else {
-            Log.d("ConversationsActivity", "User is logged in") // log the user is logged in
-        }
     }
 
 

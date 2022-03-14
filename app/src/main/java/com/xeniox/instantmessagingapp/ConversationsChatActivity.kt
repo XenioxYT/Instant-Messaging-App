@@ -53,6 +53,7 @@ class ConversationsChatActivity : AppCompatActivity() {
     var suggestion2: SmartReplySuggestion? = null
     var suggestion3: SmartReplySuggestion? = null
 
+    @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
 
         FirebaseApp.initializeApp(/*context=*/this)
@@ -145,16 +146,21 @@ class ConversationsChatActivity : AppCompatActivity() {
                     // Set online status
                     Log.d("SettingsActivity", "user is ${user.status}")
                     if (user.status) {
-                        topappbar.subtitle = "Online"
+                        Toast.makeText(this@ConversationsChatActivity, "Online", Toast.LENGTH_SHORT)
+                            .show()
+                        topappbar.subtitle = "onLine"
                     } else {
-                        topappbar.subtitle = "Offline"
-                    }
-                    if (user.lastSeen.toString() == "-1") {
-                        val lastSeen = user.lastSeen
-                        Log.d("SettingsActivity", "last seen is: $lastSeen")
-                        val lastSeenDate = Date(lastSeen)
-                        val lastSeenFormatted = SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(lastSeenDate)
-                        topappbar.subtitle = "Last seen: ${lastSeenFormatted.toString()}"
+                        Toast.makeText(
+                            this@ConversationsChatActivity,
+                            "User is offline",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        // Format date lastSeen
+                        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+                        val date = Date(user.lastSeen * 1000)
+                        val lastSeen = dateFormat.format(date)
+                        topappbar.subtitle = "Last seen at $lastSeen"
+                        topappbar.isSubtitleCentered = true
                     }
                     if (user.typing == fromId) {
 
@@ -188,7 +194,16 @@ class ConversationsChatActivity : AppCompatActivity() {
                     } else {
                         Log.d("SettingsActivity", "Typing is: false")
 //                        textView_typing.visibility = View.GONE
-                        topAppBar_chat_conversation.subtitle = otherUserEmail
+                        if (user.status) {
+                            topAppBar_chat_conversation.subtitle = "Online"
+                        } else {
+                            topAppBar_chat_conversation.subtitle = "Offline"
+                            val dateFormat = SimpleDateFormat("dd/MMM HH:mm")
+                            val date = Date(user.lastSeen * 1000)
+                            val lastSeen = dateFormat.format(date)
+                            topappbar.subtitle = "Last seen on $lastSeen"
+                            topappbar.isSubtitleCentered = true
+                        }
                     }
                 } else {
                     Log.d("SettingsActivity", "Typing is: null")
@@ -261,7 +276,7 @@ class ConversationsChatActivity : AppCompatActivity() {
         )
 
 
-        topAppBar_chat_conversation.subtitle = otherUserEmail
+        topAppBar_chat_conversation.subtitle = "Offline"
 
         topAppBar_chat_conversation.setOnMenuItemClickListener {
             when(it.itemId){
