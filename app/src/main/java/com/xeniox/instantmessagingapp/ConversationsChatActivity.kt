@@ -87,7 +87,6 @@ class ConversationsChatActivity : AppCompatActivity() {
                     // Set the colour of the toolbar
                     val topappbar = findViewById<MaterialToolbar>(R.id.topAppBar_chat_conversation)
                     topappbar.setBackgroundColor(color.color.toInt())
-
                     // Set the colour of the status bar.
                     val window = window
                     window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -105,7 +104,7 @@ class ConversationsChatActivity : AppCompatActivity() {
                         )
                     val wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable!!)
                     DrawableCompat.setTint(wrappedDrawable, color.color.toInt())
-                    val userPic = findViewById<CircleImageView>(R.id.chat_from_image)
+//                    val userPic = findViewById<CircleImageView>(R.id.chat_from_image)
 
 
                 } else {
@@ -167,21 +166,21 @@ class ConversationsChatActivity : AppCompatActivity() {
                     Log.d("ConversationsChatActivity", "Status is: ${status?.lastSeen}")
 //                    val topappbar = findViewById<MaterialToolbar>(R.id.topAppBar_chat_conversation)
                     topAppBar_chat_conversation.subtitle = "Offline"
-                    val dateFormat = SimpleDateFormat("dd/MMM/yy HH:mm")
+                    val dateFormat = SimpleDateFormat("MMM dd HH:mm")
                     val date = Date(status?.lastSeen!! * 1000)
                     val lastSeen = dateFormat.format(date)
 
-                    val currentDate = getDateTimeFormat(System.currentTimeMillis() / 1000, "dd/MMM/yy HH:mm")
+                    val currentDate = getDateTimeFormat(System.currentTimeMillis() / 1000, "MMM dd HH:mm")
                     Log.d("ConversationsChatActivity", "Current date is: $currentDate")
                     Log.d("ConversationsChatActivity", "Last seen is: $lastSeen")
 
-                    if (currentDate.substring(0, 9) == lastSeen.substring(0, 9)) {
-                        Log.d("ConversationsChatActivity", "Date is: ${currentDate.substring(10, lastSeen.length)}")
-                        topAppBar_chat_conversation.subtitle = "Last seen at ${lastSeen.substring(10, lastSeen.length).trim()}"
+                    if (currentDate.substring(0, 5) == lastSeen.substring(0, 5)) {
+                        Log.d("ConversationsChatActivity", "Date is: ${currentDate.substring(7, lastSeen.length)}")
+                        topAppBar_chat_conversation.subtitle = "Last seen today at ${lastSeen.substring(7, lastSeen.length).trim()}"
                         topAppBar_chat_conversation.isSubtitleCentered = true
 
                     } else {
-                        topAppBar_chat_conversation.subtitle = "Last seen at ${lastSeen.trim()}"
+                        topAppBar_chat_conversation.subtitle = "Last seen ${lastSeen.trim()}"
                     }
                 } else {
                     Log.d("ConversationsChatActivity", "Status is: null")
@@ -336,6 +335,28 @@ class ConversationsChatActivity : AppCompatActivity() {
 
 
         topAppBar_chat_conversation.subtitle = "Offline"
+
+        topAppBar_chat_conversation.setOnClickListener {
+            val dialog = BottomSheetDialog(this)
+            val view = layoutInflater.inflate(R.layout.bottom_sheet_user_profile, null)
+            Log.d(TAG, "onCreate: $toId")
+            Log.d(TAG, "onCreate: $otherUserEmail")
+
+            val textEmail = view.findViewById<TextView>(R.id.text_email_profile)
+            val textUsername = view.findViewById<TextView>(R.id.text_username_profile)
+            val userProfileImage = view.findViewById<ImageView>(R.id.user_profile_image)
+            val textBio = view.findViewById<TextView>(R.id.text_bio_profile)
+
+            textEmail.text = otherUserEmail.toString()
+            textUsername.text = username.toString()
+            textBio.text = bio.toString()
+
+            Picasso.get().load(userProfileImageUrl).into(userProfileImage)
+
+            dialog.setCancelable(true)
+            dialog.setContentView(view)
+            dialog.show()
+        }
 
         topAppBar_chat_conversation.setOnMenuItemClickListener {
             when(it.itemId){
@@ -772,9 +793,9 @@ class ChatFromItem(val text: String, val user: User, val timedate: String) : Ite
         viewHolder.itemView.text_from_message_date_time.text = timedate
 
         val uri = user.profileImageUrl
-        val targetImageView = viewHolder.itemView.chat_from_image
+//        val targetImageView = viewHolder.itemView.chat_from_image
 
-        Picasso.get().load(uri).into(targetImageView)
+//        Picasso.get().load(uri).into(targetImageView)
     }
 
     override fun getLayout(): Int {
@@ -788,9 +809,9 @@ class ChatToItem(val text: String, val user: User, val timedate: String) : Item<
         viewHolder.itemView.text_to_message_date_time.text = timedate
 
         val uri = user.profileImageUrl
-        val targetImageView = viewHolder.itemView.chat_to_image
+//        val targetImageView = viewHolder.itemView.chat_to_image
 
-        Picasso.get().load(uri).into(targetImageView)
+//        Picasso.get().load(uri).into(targetImageView)
     }
 
     override fun getLayout(): Int {

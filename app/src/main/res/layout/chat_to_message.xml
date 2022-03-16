@@ -10,35 +10,35 @@
         android:id="@+id/text_to_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="4dp"
         android:background="@drawable/chat_received_message_rounded"
         android:fontFamily="@font/outfit_regular"
         android:maxWidth="210dp"
         android:padding="12dp"
         android:text="This is a test message"
         android:textColor="@color/black"
-        app:layout_constraintEnd_toStartOf="@+id/chat_to_image"
-        app:layout_constraintTop_toTopOf="@+id/chat_to_image" />
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/chat_to_image"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_marginRight="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/btn_dialog" />
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"/>
+
+<!--    <de.hdodenhof.circleimageview.CircleImageView-->
+<!--        android:id="@+id/chat_to_image"-->
+<!--        android:layout_width="45dp"-->
+<!--        android:layout_height="45dp"-->
+<!--        android:layout_marginRight="8dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:srcCompat="@android:drawable/btn_dialog" />-->
 
     <TextView
         android:id="@+id/text_to_message_date_time"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/outfit_regular"
-        android:text="Sun 13 Mar 2022 - 23:16"
         android:gravity="right"
+        android:text="Sun 13 Mar 2022 - 23:16"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/text_to_message"
-        app:layout_constraintEnd_toStartOf="@+id/text_to_message"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/text_to_message"
+        app:layout_constraintTop_toBottomOf="@+id/text_to_message" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
