@@ -1,13 +1,18 @@
 package com.xeniox.instantmessagingapp
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.Layout
+import android.text.SpannableString
+import android.text.style.AlignmentSpan
 import android.util.Log
 import android.view.MenuItem
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -17,16 +22,17 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.android.synthetic.main.activity_conversations.*
 import kotlinx.android.synthetic.main.activity_settings.*
+import kotlinx.android.synthetic.main.activity_settings.drawer_layout
+import kotlinx.android.synthetic.main.activity_settings.navigation_drawer
 import kotlinx.android.synthetic.main.nav_header.*
 import vadiole.colorpicker.ColorModel
 import vadiole.colorpicker.ColorPickerDialog
+import java.util.*
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -40,6 +46,29 @@ class SettingsActivity : AppCompatActivity() {
         firebaseAppCheck.installAppCheckProviderFactory(
             SafetyNetAppCheckProviderFactory.getInstance()
         )
+
+        val presenceRef = FirebaseDatabase.getInstance().getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
+        presenceRef.onDisconnect().setValue(System.currentTimeMillis() / 1000)
+        presenceRef.setValue(-1)
+
+//        val statusRef = FirebaseDatabase.getInstance().getReference("status/${FirebaseAuth.getInstance().uid}/")
+//        statusRef.addValueEventListener(object : ValueEventListener {
+//            override fun onCancelled(p0: DatabaseError) {
+////                TODO("Not yet implemented")
+//            }
+//
+//            override fun onDataChange(p0: DataSnapshot) {
+//                val userStatus = p0.getValue(Status::class.java)
+//                if (userStatus != null) {
+//                    if (!userStatus.status) {
+//                        val statusRef = FirebaseDatabase.getInstance().getReference("status/${FirebaseAuth.getInstance().uid}/status")
+//                        statusRef.setValue(true)
+//                        val lastSeenRef = FirebaseDatabase.getInstance().getReference("users/${FirebaseAuth.getInstance().uid}/lastSeen")
+//                        lastSeenRef.setValue(-1)
+//                    }
+//                }
+//            }
+//        })
 
         val user = FirebaseAuth.getInstance().currentUser?.uid
         val ref = FirebaseDatabase.getInstance().getReference("/users/$user")
@@ -55,10 +84,7 @@ class SettingsActivity : AppCompatActivity() {
                     val window = window
                     window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
                     window.statusBarColor = color.color.toInt()
-//                    window.setFlags(
-//                        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-//                        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-//                    )
+
                     button_color.setBackgroundColor(color.color.toInt())
 //                    val headerlayout = findViewById<Constraints>(R.id.header_layout)
                     header_layout.setBackgroundColor(color.color.toInt())
@@ -136,11 +162,37 @@ class SettingsActivity : AppCompatActivity() {
                     drawer_layout.closeDrawer(GravityCompat.START)
                 }
                 R.id.logout -> { // if the item was the fourth item
-                    val intent = Intent(this, LoginActivity::class.java) // create an intent to go to the login activity
-                    FirebaseAuth.getInstance().signOut()
-                    Log.d("Logout", "Logged out") // log the user out
-                    startActivity(intent) // start the intent
-                    drawer_layout.closeDrawer(GravityCompat.START)
+                    // Create a dialog to confirm the user wants to log out
+                    val builder = AlertDialog.Builder(this)
+                    val title =
+                        SpannableString("Log out?") // Set title to the text "Creating Account"
+                    title.setSpan( // Set the alignment of the text to center
+                        AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), // Set the alignment to center
+                        0, // Set the start of the alignment to 0
+                        title.length, // Set the end of the alignment to the length of the text
+                        0 // Set the flags to 0
+                    ) // End the alignment
+                    builder.setTitle(title)
+                    val message = SpannableString("Are you sure you want to log out?")
+                    message.setSpan( // Set the alignment of the text to center
+                        AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), // Set the alignment to center
+                        0, // Set the start of the alignment to 0
+                        message.length, // Set the end of the alignment to the length of the text
+                        0 // Set the flags to 0
+                    ) // End the alignment
+                    builder.setMessage(message)
+                    builder.setPositiveButton("Yes") { _, _ ->
+                        val statusRef = FirebaseDatabase.getInstance().getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
+                        statusRef.setValue(System.currentTimeMillis() / 1000)
+                        FirebaseAuth.getInstance().signOut() // log out the user
+                        val intent = Intent(this, LoginActivity::class.java) // create an intent to go to the login activity
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK) // clear the task and start the login activity
+                        startActivity(intent) // start the intent
+                    }
+                    builder.setNegativeButton("No") { _, _ ->
+                        drawer_layout.closeDrawer(GravityCompat.START) // close the drawer
+                    }
+                    builder.show() // show the dialog
 
                 }
             }
@@ -179,6 +231,8 @@ class SettingsActivity : AppCompatActivity() {
                 val email = ConversationsActivity.currentUser?.email
                 Log.d("ConversationsActivity","Current user email: $email")
                 navigation_drawer.findViewById<TextView>(R.id.email_nav_header).text = ConversationsActivity.currentUser?.email
+                val navHeaderImage = findViewById<CircleImageView>(R.id.nav_header_image)
+                Picasso.get().load(ConversationsActivity.currentUser?.profileImageUrl).into(navHeaderImage)
             }
 
             override fun onCancelled(p0: DatabaseError) {
@@ -187,8 +241,30 @@ class SettingsActivity : AppCompatActivity() {
         })
     }
 
-    private fun colourPicker() {
-
-    }
-
+//    private fun updateUserStatus(status: Boolean, lastSeen: Long?) {
+//        if (FirebaseAuth.getInstance().uid == null) return // if the user is not logged in, return
+//        else {
+//            val refStatus = FirebaseDatabase.getInstance()
+//                .getReference("/status/${FirebaseAuth.getInstance().uid}/status")
+//            refStatus.setValue(status)
+//            val refLastSeen = FirebaseDatabase.getInstance()
+//                .getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
+//            refLastSeen.setValue(lastSeen)
+//        }
+//    }
+//
+//    override fun onStop() {
+//        super.onStop()
+//        val statusRef = FirebaseDatabase.getInstance().getReference("/status/${FirebaseAuth.getInstance().uid}/status")
+//        statusRef.setValue(false)
+//        val lastSeenRef = FirebaseDatabase.getInstance().getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
+//        lastSeenRef.setValue(System.currentTimeMillis() / 1000)
+//    }
+//
+//    override fun onResume() {
+//        super.onResume()
+//        Log.d("ConversationsActivity", "onResume")
+//        // set a timer to update the user status every 5 seconds
+//        updateUserStatus(true, -1)
+//    }
 }
