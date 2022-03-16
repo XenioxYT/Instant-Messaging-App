@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.format.DateUtils
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -15,6 +16,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.DrawableCompat
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.FirebaseApp
@@ -32,6 +34,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.android.synthetic.main.activity_conversations.*
 import kotlinx.android.synthetic.main.activity_conversations_chat.*
 import kotlinx.android.synthetic.main.chat_from_message.*
 import kotlinx.android.synthetic.main.chat_from_message.view.*
@@ -61,14 +64,14 @@ class ConversationsChatActivity : AppCompatActivity() {
         firebaseAppCheck.installAppCheckProviderFactory(
             SafetyNetAppCheckProviderFactory.getInstance()
         )
-
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_conversations_chat)
 
-//        val toolbar = findViewById<MaterialToolbar>(R.id.topAppBar_chat_conversation)
-//        setSupportActionBar(toolbar)
 
+        // set a timer to run this code every 10 seconds
+        val presenceRef = FirebaseDatabase.getInstance().getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
+        presenceRef.onDisconnect().setValue(System.currentTimeMillis() / 1000)
+        presenceRef.setValue(-1)
 
 //         Set custom colours here:
         val user = FirebaseAuth.getInstance().currentUser?.uid
@@ -134,6 +137,64 @@ class ConversationsChatActivity : AppCompatActivity() {
         val otherUserEmail = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.email
         val userProfileImageUrl = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.profileImageUrl
 
+//        val statusRef = FirebaseDatabase.getInstance().getReference("status/${FirebaseAuth.getInstance().uid}/")
+//        statusRef.addValueEventListener(object : ValueEventListener {
+//            override fun onCancelled(p0: DatabaseError) {
+////                TODO("Not yet implemented")
+//            }
+//
+//            override fun onDataChange(p0: DataSnapshot) {
+//                val userStatus = p0.getValue(Status::class.java)
+//                if (userStatus != null) {
+//                    if (!userStatus.status) {
+//                        val statusRef = FirebaseDatabase.getInstance()
+//                            .getReference("status/${FirebaseAuth.getInstance().uid}/status")
+//                        statusRef.setValue(true)
+//                        val lastSeenRef = FirebaseDatabase.getInstance()
+//                            .getReference("users/${FirebaseAuth.getInstance().uid}/lastSeen")
+//                        lastSeenRef.setValue(-1)
+//                    }
+//                }
+//            }
+//        })
+
+        val toStatusRef = FirebaseDatabase.getInstance().getReference("/status/$toId/")
+        toStatusRef.addValueEventListener(object : ValueEventListener {
+            @SuppressLint("SimpleDateFormat")
+            override fun onDataChange(p0: DataSnapshot) {
+                val status = p0.getValue(Status::class.java)
+                if (status?.lastSeen != -1L) {
+                    Log.d("ConversationsChatActivity", "Status is: ${status?.lastSeen}")
+//                    val topappbar = findViewById<MaterialToolbar>(R.id.topAppBar_chat_conversation)
+                    topAppBar_chat_conversation.subtitle = "Offline"
+                    val dateFormat = SimpleDateFormat("dd/MMM/yy HH:mm")
+                    val date = Date(status?.lastSeen!! * 1000)
+                    val lastSeen = dateFormat.format(date)
+
+                    val currentDate = getDateTimeFormat(System.currentTimeMillis() / 1000, "dd/MMM/yy HH:mm")
+                    Log.d("ConversationsChatActivity", "Current date is: $currentDate")
+                    Log.d("ConversationsChatActivity", "Last seen is: $lastSeen")
+
+                    if (currentDate.substring(0, 9) == lastSeen.substring(0, 9)) {
+                        Log.d("ConversationsChatActivity", "Date is: ${currentDate.substring(10, lastSeen.length)}")
+                        topAppBar_chat_conversation.subtitle = "Last seen at ${lastSeen.substring(10, lastSeen.length).trim()}"
+                        topAppBar_chat_conversation.isSubtitleCentered = true
+
+                    } else {
+                        topAppBar_chat_conversation.subtitle = "Last seen at ${lastSeen.trim()}"
+                    }
+                } else {
+                    Log.d("ConversationsChatActivity", "Status is: null")
+                    val topappbar = findViewById<MaterialToolbar>(R.id.topAppBar_chat_conversation)
+                    topappbar.subtitle = "Online"
+                }
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+                Log.d("ConversationsChatActivity", "Failed to read status")
+            }
+        })
+
         val typingRef = FirebaseDatabase.getInstance().getReference("/users/$toId/")
         typingRef.addValueEventListener(object : ValueEventListener {
             @SuppressLint("SimpleDateFormat")
@@ -145,23 +206,6 @@ class ConversationsChatActivity : AppCompatActivity() {
                     val topappbar = findViewById<MaterialToolbar>(R.id.topAppBar_chat_conversation)
                     // Set online status
                     Log.d("SettingsActivity", "user is ${user.status}")
-                    if (user.status) {
-                        Toast.makeText(this@ConversationsChatActivity, "Online", Toast.LENGTH_SHORT)
-                            .show()
-                        topappbar.subtitle = "onLine"
-                    } else {
-                        Toast.makeText(
-                            this@ConversationsChatActivity,
-                            "User is offline",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        // Format date lastSeen
-                        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
-                        val date = Date(user.lastSeen * 1000)
-                        val lastSeen = dateFormat.format(date)
-                        topappbar.subtitle = "Last seen at $lastSeen"
-                        topappbar.isSubtitleCentered = true
-                    }
                     if (user.typing == fromId) {
 
 //                        Toast.makeText(this@ConversationsChatActivity, "Typing...", Toast.LENGTH_SHORT).show()
@@ -191,22 +235,37 @@ class ConversationsChatActivity : AppCompatActivity() {
 
                         Log.d("SettingsActivity", "Typing is: true")
 //                        textView_typing.visibility = View.VISIBLE
+//                    } else {
+//                        Log.d("SettingsActivity", "Typing is: false")
+////                        textView_typing.visibility = View.GONE
+//                        if (user.status) {
+//                            topAppBar_chat_conversation.subtitle = "Online"
+//                        } else {
+////                            topAppBar_chat_conversation.subtitle = "Offline"
+//                            val dateFormat = SimpleDateFormat("dd/MMM/yy HH:mm")
+//                            val date = Date(user.lastSeen)
+//                            val lastSeen = dateFormat.format(date)
+//
+//                            val currentDate = getDateTimeFormat(user.lastSeen, "dd/MMM/yy HH:mm")
+//
+//                            if (currentDate.substring(0, 9) == lastSeen.substring(0, 9)) {
+//                                topAppBar_chat_conversation.subtitle = "Last seen at ${lastSeen.substring(10, lastSeen.length).trim()}"
+//                                topAppBar_chat_conversation.isSubtitleCentered = true
+//
+//                            } else {
+//                                topAppBar_chat_conversation.subtitle = "Last seen at ${lastSeen.trim()}"
+//                            }
+//
+//
+//
+////                            topappbar.subtitle = "Last seen on" +
+////                                    " $lastSeen"
+////                            topappbar.isSubtitleCentered = true
+//                        }
+//                    }
                     } else {
-                        Log.d("SettingsActivity", "Typing is: false")
-//                        textView_typing.visibility = View.GONE
-                        if (user.status) {
-                            topAppBar_chat_conversation.subtitle = "Online"
-                        } else {
-                            topAppBar_chat_conversation.subtitle = "Offline"
-                            val dateFormat = SimpleDateFormat("dd/MMM HH:mm")
-                            val date = Date(user.lastSeen * 1000)
-                            val lastSeen = dateFormat.format(date)
-                            topappbar.subtitle = "Last seen on $lastSeen"
-                            topappbar.isSubtitleCentered = true
-                        }
+                        Log.d("SettingsActivity", "Typing is: null")
                     }
-                } else {
-                    Log.d("SettingsActivity", "Typing is: null")
                 }
             }
 
@@ -681,6 +740,12 @@ class ConversationsChatActivity : AppCompatActivity() {
         return format.format(date)
     }
 
+    private fun getDateTimeFormat(timestamp: Long, format: String): String {
+        val date = Date(timestamp.toLong() * 1000)
+        val format = SimpleDateFormat(format)
+        return format.format(date)
+    }
+
     override fun onContextItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
@@ -699,7 +764,6 @@ class ConversationsChatActivity : AppCompatActivity() {
 
         return super.onContextItemSelected(item)
     }
-
 }
 
 class ChatFromItem(val text: String, val user: User, val timedate: String) : Item<ViewHolder>() {
