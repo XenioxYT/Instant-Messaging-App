@@ -1,5 +1,6 @@
 package com.xeniox.instantmessagingapp
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.text.style.AlignmentSpan
 import android.util.Log
 import android.view.MenuItem
 import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -21,12 +23,16 @@ import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.livinglifetechway.k4kotlin.core.toast
 import com.squareup.picasso.Picasso
 import com.xeniox.instantmessagingapp.NewConversationActivity.Companion.USER_KEY
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_conversations.*
 import kotlinx.android.synthetic.main.nav_header.*
+import java.util.*
+import kotlin.collections.HashMap
 
 
 class ConversationsActivity : AppCompatActivity() {
@@ -37,12 +43,30 @@ class ConversationsActivity : AppCompatActivity() {
 
     lateinit var toggle: ActionBarDrawerToggle
 
+    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         FirebaseApp.initializeApp(/*context=*/this)
         val firebaseAppCheck = FirebaseAppCheck.getInstance()
         firebaseAppCheck.installAppCheckProviderFactory(
             SafetyNetAppCheckProviderFactory.getInstance()
         )
+
+        val presenceRef = FirebaseDatabase.getInstance().getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
+        presenceRef.onDisconnect().setValue(System.currentTimeMillis() / 1000)
+        presenceRef.setValue(-1)
+//
+//        val lastSeenRef = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/lastSeen")
+//        lastSeenRef.onDisconnect().setValue(System.currentTimeMillis() / 1000)
+//        lastSeenRef.setValue(-1)
+//
+//        registerActivityLifecycleCallbacks(FirebaseDatabaseConnectionHandler())
+
+//        if (!BackgroundManager.isBackground()) {
+//            presenceRef.setValue(true)
+//        }
+//        if (BackgroundManager.isForeground()) {
+//            presenceRef.setValue(true)
+//        }
 
         super.onCreate(savedInstanceState) // call super class onCreate method
         setContentView(R.layout.activity_conversations) // set the layout of the activity
@@ -70,42 +94,49 @@ class ConversationsActivity : AppCompatActivity() {
         dialog.show() // Show the dialog
 
 
+
+
         val user = FirebaseAuth.getInstance().currentUser?.uid
         val refColor = FirebaseDatabase.getInstance("https://instant-messaging-app-7fed6-default-rtdb.europe-west1.firebasedatabase.app/").getReference("/users/$user")
         refColor.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 val color = p0.getValue(User::class.java)
-                try {
-                    if (color?.color != null) {
-                        Log.d("SettingsActivity", "Color is: ${color.color}")
-                        val userColor = color.color
-                        Log.d("SettingsActivity", "Color is: $color")
 
-                        // Set the colour of the toolbar
-                        val topappbar = findViewById<MaterialToolbar>(R.id.topAppBar)
-                        topappbar.setBackgroundColor(color.color.toInt())
-
-                        //TODO: There was a crash here, but I don't know why. I think it was because the color was null, as it could not get any data from the database as the user was not logged in first.
-                        // There was a fix which was to move verifyUserIsLoggedIn() to the top of the function, but it still crashed.
-                        // Then I moved it to the login activity, and it worked, then set login activity as the start activity, and it worked.
-                        // So we're all good now.
-
-                        // Set the colour of the nav header
-                        header_layout.setBackgroundColor(color.color.toInt())
-
-                        // Set the colour of the status bar.
-                        val window = window
-                        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                        window.statusBarColor = color.color.toInt()
-
-                        // Set other colours here
+                if (color?.username != null) {
 
 
-                    } else {
+                    try {
+                        if (color?.color != null) {
+                            Log.d("SettingsActivity", "Color is: ${color.color}")
+                            val userColor = color.color
+                            Log.d("SettingsActivity", "Color is: $color")
+
+                            // Set the colour of the toolbar
+                            val topappbar = findViewById<MaterialToolbar>(R.id.topAppBar)
+                            topappbar.setBackgroundColor(color.color.toInt())
+
+                            //TODO: There was a crash here, but I don't know why. I think it was because the color was null, as it could not get any data from the database as the user was not logged in first.
+                            // There was a fix which was to move verifyUserIsLoggedIn() to the top of the function, but it still crashed.
+                            // Then I moved it to the login activity, and it worked, then set login activity as the start activity, and it worked.
+                            // So we're all good now.
+
+                            // Set the colour of the nav header
+                            header_layout.setBackgroundColor(color.color.toInt())
+
+                            // Set the colour of the status bar.
+                            val window = window
+                            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                            window.statusBarColor = color.color.toInt()
+
+                            // Set other colours here
+
+
+                        } else {
+                            Log.d("SettingsActivity", "Color is: null")
+                        }
+                    } catch (e: Exception) {
                         Log.d("SettingsActivity", "Color is: null")
                     }
-                } catch (e: Exception) {
-                    Log.d("SettingsActivity", "Color is: null")
                 }
             }
 
@@ -196,6 +227,8 @@ class ConversationsActivity : AppCompatActivity() {
                     ) // End the alignment
                     builder.setMessage(message)
                     builder.setPositiveButton("Yes") { _, _ ->
+                        val statusRef = FirebaseDatabase.getInstance().getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
+                        statusRef.setValue(System.currentTimeMillis() / 1000)
                         FirebaseAuth.getInstance().signOut() // log out the user
                         val intent = Intent(this, LoginActivity::class.java) // create an intent to go to the login activity
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK) // clear the task and start the login activity
@@ -266,7 +299,8 @@ class ConversationsActivity : AppCompatActivity() {
                     navigation_drawer.findViewById<TextView>(R.id.email_nav_header).text =
                         currentUser?.email
                     dialog.dismiss()
-                    Picasso.get().load(currentUser?.profileImageUrl)
+                    val navHeaderImage = findViewById<CircleImageView>(R.id.nav_header_image)
+                    Picasso.get().load(currentUser?.profileImageUrl).into(navHeaderImage)
                 }
             }
 
@@ -276,26 +310,6 @@ class ConversationsActivity : AppCompatActivity() {
         })
     }
 
-    override fun onStop() {
-        super.onStop()
-        Log.d("ConversationsActivity", "onStop")
-        Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show()
-        updateUserStatus(false, System.currentTimeMillis() / 1000)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d("ConversationsActivity", "onResume")
-        Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show()
-        updateUserStatus(true, -1)
-    }
-
-    private fun updateUserStatus(status: Boolean, lastSeen: Long?) {
-        val refStatus = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/status")
-        refStatus.setValue(status)
-        val refLastSeen = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/lastSeen")
-        refLastSeen.setValue(lastSeen)
-    }
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean { // override the onOptionsItemSelected method
