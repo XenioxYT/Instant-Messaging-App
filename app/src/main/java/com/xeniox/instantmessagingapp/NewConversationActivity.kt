@@ -26,6 +26,7 @@ import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_new_conversation.*
 import kotlinx.android.synthetic.main.user_row_new_conversation.view.*
+import java.util.*
 
 class NewConversationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +38,28 @@ class NewConversationActivity : AppCompatActivity() {
             SafetyNetAppCheckProviderFactory.getInstance()
         )
 
+        val presenceRef = FirebaseDatabase.getInstance().getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
+        presenceRef.onDisconnect().setValue(System.currentTimeMillis() / 1000)
+        presenceRef.setValue(-1)
+
+//        val statusRef = FirebaseDatabase.getInstance().getReference("status/${FirebaseAuth.getInstance().uid}/")
+//        statusRef.addValueEventListener(object : ValueEventListener {
+//            override fun onCancelled(p0: DatabaseError) {
+////                TODO("Not yet implemented")
+//            }
+//
+//            override fun onDataChange(p0: DataSnapshot) {
+//                val userStatus = p0.getValue(Status::class.java)
+//                if (userStatus != null) {
+//                    if (!userStatus.status) {
+//                        val statusRef = FirebaseDatabase.getInstance().getReference("status/${FirebaseAuth.getInstance().uid}/status")
+//                        statusRef.setValue(true)
+//                        val lastSeenRef = FirebaseDatabase.getInstance().getReference("users/${FirebaseAuth.getInstance().uid}/lastSeen")
+//                        lastSeenRef.setValue(-1)
+//                    }
+//                }
+//            }
+//        })
 
         val user = FirebaseAuth.getInstance().currentUser?.uid
         val refColor = FirebaseDatabase.getInstance().getReference("/users/$user")
@@ -141,6 +164,33 @@ class NewConversationActivity : AppCompatActivity() {
 
         })
     }
+
+//    override fun onStop() {
+//        super.onStop()
+//        val statusRef = FirebaseDatabase.getInstance().getReference("/status/${FirebaseAuth.getInstance().uid}/status")
+//        statusRef.setValue(false)
+//        val lastSeenRef = FirebaseDatabase.getInstance().getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
+//        lastSeenRef.setValue(System.currentTimeMillis() / 1000)
+//    }
+//
+//    override fun onResume() {
+//        super.onResume()
+//        Log.d("ConversationsActivity", "onResume")
+//        // set a timer to update the user status every 5 seconds
+//        updateUserStatus(true, -1)
+//    }
+//    private fun updateUserStatus(status: Boolean, lastSeen: Long?) {
+//        if (FirebaseAuth.getInstance().uid == null) return // if the user is not logged in, return
+//        else {
+//            val refStatus = FirebaseDatabase.getInstance()
+//                .getReference("/status/${FirebaseAuth.getInstance().uid}/status")
+//            refStatus.setValue(status)
+//            val refLastSeen = FirebaseDatabase.getInstance()
+//                .getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
+//            refLastSeen.setValue(lastSeen)
+//        }
+//    }
+
 }
 
 class UserItem(val user: User) : Item<ViewHolder>() {
