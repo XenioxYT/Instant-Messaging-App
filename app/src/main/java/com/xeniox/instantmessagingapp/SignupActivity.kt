@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcel
@@ -14,9 +15,9 @@ import android.text.SpannableString
 import android.text.style.AlignmentSpan
 import android.util.Log
 import android.util.Patterns
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
@@ -24,10 +25,11 @@ import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.android.synthetic.main.activity_conversations.*
+import com.livinglifetechway.k4kotlin.core.hideKeyboard
 import kotlinx.android.synthetic.main.activity_signup.*
 import java.io.ByteArrayOutputStream
 import java.util.*
+
 
 // Main class for the SignupActivity
 class SignupActivity() : AppCompatActivity() { // Start of class
@@ -45,6 +47,7 @@ class SignupActivity() : AppCompatActivity() { // Start of class
         // Listen for the create account button press
         button_create_account.setOnClickListener { // Create a new user with email and password
             Log.d("SignupActivity", "Button clicked") // Log the button press
+            hideKeyboard() // Hide the keyboard
 
             val profilepic = false
             val username =
@@ -77,6 +80,7 @@ class SignupActivity() : AppCompatActivity() { // Start of class
                     builder.setMessage("Please wait while your account is being created.") // Set the message of the alert dialog to "Please wait while your account is being created."
                     val dialog: AlertDialog = builder.create() // Set dialog to the alert dialog created by the builder
                     dialog.setCancelable(false) // Set the alert dialog to not be cancelable
+                    // Change the font of the message to the Roboto font
                     dialog.show()
                     Log.d("SignupActivity", "dialog shown")
 
@@ -107,6 +111,8 @@ class SignupActivity() : AppCompatActivity() { // Start of class
                                     "SignupActivity",
                                     "Successfully uploaded image: ${it.metadata?.path}"
                                 )
+
+
                                 ref.downloadUrl.addOnSuccessListener { it ->
                                     Log.d("SignupActivity", "File Location: $it")
                                     val filelocation = it
