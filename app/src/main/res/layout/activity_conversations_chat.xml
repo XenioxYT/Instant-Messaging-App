@@ -11,22 +11,22 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:elevation="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:elevation="10dp"
         app:liftOnScroll="false">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBar_chat_conversation"
             style="@style/MyToolbar"
-            app:subtitle="Email"
-            app:subtitleCentered="true"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:theme="@style/ItemBackground"
             app:menu="@menu/chat_menu"
             app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
+            app:subtitle="Email"
+            app:subtitleCentered="true"
             app:title="Username"
             app:titleCentered="true"
             app:titleTextColor="@color/black" />
@@ -41,6 +41,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
 
 
     <androidx.recyclerview.widget.RecyclerView
