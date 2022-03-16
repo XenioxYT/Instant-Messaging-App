@@ -60,6 +60,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/username_editText_register"
             android:layout_width="match_parent"
+            android:fontFamily="@font/outfit_bold"
             android:layout_height="match_parent"
             android:inputType="text"
             android:textColor="@color/black"
@@ -92,6 +93,7 @@
             android:id="@+id/email_editText_register"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fontFamily="@font/outfit_bold"
             android:inputType="textEmailAddress"
             android:textColorHint="@color/black"
             tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck" />
@@ -121,6 +123,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password_editText_register"
             android:layout_width="match_parent"
+            android:fontFamily="@font/outfit_bold"
             android:layout_height="match_parent"
             android:inputType="textPassword"
             android:textColorHint="@color/black" />
@@ -151,6 +154,7 @@
             android:id="@+id/confirm_password_editText_register"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fontFamily="@font/outfit_bold"
             android:inputType="textPassword"
             android:textColorHint="@color/black" />
 
@@ -161,6 +165,7 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="2dp"
+        android:fontFamily="@font/outfit_bold"
         android:text="@string/button_create_account"
         android:textColor="@color/white"
         android:theme="@style/Theme.InstantMessagingApp.Day"
@@ -191,6 +196,7 @@
         android:textColor="@color/white"
         android:theme="@style/Theme.InstantMessagingApp.Day"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:fontFamily="@font/outfit_bold"
         app:layout_constraintEnd_toEndOf="@+id/text_already_have_account"
         app:layout_constraintStart_toStartOf="@+id/text_already_have_account" />
 
@@ -201,6 +207,7 @@
         android:layout_marginTop="90dp"
         android:background="@drawable/rounded_profile_picture_button"
         android:text="Select Photo"
+        android:fontFamily="@font/outfit_bold"
         android:textColor="@color/white"
         android:textStyle="bold"
         android:theme="@style/Theme.InstantMessagingApp.Day"
