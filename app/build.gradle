@@ -99,7 +99,6 @@ dependencies {
     //noinspection GradleDependency
     implementation 'com.github.lisawray.groupie:groupie:2.1.0'
     //noinspection GradleDependency
-    implementation 'com.github.lisawray.groupie:groupie:2.1.0'
     //noinspection GradleDependency
     implementation 'com.github.lisawray.groupie:groupie-viewbinding:2.10.0'
     implementation "com.github.lisawray.groupie:groupie-kotlin-android-extensions:2.10.0"
