@@ -57,6 +57,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email_editText_login"
             android:layout_width="match_parent"
+            android:fontFamily="@font/outfit_bold"
             android:layout_height="match_parent"
             android:inputType="textEmailAddress"
             android:textColorHint="@color/black"
@@ -88,6 +89,7 @@
             android:id="@+id/password_editText_login"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fontFamily="@font/outfit_bold"
             android:inputType="textPassword"
             android:textColorHint="@color/black"
             android:textCursorDrawable="@color/black" />
@@ -100,6 +102,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
         android:text="@string/button_login_signupActivity"
+        android:fontFamily="@font/outfit_bold"
         android:textColor="@color/white"
         android:theme="@style/Theme.InstantMessagingApp.Day"
         app:layout_constraintEnd_toEndOf="@+id/password_editText_login_layout"
@@ -124,6 +127,7 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginBottom="16dp"
+        android:fontFamily="@font/outfit_bold"
         android:text="@string/back_to_login"
         android:textColor="@color/white"
         android:theme="@style/Theme.InstantMessagingApp.Day"
