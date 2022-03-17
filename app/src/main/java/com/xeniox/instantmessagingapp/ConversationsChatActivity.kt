@@ -136,27 +136,6 @@ class ConversationsChatActivity : AppCompatActivity() {
         val otherUserEmail = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.email
         val userProfileImageUrl = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.profileImageUrl
 
-//        val statusRef = FirebaseDatabase.getInstance().getReference("status/${FirebaseAuth.getInstance().uid}/")
-//        statusRef.addValueEventListener(object : ValueEventListener {
-//            override fun onCancelled(p0: DatabaseError) {
-////                TODO("Not yet implemented")
-//            }
-//
-//            override fun onDataChange(p0: DataSnapshot) {
-//                val userStatus = p0.getValue(Status::class.java)
-//                if (userStatus != null) {
-//                    if (!userStatus.status) {
-//                        val statusRef = FirebaseDatabase.getInstance()
-//                            .getReference("status/${FirebaseAuth.getInstance().uid}/status")
-//                        statusRef.setValue(true)
-//                        val lastSeenRef = FirebaseDatabase.getInstance()
-//                            .getReference("users/${FirebaseAuth.getInstance().uid}/lastSeen")
-//                        lastSeenRef.setValue(-1)
-//                    }
-//                }
-//            }
-//        })
-
         val toStatusRef = FirebaseDatabase.getInstance().getReference("/status/$toId/")
         toStatusRef.addValueEventListener(object : ValueEventListener {
             @SuppressLint("SimpleDateFormat")
@@ -203,8 +182,6 @@ class ConversationsChatActivity : AppCompatActivity() {
                 if (user?.typing != null) {
                     Log.d("SettingsActivity", "Typing is: ${user.typing}")
                     val topappbar = findViewById<MaterialToolbar>(R.id.topAppBar_chat_conversation)
-                    // Set online status
-                    Log.d("SettingsActivity", "user is ${user.status}")
                     if (user.typing == fromId) {
 
 //                        Toast.makeText(this@ConversationsChatActivity, "Typing...", Toast.LENGTH_SHORT).show()

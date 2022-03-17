@@ -106,6 +106,15 @@
             app:layout_constraintStart_toStartOf="@+id/user_profile_image_settings"
             app:layout_constraintTop_toBottomOf="@+id/text_edit_bio" />
 
+
+        <Button
+            android:layout_width="wrap_content"
+            android:id="@+id/button_save_bio"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            app:layout_constraintStart_toStartOf="@+id/edit_text_bio_settings"
+            app:layout_constraintTop_toBottomOf="@+id/edit_text_bio_settings" />
+
         <TextView
             android:id="@+id/text_edit_bio"
             android:layout_width="wrap_content"

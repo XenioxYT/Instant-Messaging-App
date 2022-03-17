@@ -51,6 +51,13 @@ class SettingsActivity : AppCompatActivity() {
         presenceRef.onDisconnect().setValue(System.currentTimeMillis() / 1000)
         presenceRef.setValue(-1)
 
+        button_save_bio.setOnClickListener {
+            val bio = edit_text_bio_settings.text.toString().trim()
+            val userRef = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/bio")
+            userRef.setValue(bio)
+            Toast.makeText(this, "Bio saved", Toast.LENGTH_SHORT).show()
+        }
+
 //        val statusRef = FirebaseDatabase.getInstance().getReference("status/${FirebaseAuth.getInstance().uid}/")
 //        statusRef.addValueEventListener(object : ValueEventListener {
 //            override fun onCancelled(p0: DatabaseError) {

@@ -110,7 +110,7 @@ class NewConversationActivity : AppCompatActivity() {
         ) // End the setSpan function
         val builder = AlertDialog.Builder(this) // Create a builder variable
         builder.setTitle(title) // Set the title of the alert dialog to the title variable
-        builder.setMessage("Please wait while we load the users") // Set the message of the alert dialog to "There was an error connecting to the servers. Please check your internet connection and try again."
+        builder.setMessage("Please wait while we load your contacts")
         val dialog: AlertDialog = builder.create() // Create a dialog variable with the builder
         dialog.setCancelable(false)
         dialog.show() // Show the dialog
@@ -164,33 +164,6 @@ class NewConversationActivity : AppCompatActivity() {
 
         })
     }
-
-//    override fun onStop() {
-//        super.onStop()
-//        val statusRef = FirebaseDatabase.getInstance().getReference("/status/${FirebaseAuth.getInstance().uid}/status")
-//        statusRef.setValue(false)
-//        val lastSeenRef = FirebaseDatabase.getInstance().getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
-//        lastSeenRef.setValue(System.currentTimeMillis() / 1000)
-//    }
-//
-//    override fun onResume() {
-//        super.onResume()
-//        Log.d("ConversationsActivity", "onResume")
-//        // set a timer to update the user status every 5 seconds
-//        updateUserStatus(true, -1)
-//    }
-//    private fun updateUserStatus(status: Boolean, lastSeen: Long?) {
-//        if (FirebaseAuth.getInstance().uid == null) return // if the user is not logged in, return
-//        else {
-//            val refStatus = FirebaseDatabase.getInstance()
-//                .getReference("/status/${FirebaseAuth.getInstance().uid}/status")
-//            refStatus.setValue(status)
-//            val refLastSeen = FirebaseDatabase.getInstance()
-//                .getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
-//            refLastSeen.setValue(lastSeen)
-//        }
-//    }
-
 }
 
 class UserItem(val user: User) : Item<ViewHolder>() {

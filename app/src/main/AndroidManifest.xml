@@ -4,6 +4,7 @@
     package="com.xeniox.instantmessagingapp">
 
     <application
+        android:name=".Global"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -13,43 +14,49 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.InstantMessagingApp"
-        android:name=".Global"
         tools:targetApi="s">
+        <activity
+            android:name=".ForgottenPasswordActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
         <activity
             android:name=".UserProfileActivity"
             android:exported="false" />
         <activity
             android:name=".ConversationsChatActivity"
             android:exported="false"
-            android:parentActivityName=".ConversationsActivity"/>
+            android:parentActivityName=".ConversationsActivity" />
         <activity
             android:name=".NewConversationActivity"
             android:exported="false"
-            android:parentActivityName=".ConversationsActivity"/>
+            android:parentActivityName=".ConversationsActivity" />
         <activity
             android:name=".SettingsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".ConversationsActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".LoginAccountCreatedActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".WelcomeActivity"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
-            android:exported="true" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            android:screenOrientation="portrait"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".SignupActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
     </application>
 

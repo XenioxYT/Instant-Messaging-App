@@ -28,6 +28,12 @@ class LoginActivity : AppCompatActivity() {
 
 
 
+        button_forgot_password.setOnClickListener {
+            val intent = Intent(this, ForgottenPasswordActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+        }
+
         // Listen for the login button press
         button_login_loginActivity.setOnClickListener {
 
@@ -65,8 +71,6 @@ class LoginActivity : AppCompatActivity() {
                 password_editText_login_layout.isErrorEnabled = false // Remove error
             }
 
-
-
             if (email_editText_login.text.toString().isNotEmpty() && password_editText_login.text.toString().isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
             ) { // If username and password are not empty
                 Log.d("LoginActivity", "Logging in user") // Log the login
@@ -75,7 +79,7 @@ class LoginActivity : AppCompatActivity() {
                         dialog.dismiss()
                         val uid = FirebaseAuth.getInstance().uid
                         val email = FirebaseAuth.getInstance().currentUser?.email
-                        User(uid.toString(), "", "", email.toString(),"", "","null", false, 0)
+                        User(uid.toString(), "", "", email.toString(),"", "","null")
                         if (!it.isSuccessful) return@addOnCompleteListener
 
                         Log.d(

@@ -130,9 +130,7 @@ class SignupActivity() : AppCompatActivity() { // Start of class
                                         email,
                                         "-16728876",
                                         "Hi there, I'm using Recivo. I'm new to this app. I'm looking for a new friend to chat with.",
-                                        "null",
-                                        true,
-                                        -1
+                                        "null"
                                     ) // Create a user object with the user's uid and username
                                     ref.setValue(user)
                                         .addOnSuccessListener { // Add an onSuccessListener to the setValue function

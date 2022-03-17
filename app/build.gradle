@@ -115,6 +115,8 @@ dependencies {
     // K4Kotlin androidx extension functions (Uses appcompat version of androidx)
     implementation 'com.github.kirtan403.k4kotlin:k4kotlin-androidx:1.0.0-beta1'
 
+    implementation 'com.google.android.gms:play-services-auth:20.1.0'
+
     // K4Kotlin databinding extension functions
     implementation 'com.github.kirtan403.k4kotlin:k4kotlin-databinding:1.0.0-beta1'
 
