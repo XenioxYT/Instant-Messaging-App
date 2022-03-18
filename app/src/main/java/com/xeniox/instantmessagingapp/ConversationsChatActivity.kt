@@ -243,7 +243,43 @@ class ConversationsChatActivity : AppCompatActivity() {
 //                    }
                     } else {
                         Log.d("SettingsActivity", "Typing is: null")
-                        topAppBar_chat_conversation.subtitle = "Online"
+//                        topAppBar_chat_conversation.subtitle = "Online"
+                        val toStatusRef = FirebaseDatabase.getInstance().getReference("/status/$toId/")
+                        toStatusRef.addValueEventListener(object : ValueEventListener {
+                            @SuppressLint("SimpleDateFormat")
+                            override fun onDataChange(p0: DataSnapshot) {
+                                val status = p0.getValue(Status::class.java)
+                                if (status?.lastSeen != -1L) {
+                                    Log.d("ConversationsChatActivity", "Status is: ${status?.lastSeen}")
+//                    val topappbar = findViewById<MaterialToolbar>(R.id.topAppBar_chat_conversation)
+                                    topAppBar_chat_conversation.subtitle = "Offline"
+                                    val dateFormat = SimpleDateFormat("MMM dd HH:mm")
+                                    val date = Date(status?.lastSeen!! * 1000)
+                                    val lastSeen = dateFormat.format(date)
+
+                                    val currentDate = getDateTimeFormat(System.currentTimeMillis() / 1000)
+                                    Log.d("ConversationsChatActivity", "Current date is: $currentDate")
+                                    Log.d("ConversationsChatActivity", "Last seen is: $lastSeen")
+
+                                    if (currentDate.substring(0, 5) == lastSeen.substring(0, 5)) {
+                                        Log.d("ConversationsChatActivity", "Date is: ${currentDate.substring(7, lastSeen.length)}")
+                                        topAppBar_chat_conversation.subtitle = "Last seen today at ${lastSeen.substring(7, lastSeen.length).trim()}"
+                                        topAppBar_chat_conversation.isSubtitleCentered = true
+
+                                    } else {
+                                        topAppBar_chat_conversation.subtitle = "Last seen ${lastSeen.trim()}"
+                                    }
+                                } else {
+                                    Log.d("ConversationsChatActivity", "Status is: null")
+                                    val topappbar = findViewById<MaterialToolbar>(R.id.topAppBar_chat_conversation)
+                                    topappbar.subtitle = "Online"
+                                }
+                            }
+
+                            override fun onCancelled(p0: DatabaseError) {
+                                Log.d("ConversationsChatActivity", "Failed to read status")
+                            }
+                        })
                     }
                 }
             }

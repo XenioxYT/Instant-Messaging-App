@@ -35,11 +35,6 @@ class ForgottenPasswordActivity : AppCompatActivity() {
                 email_editText_forgot_password.requestFocus()
                 return@setOnClickListener
             } else {
-//                val dialog = android.app.AlertDialog.Builder(this)
-//                dialog.setTitle("Sending email")
-//                dialog.setMessage("Hang on, we are sending you an email to reset your password")
-//                dialog.setCancelable(false)
-//                dialog.show()
                 FirebaseAuth.getInstance().sendPasswordResetEmail(email)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
