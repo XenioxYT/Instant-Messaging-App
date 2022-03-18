@@ -124,53 +124,6 @@ class LoginAccountCreatedActivity : AppCompatActivity() {
         }
     }
 
-    private fun loginUser(email: String, password: String) {
-        Log.d("LoginActivity", "Logging in user") // Log the login
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener {
-                if (!it.isSuccessful) return@addOnCompleteListener
-
-                Log.d(
-                    "LoginActivity",
-                    "Successfully logged in: ${it.result?.user?.uid}"
-                ) // Log the successful login
-                val intent = Intent(
-                    this,
-                    ConversationsActivity::class.java
-                ) // Create an intent to go to the ConversationsActivity
-                intent.flags =
-                    Intent.FLAG_ACTIVITY_NO_HISTORY // Clear the back stack
-                startActivity(intent) // Start the activity
-                finish()
-            }
-            .addOnFailureListener {
-                loginFailed(it)
-            }
-
-    }
-
-    private fun loginDialog() {
-        Log.d("LoginActivity", "Login dialog") // Log the dialog
-        // Create a dialog
-        val context = this
-        val title = SpannableString("Logging in") // Create a title
-        val dismiss = false
-        title.setSpan(
-            AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
-            0,
-            title.length,
-            0
-        )
-        val builder = AlertDialog.Builder(context) // Create a builder
-        builder.setTitle(title) // Set the title
-        builder.setMessage("Please wait while we log you in") // Set the message
-        val dialog: AlertDialog = builder.create() // Create the dialog
-        dialog.setCancelable(false)
-        if (!dismiss) {
-            dialog.show()
-        }
-    }
-
     private fun loginFailed(it: java.lang.Exception) { // Create a function called loginFailedRegister
         Log.d(
             "SignupActivity",
@@ -228,7 +181,7 @@ class LoginAccountCreatedActivity : AppCompatActivity() {
                 return // Return
             }
         }
-        if (email_editText_login.text.toString().trim().isNullOrEmpty()) { // If the email text box is empty
+        if (email_editText_login.text.toString().trim().isEmpty()) { // If the email text box is empty
             email_editText_login_layout.isErrorEnabled =
                 true // Enable the error message of the email text box
             email_editText_login_layout.error =

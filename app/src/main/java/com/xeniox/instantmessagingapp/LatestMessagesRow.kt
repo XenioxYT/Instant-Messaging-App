@@ -15,7 +15,7 @@ import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.conversations_message_row.view.*
 private lateinit var firebaseAnalytics: FirebaseAnalytics
 
-class LatestMessageRow(val chatMessage: ChatMessage): Item<ViewHolder>() {
+class LatestMessageRow(private val chatMessage: ChatMessage): Item<ViewHolder>() {
     var chatPartnerUser: User? = null
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.conversations_message_row_textView.text = chatMessage.text

@@ -39,6 +39,7 @@ class ConversationsActivity : AppCompatActivity() {
     companion object {
         var currentUser: User? = null
     }
+
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private lateinit var toggle: ActionBarDrawerToggle
@@ -53,7 +54,8 @@ class ConversationsActivity : AppCompatActivity() {
         // Obtain the FirebaseAnalytics instance.
         firebaseAnalytics = Firebase.analytics
 
-        val presenceRef = FirebaseDatabase.getInstance().getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
+        val presenceRef = FirebaseDatabase.getInstance()
+            .getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
         presenceRef.onDisconnect().setValue(System.currentTimeMillis() / 1000)
         presenceRef.setValue(-1)
 //
@@ -83,7 +85,8 @@ class ConversationsActivity : AppCompatActivity() {
         ) // End the setSpan function
         val builder = AlertDialog.Builder(this) // Create a builder variable
         builder.setTitle(title) // Set the title of the alert dialog to the title variable
-        val message = SpannableString("Please wait while we load your conversations") // Set the message variable to "Please wait while we load your conversations"
+        val message =
+            SpannableString("Please wait while we load your conversations") // Set the message variable to "Please wait while we load your conversations"
         message.setSpan(
             AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), // Set the alignment of the text to center
             0, // Start at the beginning of the string
@@ -96,10 +99,10 @@ class ConversationsActivity : AppCompatActivity() {
         dialog.show() // Show the dialog
 
 
-
-
         val user = FirebaseAuth.getInstance().currentUser?.uid
-        val refColor = FirebaseDatabase.getInstance("https://instant-messaging-app-7fed6-default-rtdb.europe-west1.firebasedatabase.app/").getReference("/users/$user")
+        val refColor =
+            FirebaseDatabase.getInstance("https://instant-messaging-app-7fed6-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("/users/$user")
         refColor.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 val color = p0.getValue(User::class.java)
@@ -224,11 +227,16 @@ class ConversationsActivity : AppCompatActivity() {
                     ) // End the alignment
                     builder.setMessage(message)
                     builder.setPositiveButton("Yes") { _, _ ->
-                        val statusRef = FirebaseDatabase.getInstance().getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
+                        val statusRef = FirebaseDatabase.getInstance()
+                            .getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
                         statusRef.setValue(System.currentTimeMillis() / 1000)
                         FirebaseAuth.getInstance().signOut() // log out the user
-                        val intent = Intent(this, LoginActivity::class.java) // create an intent to go to the login activity
-                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK) // clear the task and start the login activity
+                        val intent = Intent(
+                            this,
+                            LoginActivity::class.java
+                        ) // create an intent to go to the login activity
+                        intent.flags =
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK) // clear the task and start the login activity
                         startActivity(intent) // start the intent
                     }
                     builder.setNegativeButton("No") { _, _ ->
@@ -246,16 +254,19 @@ class ConversationsActivity : AppCompatActivity() {
 
     private fun listenForConversations() {
         val fromId = FirebaseAuth.getInstance().uid // get the current user's id
-        val ref = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId") // get the reference to the user-conversations node
-        ref.addChildEventListener(object: ChildEventListener {
+        val ref = FirebaseDatabase.getInstance()
+            .getReference("/latest-messages/$fromId") // get the reference to the user-conversations node
+        ref.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val chatMessage = snapshot.getValue(ChatMessage::class.java) ?: return // get the chat message
+                val chatMessage =
+                    snapshot.getValue(ChatMessage::class.java) ?: return // get the chat message
                 latestMessagesMap[snapshot.key!!] = chatMessage // add the chat message to the map
                 refreshRecyclerViewMessages() // refresh the recycler view
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                val chatMessage = snapshot.getValue(ChatMessage::class.java) ?: return // get the chat message
+                val chatMessage =
+                    snapshot.getValue(ChatMessage::class.java) ?: return // get the chat message
                 latestMessagesMap[snapshot.key!!] = chatMessage // add the chat message to the map
                 refreshRecyclerViewMessages() // refresh the recycler view
             }
@@ -279,15 +290,15 @@ class ConversationsActivity : AppCompatActivity() {
     }
 
 
-
     private val adapter = GroupAdapter<ViewHolder>() // create a new group adapter
 
     private fun fetchCurrentUser(dialog: AlertDialog) {
-        val ref = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}")
+        val ref =
+            FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 currentUser = p0.getValue(User::class.java)
-                Log.d("ConversationsActivity","Current user: ${currentUser?.username}")
+                Log.d("ConversationsActivity", "Current user: ${currentUser?.username}")
                 if (currentUser?.username != null && currentUser?.email != null) {
                     navigation_drawer.findViewById<TextView>(R.id.username_nav_header).text =
                         currentUser?.username
@@ -306,7 +317,6 @@ class ConversationsActivity : AppCompatActivity() {
             }
         })
     }
-
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean { // override the onOptionsItemSelected method

@@ -5,17 +5,14 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
-import android.os.Parcel
 import android.provider.MediaStore
 import android.text.Layout
 import android.text.SpannableString
 import android.text.style.AlignmentSpan
 import android.util.Log
 import android.util.Patterns
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.github.dhaval2404.imagepicker.ImagePicker
@@ -36,7 +33,7 @@ import java.util.*
 
 private lateinit var firebaseAnalytics: FirebaseAnalytics
 // Main class for the SignupActivity
-class SignupActivity() : AppCompatActivity() { // Start of class
+class SignupActivity : AppCompatActivity() { // Start of class
     override fun onCreate(savedInstanceState: Bundle?) { // onCreate method
         super.onCreate(savedInstanceState) // call super class onCreate
         setContentView(R.layout.activity_signup) // set the layout
@@ -92,7 +89,7 @@ class SignupActivity() : AppCompatActivity() { // Start of class
 
 
                     // Create a new user with the email and password
-                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnSuccessListener {
+                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnSuccessListener { it ->
                         Log.d(
                             "SignupActivity",
                             "user created with UID $it"
@@ -156,7 +153,7 @@ class SignupActivity() : AppCompatActivity() { // Start of class
                                             startActivity(intent) // Start the intent
                                             finish() // Finish the current activity
                                         } // End the addOnSuccessListener
-                                        .addOnFailureListener { // Add an onFailureListener to the setValue function
+                                        .addOnFailureListener {   // Add an onFailureListener to the setValue function
                                             Log.d(
                                                 "SignupActivity",
                                                 "Failed to set value to database: ${it.message}"
@@ -284,29 +281,29 @@ class SignupActivity() : AppCompatActivity() { // Start of class
 
     private var selectedPhotoUri: Uri? = null // Create a variable to hold the selected photo uri
 
-    constructor(parcel: Parcel) : this() {
-        selectedPhotoUri = parcel.readParcelable(Uri::class.java.classLoader)
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (resultCode == Activity.RESULT_OK) {
+        when (resultCode) {
+            Activity.RESULT_OK -> {
 
-            selectedPhotoUri = data?.data
-            val bitmap = MediaStore.Images.Media.getBitmap(
-                contentResolver,
-                selectedPhotoUri
-            ) // Get the bitmap from the uri
+                selectedPhotoUri = data?.data
+                val bitmap = MediaStore.Images.Media.getBitmap(
+                    contentResolver,
+                    selectedPhotoUri
+                ) // Get the bitmap from the uri
 
-            selectphoto_imageview_register.setImageBitmap(bitmap) // Set the image view to the bitmap
+                selectphoto_imageview_register.setImageBitmap(bitmap) // Set the image view to the bitmap
 
-            button_profile_picture.alpha = 0f
+                button_profile_picture.alpha = 0f
 
-        } else if (resultCode == ImagePicker.RESULT_ERROR) {
-            Toast.makeText(this, ImagePicker.getError(data), Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show()
+            }
+            ImagePicker.RESULT_ERROR -> {
+                Toast.makeText(this, ImagePicker.getError(data), Toast.LENGTH_SHORT).show()
+            }
+            else -> {
+                Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -355,7 +352,7 @@ class SignupActivity() : AppCompatActivity() { // Start of class
                 return false// Return
             }
         }
-        if (email_editText_register.text.toString()
+        return if (email_editText_register.text.toString()
                 .isEmpty()
         ) { // If the email text box is empty
             email_editText_register_layout.isErrorEnabled = true
@@ -363,11 +360,11 @@ class SignupActivity() : AppCompatActivity() { // Start of class
                 "Email is required" // Set the error message of the email text box to "Email is required"
             email_editText_register.requestFocus() // Request focus of the email text box
             loginException()
-            return false// Return
+            false// Return
         } else {
             email_editText_register_layout.isErrorEnabled =
                 false // Clear the error message of the email text box
-            return true
+            true
         }
     }
 
@@ -384,18 +381,18 @@ class SignupActivity() : AppCompatActivity() { // Start of class
                 return false // Return
             }
         }
-        if (password_editText_register.text.toString().isEmpty()
+        return if (password_editText_register.text.toString().isEmpty()
         ) { // If the password text box is empty
             password_editText_register_layout.isErrorEnabled = true
             password_editText_register_layout.error =
                 "Password cannot be empty" // Set the error message of the password text box to "Password cannot be empty"
             password_editText_register.requestFocus() // Request focus of the password text box
             loginException()
-            return false// Return
+            false// Return
         } else {
             password_editText_register_layout.isErrorEnabled =
                 false // Clear the error message of the password text box
-            return true
+            true
         }
     } // End the checkPassword function
 
@@ -412,7 +409,7 @@ class SignupActivity() : AppCompatActivity() { // Start of class
                 return false// Return
             } // End the if statement
         }
-        if (confirm_password_editText_register.text.toString()
+        return if (confirm_password_editText_register.text.toString()
                 .isEmpty()
         ) { // If the confirm password text box is empty
             confirm_password_editText_register_layout.isErrorEnabled = true
@@ -420,10 +417,10 @@ class SignupActivity() : AppCompatActivity() { // Start of class
                 "Confirm Password cannot be empty" // Set the error message of the confirm password text box to "Confirm Password cannot be empty"
             confirm_password_editText_register.requestFocus() // Request focus of the confirm password text box
             loginException()
-            return false // Return
+            false // Return
         } else {
             confirm_password_editText_register_layout.isErrorEnabled = false // Clear the error message of the confirm password text box
-            return true
+            true
         }
     } // End the checkPasswordsMatch function
 

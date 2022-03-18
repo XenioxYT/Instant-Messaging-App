@@ -1,12 +1,7 @@
 package com.xeniox.instantmessagingapp;
 
-import android.app.Activity;
 import android.app.Application;
-import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 
-import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 

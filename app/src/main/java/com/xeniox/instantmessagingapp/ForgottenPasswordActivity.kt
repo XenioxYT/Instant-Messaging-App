@@ -10,7 +10,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import com.xeniox.instantmessagingapp.ConversationsChatActivity.Companion.TAG
 import kotlinx.android.synthetic.main.activity_forgotten_password.*
-import kotlinx.android.synthetic.main.login_activity.*
 
 
 private lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -51,9 +50,9 @@ class ForgottenPasswordActivity : AppCompatActivity() {
                             dialog2.setMessage("Please check your email to reset your password")
                             dialog2.setCancelable(false)
                             dialog2.setPositiveButton("Ok") { _, _ ->
-                                val intent = android.content.Intent(this, LoginActivity::class.java)
+                                val intent = Intent(this, LoginActivity::class.java)
                                 intent.flags =
-                                    android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK.or(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                                 startActivity(intent)
                             }
                             dialog2.show()

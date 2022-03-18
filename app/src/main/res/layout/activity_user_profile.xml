@@ -7,64 +7,13 @@
     tools:context=".UserProfileActivity">
 
     <ImageView
-        android:id="@+id/user_profile_image_full_profile"
         android:layout_width="140dp"
         android:layout_height="140dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginLeft="16dp"
+        android:contentDescription="@string/your_profile_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/text_username_is"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:text="Your username is:"-->
-    <!--        android:layout_marginLeft="16dp"-->
-    <!--        android:fontFamily="@font/outfit_regular"-->
-    <!--        app:layout_constraintBottom_toTopOf="@+id/text_user_profile"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toEndOf="@+id/user_profile_image_full_profile"-->
-    <!--        app:layout_constraintTop_toTopOf="@+id/user_profile_image_full_profile"-->
-    <!--        app:layout_constraintVertical_chainStyle="packed" />-->
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/text_user_profile"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginBottom="16dp"-->
-    <!--        android:fontFamily="@font/outfit_black"-->
-    <!--        android:text="Username"-->
-    <!--        android:textSize="24dp"-->
-    <!--        android:textColor="@color/black"-->
-    <!--        app:layout_constraintBottom_toTopOf="@+id/text_email_is"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="@+id/text_username_is"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/text_username_is" />-->
-
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/text_email_is"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:fontFamily="@font/outfit_regular"-->
-    <!--        android:text="Your email is:"-->
-    <!--        app:layout_constraintBottom_toTopOf="@+id/text_email_profile"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="@+id/text_user_profile"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/text_user_profile" />-->
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/text_email_profile"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:textSize="16dp"-->
-    <!--        android:fontFamily="@font/outfit_bold"-->
-    <!--        android:text="Email"-->
-    <!--        app:layout_constraintBottom_toBottomOf="@+id/user_profile_image_full_profile"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="@+id/text_email_is"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/text_email_is" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

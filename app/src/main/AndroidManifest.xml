@@ -18,7 +18,8 @@
         <activity
             android:name=".ForgottenPasswordActivity"
             android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".UserProfileActivity"
             android:exported="false" />
@@ -33,21 +34,24 @@
         <activity
             android:name=".SettingsActivity"
             android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ConversationsActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".LoginAccountCreatedActivity"
             android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".WelcomeActivity"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
             android:screenOrientation="portrait"
-            android:exported="true">
+            android:exported="true"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -57,7 +61,8 @@
         <activity
             android:name=".SignupActivity"
             android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            tools:ignore="LockedOrientationActivity" />
     </application>
 
 </manifest>

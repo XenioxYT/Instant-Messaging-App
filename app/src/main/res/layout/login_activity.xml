@@ -140,7 +140,7 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:fontFamily="@font/outfit_bold"
-        android:text="Forgot Password"
+        android:text="@string/forgot_password"
         android:textColor="@color/white"
         android:theme="@style/Theme.InstantMessagingApp.Day"
         app:layout_constraintBottom_toTopOf="@+id/button_back_to_signin"

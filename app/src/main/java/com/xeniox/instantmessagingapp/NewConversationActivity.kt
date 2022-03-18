@@ -29,7 +29,6 @@ import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_new_conversation.*
 import kotlinx.android.synthetic.main.user_row_new_conversation.view.*
-import java.util.*
 
 
 private lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -133,7 +132,7 @@ class NewConversationActivity : AppCompatActivity() {
     }
 
     companion object {
-        val USER_KEY = "USER_KEY"
+        const val USER_KEY = "USER_KEY"
     }
 
     private fun fetchUsers(dialog: AlertDialog) {

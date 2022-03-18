@@ -8,8 +8,8 @@
         android:id="@+id/user_profile_picture_conversations_message_row"
         android:layout_width="64dp"
         android:layout_height="64dp"
+        android:layout_marginStart="8dp"
         android:elevation="4dp"
-        android:layout_marginLeft="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -18,28 +18,28 @@
         android:id="@+id/conversations_message_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Username"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/outfit_bold"
+        android:text=""
+        android:textColor="@color/black"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/conversations_message_row_textView"
         app:layout_constraintStart_toEndOf="@+id/user_profile_picture_conversations_message_row"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        android:layout_marginLeft="8dp"
-        android:fontFamily="@font/outfit_bold"
-        android:textColor="@color/black"
-        android:textSize="18sp"/>
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/conversations_message_row_textView"
         android:layout_width="0dp"
         android:layout_height="17dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Last message received"
+        android:fontFamily="@font/outfit_regular"
+        android:text=""
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/user_profile_picture_conversations_message_row"
-        app:layout_constraintTop_toBottomOf="@+id/conversations_message_username"
-        android:layout_marginLeft="8dp"
-        android:fontFamily="@font/outfit_regular"
-        android:textSize="14sp"/>
+        app:layout_constraintTop_toBottomOf="@+id/conversations_message_username" />
 </androidx.constraintlayout.widget.ConstraintLayout>

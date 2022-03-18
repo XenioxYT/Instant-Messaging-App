@@ -1,10 +1,8 @@
 package com.xeniox.instantmessagingapp
 
 import android.os.Parcelable
-import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.parcel.Parcelize
 
-private lateinit var firebaseAnalytics: FirebaseAnalytics
 @Parcelize
 class User(
     val uid: String,

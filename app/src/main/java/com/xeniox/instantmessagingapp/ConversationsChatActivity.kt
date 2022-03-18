@@ -1,3 +1,5 @@
+@file:Suppress("NAME_SHADOWING")
+
 package com.xeniox.instantmessagingapp
 
 import android.annotation.SuppressLint
@@ -5,7 +7,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.text.format.DateUtils
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -16,7 +17,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.DrawableCompat
-import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.FirebaseApp
@@ -36,12 +36,8 @@ import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
-import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.android.synthetic.main.activity_conversations.*
 import kotlinx.android.synthetic.main.activity_conversations_chat.*
-import kotlinx.android.synthetic.main.chat_from_message.*
 import kotlinx.android.synthetic.main.chat_from_message.view.*
-import kotlinx.android.synthetic.main.chat_to_message.*
 import kotlinx.android.synthetic.main.chat_to_message.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -55,9 +51,9 @@ class ConversationsChatActivity : AppCompatActivity() {
 
     val adapter = GroupAdapter<ViewHolder>()
     var conversations:ArrayList<TextMessage> = ArrayList()
-    var suggestion1: SmartReplySuggestion? = null
-    var suggestion2: SmartReplySuggestion? = null
-    var suggestion3: SmartReplySuggestion? = null
+    private var suggestion1: SmartReplySuggestion? = null
+    private var suggestion2: SmartReplySuggestion? = null
+    private var suggestion3: SmartReplySuggestion? = null
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     @SuppressLint("InflateParams")
@@ -87,7 +83,7 @@ class ConversationsChatActivity : AppCompatActivity() {
                 val color = p0.getValue(User::class.java)
                 if (color?.color != null) {
                     Log.d("SettingsActivity", "Color is: ${color.color}")
-                    val userColor = color.color
+                    color.color
                     Log.d("SettingsActivity", "Color is: $color")
 
                     // Set the colour of the toolbar
@@ -155,7 +151,7 @@ class ConversationsChatActivity : AppCompatActivity() {
                     val date = Date(status?.lastSeen!! * 1000)
                     val lastSeen = dateFormat.format(date)
 
-                    val currentDate = getDateTimeFormat(System.currentTimeMillis() / 1000, "MMM dd HH:mm")
+                    val currentDate = getDateTimeFormat(System.currentTimeMillis() / 1000)
                     Log.d("ConversationsChatActivity", "Current date is: $currentDate")
                     Log.d("ConversationsChatActivity", "Last seen is: $lastSeen")
 
@@ -183,11 +179,11 @@ class ConversationsChatActivity : AppCompatActivity() {
         typingRef.addValueEventListener(object : ValueEventListener {
             @SuppressLint("SimpleDateFormat")
             override fun onDataChange(p0: DataSnapshot) {
-                val toId = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid
+                intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid
                 val user = p0.getValue(User::class.java)
                 if (user?.typing != null) {
                     Log.d("SettingsActivity", "Typing is: ${user.typing}")
-                    val topappbar = findViewById<MaterialToolbar>(R.id.topAppBar_chat_conversation)
+                    findViewById<MaterialToolbar>(R.id.topAppBar_chat_conversation)
                     if (user.typing == fromId) {
 
 //                        Toast.makeText(this@ConversationsChatActivity, "Typing...", Toast.LENGTH_SHORT).show()
@@ -331,9 +327,9 @@ class ConversationsChatActivity : AppCompatActivity() {
             val userProfileImage = view.findViewById<ImageView>(R.id.user_profile_image)
             val textBio = view.findViewById<TextView>(R.id.text_bio_profile)
 
-            textEmail.text = otherUserEmail.toString()
-            textUsername.text = username.toString()
-            textBio.text = bio.toString()
+            textEmail.text = otherUserEmail
+            textUsername.text = username
+            textBio.text = bio
 
             Picasso.get().load(userProfileImageUrl).into(userProfileImage)
 
@@ -355,9 +351,9 @@ class ConversationsChatActivity : AppCompatActivity() {
                     val userProfileImage = view.findViewById<ImageView>(R.id.user_profile_image)
                     val textBio = view.findViewById<TextView>(R.id.text_bio_profile)
 
-                    textEmail.text = otherUserEmail.toString()
-                    textUsername.text = username.toString()
-                    textBio.text = bio.toString()
+                    textEmail.text = otherUserEmail
+                    textUsername.text = username
+                    textBio.text = bio
 
                     Picasso.get().load(userProfileImageUrl).into(userProfileImage)
 
@@ -439,24 +435,24 @@ class ConversationsChatActivity : AppCompatActivity() {
                                     reply += suggestion.text + "\n"
                                 }
                                 Log.d(TAG, reply)
-                                var suggestion1 = it.suggestions[0].text
-                                if (suggestion1.isNullOrEmpty()) {
+                                val suggestion1 = it.suggestions[0].text
+                                if (suggestion1.isEmpty()) {
                                     button_reply1.visibility = View.GONE
                                     button_reply1.height = 0
                                     recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
                                 } else {
                                     button_reply1.text = suggestion1
                                 }
-                                var suggestion2 = it.suggestions[1].text
-                                if (suggestion2.isNullOrEmpty()) {
+                                val suggestion2 = it.suggestions[1].text
+                                if (suggestion2.isEmpty()) {
                                     button_reply2.visibility = View.GONE
                                     button_reply2.height = 0
                                     recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
                                 } else {
                                     button_reply2.text = suggestion2
                                 }
-                                var suggestion3 = it.suggestions[2].text
-                                if (suggestion3.isNullOrEmpty()) {
+                                val suggestion3 = it.suggestions[2].text
+                                if (suggestion3.isEmpty()) {
                                     button_reply3.visibility = View.GONE
                                     button_reply3.height = 0
                                     recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
@@ -590,9 +586,9 @@ class ConversationsChatActivity : AppCompatActivity() {
         val fromId = FirebaseAuth.getInstance().uid
         val toId = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid
         val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId")
-        val smartReplyGenerator = SmartReply.getClient()
+        SmartReply.getClient()
         ref.addChildEventListener(object: ChildEventListener {
-            @SuppressLint("SimpleDateFormat")
+            @SuppressLint("SimpleDateFormat", "WeekBasedYear")
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
                 val chatMessage = p0.getValue(ChatMessage::class.java)
                 if (chatMessage != null) {
@@ -629,7 +625,7 @@ class ConversationsChatActivity : AppCompatActivity() {
                             adapter.add(
                                 ChatFromItem(
                                     chatMessage.text,
-                                    intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!,
+                                    intent.getParcelableExtra(NewConversationActivity.USER_KEY)!!,
                                     timeAndDate
                                 )
                             )
@@ -669,11 +665,11 @@ class ConversationsChatActivity : AppCompatActivity() {
             FirebaseDatabase.getInstance().getReference("/user-messages/$toId/$fromId")
                 .push() // new messages node in firebase
 
-        if (editText_chat_conversation.text.trim().isNullOrEmpty()) {
+        if (editText_chat_conversation.text.trim().isEmpty()) {
             Log.d("chat", "message is null")
             return
         } else {
-            editText_chat_conversation.text.trim().let {
+            editText_chat_conversation.text.trim().let { it ->
                 reference.setValue(
                     ChatMessage(
                         reference.key!!,
@@ -718,7 +714,7 @@ class ConversationsChatActivity : AppCompatActivity() {
                 reference.setValue(
                     ChatMessage(
                         reference.key!!,
-                        reply.toString(),
+                        reply,
                         fromId,
                         toId,
                         System.currentTimeMillis() / 1000
@@ -732,22 +728,24 @@ class ConversationsChatActivity : AppCompatActivity() {
                 }
                 toReference.setValue(ChatMessage(toReference.key!!, reply, fromId, toId, System.currentTimeMillis() / 1000))
                 val latestMessageRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId/$toId")
-                latestMessageRef.setValue(ChatMessage(reference.key!!, reply.toString(), fromId, toId, System.currentTimeMillis() / 1000))
+                latestMessageRef.setValue(ChatMessage(reference.key!!, reply, fromId, toId, System.currentTimeMillis() / 1000))
                 val latestMessageToRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$toId/$fromId")
-                latestMessageToRef.setValue(ChatMessage(toReference.key!!, reply.toString(), fromId, toId, System.currentTimeMillis() / 1000))
+                latestMessageToRef.setValue(ChatMessage(toReference.key!!,
+                    reply, fromId, toId, System.currentTimeMillis() / 1000))
             }
     }
 
-    @SuppressLint("SimpleDateFormat")
+    @SuppressLint("SimpleDateFormat", "WeekBasedYear")
     private fun getDateTime(timestamp: Long): String {
-        val date = Date(timestamp.toLong() * 1000)
+        val date = Date(timestamp * 1000)
         val format = SimpleDateFormat("EE dd MMM YYYY - HH:mm")
         return format.format(date)
     }
 
-    private fun getDateTimeFormat(timestamp: Long, format: String): String {
-        val date = Date(timestamp.toLong() * 1000)
-        val format = SimpleDateFormat(format)
+    @SuppressLint("SimpleDateFormat")
+    private fun getDateTimeFormat(timestamp: Long): String {
+        val date = Date(timestamp * 1000)
+        val format = SimpleDateFormat("MMM dd HH:mm")
         return format.format(date)
     }
 
@@ -771,12 +769,12 @@ class ConversationsChatActivity : AppCompatActivity() {
     }
 }
 
-class ChatFromItem(val text: String, val user: User, val timedate: String) : Item<ViewHolder>() {
+class ChatFromItem(val text: String, val user: User, private val timedate: String) : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.text_from_message.text = text
         viewHolder.itemView.text_from_message_date_time.text = timedate
 
-        val uri = user.profileImageUrl
+        user.profileImageUrl
 //        val targetImageView = viewHolder.itemView.chat_from_image
 
 //        Picasso.get().load(uri).into(targetImageView)
@@ -787,12 +785,12 @@ class ChatFromItem(val text: String, val user: User, val timedate: String) : Ite
     }
 }
 
-class ChatToItem(val text: String, val user: User, val timedate: String) : Item<ViewHolder>() {
+class ChatToItem(val text: String, val user: User, private val timedate: String) : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.text_to_message.text = text
         viewHolder.itemView.text_to_message_date_time.text = timedate
 
-        val uri = user.profileImageUrl
+        user.profileImageUrl
 //        val targetImageView = viewHolder.itemView.chat_to_image
 
 //        Picasso.get().load(uri).into(targetImageView)
