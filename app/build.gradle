@@ -21,15 +21,15 @@ android {
         applicationId "com.xeniox.instantmessagingapp"
         minSdk 24
         targetSdk 30
-        versionCode 13
-        versionName "3.0.2"
+        versionCode 17
+        versionName "3.2.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

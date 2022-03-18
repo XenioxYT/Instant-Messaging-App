@@ -93,6 +93,9 @@ class LoginActivity : AppCompatActivity() {
                             "LoginActivity",
                             "Successfully logged in: ${it.result?.user?.uid}"
                         ) // Log the successful login
+                        val bundle = Bundle()
+                        bundle.putString(FirebaseAnalytics.Param.METHOD, "Login")
+                        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, bundle)
                         val intent = Intent(
                             this,
                             ConversationsActivity::class.java

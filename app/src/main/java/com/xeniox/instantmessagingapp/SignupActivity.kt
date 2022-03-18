@@ -146,6 +146,9 @@ class SignupActivity() : AppCompatActivity() { // Start of class
                                             ) // Log that the user has been saved to Firebase Database
                                             Log.d("SignupActivity", "Intent = $intent")
                                             dialog.dismiss()
+                                            val bundle = Bundle()
+                                            bundle.putString(FirebaseAnalytics.Param.METHOD, "Sign Up")
+                                            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, bundle)
                                             val intent = Intent(
                                                 this,
                                                 LoginAccountCreatedActivity::class.java
