@@ -241,6 +241,7 @@ class ConversationsChatActivity : AppCompatActivity() {
 //                    }
                     } else {
                         Log.d("SettingsActivity", "Typing is: null")
+                        topAppBar_chat_conversation.subtitle = "Online"
                     }
                 }
             }

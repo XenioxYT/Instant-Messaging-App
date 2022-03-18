@@ -21,8 +21,8 @@ android {
         applicationId "com.xeniox.instantmessagingapp"
         minSdk 24
         targetSdk 30
-        versionCode 9
-        versionName "2.4.1"
+        versionCode 13
+        versionName "3.0.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
