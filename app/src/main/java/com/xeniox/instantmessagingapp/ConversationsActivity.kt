@@ -10,9 +10,7 @@ import android.text.style.AlignmentSpan
 import android.util.Log
 import android.view.MenuItem
 import android.view.WindowManager
-import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -26,7 +24,6 @@ import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
-import com.livinglifetechway.k4kotlin.core.toast
 import com.squareup.picasso.Picasso
 import com.xeniox.instantmessagingapp.NewConversationActivity.Companion.USER_KEY
 import com.xwray.groupie.GroupAdapter
@@ -34,10 +31,9 @@ import com.xwray.groupie.ViewHolder
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_conversations.*
 import kotlinx.android.synthetic.main.nav_header.*
-import java.util.*
-import kotlin.collections.HashMap
 
 
+@Suppress("NAME_SHADOWING")
 class ConversationsActivity : AppCompatActivity() {
 
     companion object {
@@ -45,7 +41,7 @@ class ConversationsActivity : AppCompatActivity() {
     }
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
-    lateinit var toggle: ActionBarDrawerToggle
+    private lateinit var toggle: ActionBarDrawerToggle
 
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -112,34 +108,30 @@ class ConversationsActivity : AppCompatActivity() {
 
 
                     try {
-                        if (color?.color != null) {
-                            Log.d("SettingsActivity", "Color is: ${color.color}")
-                            val userColor = color.color
-                            Log.d("SettingsActivity", "Color is: $color")
+                        Log.d("SettingsActivity", "Color is: ${color.color}")
+                        color.color
+                        Log.d("SettingsActivity", "Color is: $color")
 
-                            // Set the colour of the toolbar
-                            val topappbar = findViewById<MaterialToolbar>(R.id.topAppBar)
-                            topappbar.setBackgroundColor(color.color.toInt())
+                        // Set the colour of the toolbar
+                        val topappbar = findViewById<MaterialToolbar>(R.id.topAppBar)
+                        topappbar.setBackgroundColor(color.color.toInt())
 
-                            //TODO: There was a crash here, but I don't know why. I think it was because the color was null, as it could not get any data from the database as the user was not logged in first.
-                            // There was a fix which was to move verifyUserIsLoggedIn() to the top of the function, but it still crashed.
-                            // Then I moved it to the login activity, and it worked, then set login activity as the start activity, and it worked.
-                            // So we're all good now.
+                        //TODO: There was a crash here, but I don't know why. I think it was because the color was null, as it could not get any data from the database as the user was not logged in first.
+                        // There was a fix which was to move verifyUserIsLoggedIn() to the top of the function, but it still crashed.
+                        // Then I moved it to the login activity, and it worked, then set login activity as the start activity, and it worked.
+                        // So we're all good now.
 
-                            // Set the colour of the nav header
-                            header_layout.setBackgroundColor(color.color.toInt())
+                        // Set the colour of the nav header
+                        header_layout.setBackgroundColor(color.color.toInt())
 
-                            // Set the colour of the status bar.
-                            val window = window
-                            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                            window.statusBarColor = color.color.toInt()
+                        // Set the colour of the status bar.
+                        val window = window
+                        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                        window.statusBarColor = color.color.toInt()
 
-                            // Set other colours here
+                        // Set other colours here
 
 
-                        } else {
-                            Log.d("SettingsActivity", "Color is: null")
-                        }
                     } catch (e: Exception) {
                         Log.d("SettingsActivity", "Color is: null")
                     }
@@ -162,7 +154,7 @@ class ConversationsActivity : AppCompatActivity() {
         val toolbar = findViewById<MaterialToolbar>(R.id.topAppBar)
         setSupportActionBar(toolbar)
 
-        adapter.setOnItemClickListener { item, view ->
+        adapter.setOnItemClickListener { item, _ ->
             val intent = Intent(this, ConversationsChatActivity::class.java)
 
             // we are missing the chat partner user
@@ -214,7 +206,6 @@ class ConversationsActivity : AppCompatActivity() {
                 R.id.logout -> { // if logout was clicked
 
                     // Create a dialog to confirm the user wants to log out
-                    val builder = AlertDialog.Builder(this)
                     val title =
                         SpannableString("Log out?") // Set title to the text "Creating Account"
                     title.setSpan( // Set the alignment of the text to center
@@ -223,7 +214,7 @@ class ConversationsActivity : AppCompatActivity() {
                         title.length, // Set the end of the alignment to the length of the text
                         0 // Set the flags to 0
                     ) // End the alignment
-                    builder.setTitle(title)
+                    val builder = AlertDialog.Builder(this).setTitle(title)
                     val message = SpannableString("Are you sure you want to log out?")
                     message.setSpan( // Set the alignment of the text to center
                         AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), // Set the alignment to center
@@ -289,7 +280,7 @@ class ConversationsActivity : AppCompatActivity() {
 
 
 
-    val adapter = GroupAdapter<ViewHolder>() // create a new group adapter
+    private val adapter = GroupAdapter<ViewHolder>() // create a new group adapter
 
     private fun fetchCurrentUser(dialog: AlertDialog) {
         val ref = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}")
