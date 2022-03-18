@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.google.firebase.database.FirebaseDatabase;
 
+
 public class FirebaseDatabaseConnectionHandler implements Application.ActivityLifecycleCallbacks {
 
     private static final String TAG = FirebaseDatabaseConnectionHandler.class.getSimpleName();

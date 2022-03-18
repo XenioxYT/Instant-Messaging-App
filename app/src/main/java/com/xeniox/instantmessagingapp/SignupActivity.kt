@@ -20,10 +20,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.firebase.FirebaseApp
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.livinglifetechway.k4kotlin.core.hideKeyboard
 import kotlinx.android.synthetic.main.activity_signup.*
@@ -31,6 +34,7 @@ import java.io.ByteArrayOutputStream
 import java.util.*
 
 
+private lateinit var firebaseAnalytics: FirebaseAnalytics
 // Main class for the SignupActivity
 class SignupActivity() : AppCompatActivity() { // Start of class
     override fun onCreate(savedInstanceState: Bundle?) { // onCreate method
@@ -43,6 +47,8 @@ class SignupActivity() : AppCompatActivity() { // Start of class
             SafetyNetAppCheckProviderFactory.getInstance()
         )
 
+        // Obtain the FirebaseAnalytics instance.
+        firebaseAnalytics = Firebase.analytics
 
         // Listen for the create account button press
         button_create_account.setOnClickListener { // Create a new user with email and password

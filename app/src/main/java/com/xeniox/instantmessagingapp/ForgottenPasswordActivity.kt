@@ -4,17 +4,23 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 import com.xeniox.instantmessagingapp.ConversationsChatActivity.Companion.TAG
 import kotlinx.android.synthetic.main.activity_forgotten_password.*
 import kotlinx.android.synthetic.main.login_activity.*
 
 
+private lateinit var firebaseAnalytics: FirebaseAnalytics
 class ForgottenPasswordActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgotten_password)
 
+        // Obtain the FirebaseAnalytics instance.
+        firebaseAnalytics = Firebase.analytics
 
         button_back_to_login.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)

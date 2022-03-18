@@ -29,7 +29,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -69,7 +69,7 @@ dependencies {
     // Declare the dependency for the Firebase SDK for Google Analytics
 
 
-    implementation 'com.google.firebase:firebase-bom:29.2.0'
+    implementation 'com.google.firebase:firebase-bom:29.2.1'
     implementation 'com.google.firebase:firebase-appcheck:16.0.0-beta04'
     implementation 'com.google.firebase:firebase-appcheck-debug:16.0.0-beta04'
     implementation 'com.google.firebase:firebase-appcheck-debug-testing:16.0.0-beta04'
@@ -116,6 +116,7 @@ dependencies {
     implementation 'com.github.kirtan403.k4kotlin:k4kotlin-androidx:1.0.0-beta1'
 
     implementation 'com.google.android.gms:play-services-auth:20.1.0'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 
     // K4Kotlin databinding extension functions
     implementation 'com.github.kirtan403.k4kotlin:k4kotlin-databinding:1.0.0-beta1'
