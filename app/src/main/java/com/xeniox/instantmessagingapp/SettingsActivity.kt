@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_settings.*
@@ -54,6 +55,11 @@ class SettingsActivity : AppCompatActivity() {
         val presenceRef = FirebaseDatabase.getInstance().getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
         presenceRef.onDisconnect().setValue(System.currentTimeMillis() / 1000)
         presenceRef.setValue(-1)
+        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+            Log.d("TOKEN", it)
+            val tokenRef = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/regToken")
+            tokenRef.setValue(it)
+        }
 
         button_save_bio.setOnClickListener {
             val bio = edit_text_bio_settings.text.toString().trim()
