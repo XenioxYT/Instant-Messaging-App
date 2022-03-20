@@ -27,12 +27,14 @@ import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.mlkit.nl.smartreply.SmartReply
 import com.google.mlkit.nl.smartreply.SmartReplySuggestion
 import com.google.mlkit.nl.smartreply.SmartReplySuggestionResult.STATUS_NOT_SUPPORTED_LANGUAGE
 import com.google.mlkit.nl.smartreply.SmartReplySuggestionResult.STATUS_SUCCESS
 import com.google.mlkit.nl.smartreply.TextMessage
 import com.squareup.picasso.Picasso
+import com.xeniox.instantmessagingapp.ConversationsActivity.Companion.currentUser
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
@@ -68,7 +70,13 @@ class ConversationsChatActivity : AppCompatActivity() {
         setContentView(R.layout.activity_conversations_chat)
         // Obtain the FirebaseAnalytics instance.
         firebaseAnalytics = Firebase.analytics
-
+        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+            Log.d("TOKEN", it)
+            val tokenRef = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/regToken")
+            tokenRef.setValue(it)
+        }
+        Log.d(TAG, "pushNotifications${FirebaseAuth.getInstance().uid}${intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid}")
+        FirebaseMessaging.getInstance().subscribeToTopic("pushNotifications${intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid}${FirebaseAuth.getInstance().uid}")
 
         // set a timer to run this code every 10 seconds
         val presenceRef = FirebaseDatabase.getInstance().getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
@@ -121,7 +129,7 @@ class ConversationsChatActivity : AppCompatActivity() {
 
 
 
-        recyclerView_chat_conversation.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+        recyclerView_chat_conversation.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
             recyclerView_chat_conversation.scrollToPosition(
                 adapter.itemCount - 1
             )
@@ -133,6 +141,7 @@ class ConversationsChatActivity : AppCompatActivity() {
         val toId = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid
         val username = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.username
         val bio = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.bio
+        val otherUserStatus = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.shortStatus
         val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId")
         val smartReplyGenerator = SmartReply.getClient()
         val otherUserEmail = intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.email
@@ -362,10 +371,12 @@ class ConversationsChatActivity : AppCompatActivity() {
             val textUsername = view.findViewById<TextView>(R.id.text_username_profile)
             val userProfileImage = view.findViewById<ImageView>(R.id.user_profile_image)
             val textBio = view.findViewById<TextView>(R.id.text_bio_profile)
+            val textStatus = view.findViewById<TextView>(R.id.text_status_profile)
 
             textEmail.text = otherUserEmail
             textUsername.text = username
             textBio.text = bio
+            textStatus.text = otherUserStatus
 
             Picasso.get().load(userProfileImageUrl).into(userProfileImage)
 
@@ -402,6 +413,7 @@ class ConversationsChatActivity : AppCompatActivity() {
                 }
                 R.id.mute_notifications -> {
                     Toast.makeText(this, "Mute Notifications", Toast.LENGTH_SHORT).show()
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic("pushNotifications${intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid}${FirebaseAuth.getInstance().uid}")
                 }
             }
             true
@@ -712,7 +724,8 @@ class ConversationsChatActivity : AppCompatActivity() {
                         it.toString(),
                         fromId,
                         toId,
-                        System.currentTimeMillis() / 1000
+                        System.currentTimeMillis() / 1000,
+                        currentUser!!.username
                     )
                 ).addOnSuccessListener {
                     Log.d("ConversationsChatActivity", "Message sent... $it")
@@ -721,11 +734,11 @@ class ConversationsChatActivity : AppCompatActivity() {
                     recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
 
                 }
-                toReference.setValue(ChatMessage(toReference.key!!, it.toString(), fromId, toId, System.currentTimeMillis() / 1000))
+                toReference.setValue(ChatMessage(toReference.key!!, it.toString(), fromId, toId, System.currentTimeMillis() / 1000, currentUser!!.username))
                 val latestMessageRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId/$toId")
-                latestMessageRef.setValue(ChatMessage(reference.key!!, editText_chat_conversation.text.toString(), fromId, toId, System.currentTimeMillis() / 1000))
+                latestMessageRef.setValue(ChatMessage(reference.key!!, editText_chat_conversation.text.toString(), fromId, toId, System.currentTimeMillis() / 1000, currentUser!!.username))
                 val latestMessageToRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$toId/$fromId")
-                latestMessageToRef.setValue(ChatMessage(toReference.key!!, editText_chat_conversation.text.toString(), fromId, toId, System.currentTimeMillis() / 1000))
+                latestMessageToRef.setValue(ChatMessage(toReference.key!!, editText_chat_conversation.text.toString(), fromId, toId, System.currentTimeMillis() / 1000, intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.username))
 
             }
         }
@@ -753,7 +766,8 @@ class ConversationsChatActivity : AppCompatActivity() {
                         reply,
                         fromId,
                         toId,
-                        System.currentTimeMillis() / 1000
+                        System.currentTimeMillis() / 1000,
+                        currentUser!!.username
                     )
                 ).addOnSuccessListener {
                     Log.d("ConversationsChatActivity", "Message sent... $it")
@@ -762,12 +776,11 @@ class ConversationsChatActivity : AppCompatActivity() {
                     recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
 
                 }
-                toReference.setValue(ChatMessage(toReference.key!!, reply, fromId, toId, System.currentTimeMillis() / 1000))
+                toReference.setValue(ChatMessage(toReference.key!!, reply, fromId, toId, System.currentTimeMillis() / 1000, currentUser!!.username))
                 val latestMessageRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId/$toId")
-                latestMessageRef.setValue(ChatMessage(reference.key!!, reply, fromId, toId, System.currentTimeMillis() / 1000))
+                latestMessageRef.setValue(ChatMessage(reference.key!!, reply, fromId, toId, System.currentTimeMillis() / 1000, currentUser!!.username))
                 val latestMessageToRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$toId/$fromId")
-                latestMessageToRef.setValue(ChatMessage(toReference.key!!,
-                    reply, fromId, toId, System.currentTimeMillis() / 1000))
+                latestMessageToRef.setValue(ChatMessage(toReference.key!!, reply, fromId, toId, System.currentTimeMillis() / 1000, intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.username))
             }
     }
 
