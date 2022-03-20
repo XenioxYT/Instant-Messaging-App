@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
@@ -17,6 +18,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.MenuItemCompat
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.FirebaseApp
@@ -33,6 +35,7 @@ import com.google.mlkit.nl.smartreply.SmartReplySuggestion
 import com.google.mlkit.nl.smartreply.SmartReplySuggestionResult.STATUS_NOT_SUPPORTED_LANGUAGE
 import com.google.mlkit.nl.smartreply.SmartReplySuggestionResult.STATUS_SUCCESS
 import com.google.mlkit.nl.smartreply.TextMessage
+import com.livinglifetechway.k4kotlin.core.toast
 import com.squareup.picasso.Picasso
 import com.xeniox.instantmessagingapp.ConversationsActivity.Companion.currentUser
 import com.xwray.groupie.GroupAdapter
@@ -76,12 +79,36 @@ class ConversationsChatActivity : AppCompatActivity() {
             tokenRef.setValue(it)
         }
         Log.d(TAG, "pushNotifications${FirebaseAuth.getInstance().uid}${intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid}")
-        FirebaseMessaging.getInstance().subscribeToTopic("pushNotifications${intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid}${FirebaseAuth.getInstance().uid}")
+//        FirebaseMessaging.getInstance().subscribeToTopic("pushNotifications${intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid}${FirebaseAuth.getInstance().uid}")
 
         // set a timer to run this code every 10 seconds
         val presenceRef = FirebaseDatabase.getInstance().getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
         presenceRef.onDisconnect().setValue(System.currentTimeMillis() / 1000)
         presenceRef.setValue(-1)
+
+        val mutedRef = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/muted/${intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid}")
+        mutedRef.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+                Log.d(TAG, "onCancelled")
+            }
+
+            @SuppressLint("SetTextI18n")
+            override fun onDataChange(p0: DataSnapshot) {
+                val muted = p0.getValue(Boolean::class.java)
+                Log.d("MUTED", "$muted")
+                if (muted != null && muted) {
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic("pushNotifications${intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid}${FirebaseAuth.getInstance().uid}")
+                    val mutedText = findViewById<MenuItem>(R.id.mute_notifications)
+                    toast("You have muted notifications from this user")
+                    mutedText.text = "Notifications Muted"
+                } else {
+                    val mutedText = findViewById<TextView>(R.id.mute_notifications)
+                    toast("You have unmuted notifications from this user")
+                    mutedText.text = "Mute Notifications"
+                    FirebaseMessaging.getInstance().subscribeToTopic("pushNotifications${intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid}${FirebaseAuth.getInstance().uid}")
+                }
+            }
+        })
 
 //         Set custom colours here:
         val user = FirebaseAuth.getInstance().currentUser?.uid
@@ -413,7 +440,23 @@ class ConversationsChatActivity : AppCompatActivity() {
                 }
                 R.id.mute_notifications -> {
                     Toast.makeText(this, "Mute Notifications", Toast.LENGTH_SHORT).show()
-                    FirebaseMessaging.getInstance().unsubscribeFromTopic("pushNotifications${intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid}${FirebaseAuth.getInstance().uid}")
+//                    FirebaseMessaging.getInstance().unsubscribeFromTopic("pushNotifications${intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid}${FirebaseAuth.getInstance().uid}")
+                    // set the text to "notifications muted"
+                    if (it.title == "Notifications Muted") {
+                        it.title = "Mute Notifications"
+                        FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/muted/$toId").setValue(false)
+                        Log.d(TAG, "set value to false")
+                    } else {
+                        it.title = "Notifications Muted"
+                        FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/muted/$toId").setValue(true)
+                        Log.d(TAG, "set value to true")
+                    }
+//                    it.title = "Notifications Muted"
+//                    it.icon = ContextCompat.getDrawable(this, R.drawable.ic_account_circle_black_24dp)
+//                    val mutedRef = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/muted/$toId")
+//                    mutedRef.setValue(true)
+
+
                 }
             }
             true
