@@ -24,6 +24,7 @@ import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.squareup.picasso.Picasso
 import com.xeniox.instantmessagingapp.NewConversationActivity.Companion.USER_KEY
 import com.xwray.groupie.GroupAdapter
@@ -51,8 +52,24 @@ class ConversationsActivity : AppCompatActivity() {
         firebaseAppCheck.installAppCheckProviderFactory(
             SafetyNetAppCheckProviderFactory.getInstance()
         )
+//        FirebaseMessaging.getInstance().subscribeToTopic("pushNotifications")
         // Obtain the FirebaseAnalytics instance.
         firebaseAnalytics = Firebase.analytics
+
+        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+            Log.d("TOKEN", it)
+            val tokenRef = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/regToken")
+            tokenRef.setValue(it)
+        }
+
+        FirebaseMessaging.getInstance().send(
+            com.google.firebase.messaging.RemoteMessage.Builder(
+                "1:${FirebaseAuth.getInstance().uid}"
+            )
+                .setMessageId(java.util.UUID.randomUUID().toString())
+                .addData("registrationToken", FirebaseMessaging.getInstance().token.toString())
+                .build()
+        )
 
         val presenceRef = FirebaseDatabase.getInstance()
             .getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
