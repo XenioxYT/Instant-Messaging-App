@@ -86,7 +86,7 @@ class LoginActivity : AppCompatActivity() {
                         dialog.dismiss()
                         val uid = FirebaseAuth.getInstance().uid
                         val email = FirebaseAuth.getInstance().currentUser?.email
-                        User(uid.toString(), "", "", email.toString(),"", "","null")
+                        User(uid.toString(), "", "", email.toString(),"", "","null","null","")
                         if (!it.isSuccessful) return@addOnCompleteListener
 
                         Log.d(
