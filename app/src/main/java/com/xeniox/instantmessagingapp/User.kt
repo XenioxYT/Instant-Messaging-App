@@ -12,7 +12,9 @@ class User(
     val color: String,
     val bio: String,
     val typing: String,
+    val regToken: String,
+    val shortStatus: String
 ) : Parcelable { // Create a class called User
-    constructor() : this("", "", "","","","", "")
+    constructor() : this("", "", "","","","", "", "", "")
     //created blank constructor as kotlin now requires this when making a class
 }
