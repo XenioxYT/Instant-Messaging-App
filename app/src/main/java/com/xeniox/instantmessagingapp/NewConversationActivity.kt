@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
@@ -47,6 +48,11 @@ class NewConversationActivity : AppCompatActivity() {
         val presenceRef = FirebaseDatabase.getInstance().getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
         presenceRef.onDisconnect().setValue(System.currentTimeMillis() / 1000)
         presenceRef.setValue(-1)
+        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+            Log.d("TOKEN", it)
+            val tokenRef = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/regToken")
+            tokenRef.setValue(it)
+        }
 
 //        val statusRef = FirebaseDatabase.getInstance().getReference("status/${FirebaseAuth.getInstance().uid}/")
 //        statusRef.addValueEventListener(object : ValueEventListener {
@@ -175,7 +181,7 @@ class NewConversationActivity : AppCompatActivity() {
 class UserItem(val user: User) : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.text_username_new_conversation.text = user.username
-        viewHolder.itemView.text_email_new_conversation.text = user.email
+        viewHolder.itemView.text_email_new_conversation.text = user.shortStatus
         Picasso.get().load(user.profileImageUrl).into(viewHolder.itemView.imageView)
     }
 
