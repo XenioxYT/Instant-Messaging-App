@@ -8,10 +8,11 @@
         android:title="@string/view_profile_title"
         app:showAsAction="never" />
     <item
+        android:icon="@drawable/ic_search_black_24dp"
         android:id="@+id/search_chat"
         android:contentDescription="@string/search_chat_dec"
         android:title="@string/search_chat_title"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
     <item
         android:id="@+id/mute_notifications"
         android:contentDescription="@string/mute_notifications_desc"

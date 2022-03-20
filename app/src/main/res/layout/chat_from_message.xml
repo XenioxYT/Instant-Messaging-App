@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:autoLink="all|email|phone|map"
         android:layout_marginTop="8dp"
         android:background="@drawable/chat_sent_message_rounded"
         android:fontFamily="@font/outfit_regular"
