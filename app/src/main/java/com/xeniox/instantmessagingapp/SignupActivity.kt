@@ -118,14 +118,14 @@ class SignupActivity : AppCompatActivity() { // Start of class
 
                                 ref.downloadUrl.addOnSuccessListener { it ->
                                     Log.d("SignupActivity", "File Location: $it")
-                                    val filelocation = it
+                                    val fileLocation = it
                                     val uid = FirebaseAuth.getInstance().uid
                                         ?: "" // Get the user's uid
                                     val ref =
                                         FirebaseDatabase.getInstance("https://instant-messaging-app-7fed6-default-rtdb.europe-west1.firebasedatabase.app/")
                                             .getReference("/users/$uid") // Get the user's reference
-                                    Log.d("SignupActivity", "${filename}, $filelocation")
-                                    val profileImageUrl = filelocation.toString()
+                                    Log.d("SignupActivity", "${filename}, $fileLocation")
+                                    val profileImageUrl = fileLocation.toString()
                                     val user = User(
                                         uid,
                                         username_editText_register.text.toString().trim(),
@@ -133,10 +133,14 @@ class SignupActivity : AppCompatActivity() { // Start of class
                                         email,
                                         "-16728876",
                                         "Hi there, I'm using Recivo. I'm new to this app. I'm looking for a new friend to chat with.",
-                                        "null"
+                                        "null",
+                                        "null",
+                                        "I'm using recivo"
                                     ) // Create a user object with the user's uid and username
+                                    val status = Status(-1)
                                     ref.setValue(user)
                                         .addOnSuccessListener { // Add an onSuccessListener to the setValue function
+                                            ref.setValue(status) // create a user node with status.
                                             Log.d(
                                                 "SignupActivity",
                                                 "Finally we saved the user to Firebase Database"
