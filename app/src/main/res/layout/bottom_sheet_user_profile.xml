@@ -39,7 +39,7 @@
         android:fontFamily="@font/outfit_bold"
         android:text="@string/email"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/text_username_profile"
         app:layout_constraintStart_toStartOf="@+id/text_username_profile"
         app:layout_constraintTop_toBottomOf="@+id/text_username_profile" />
@@ -49,9 +49,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="16dp"
         android:layout_marginRight="32dp"
         android:layout_marginBottom="35dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/outfit_regular"
         android:gravity="center"
         android:text="@string/bio"
@@ -59,6 +59,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_status_profile" />
+
+    <TextView
+        android:id="@+id/text_status_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status"
+        android:fontFamily="@font/outfit_regular"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/text_email_profile"
+        app:layout_constraintStart_toStartOf="@+id/text_email_profile"
         app:layout_constraintTop_toBottomOf="@+id/text_email_profile" />
 
 
