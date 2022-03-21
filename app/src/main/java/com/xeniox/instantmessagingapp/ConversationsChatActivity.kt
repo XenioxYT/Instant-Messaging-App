@@ -3,12 +3,13 @@
 package com.xeniox.instantmessagingapp
 
 import android.annotation.SuppressLint
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
@@ -18,7 +19,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.core.view.MenuItemCompat
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.FirebaseApp
@@ -98,13 +98,13 @@ class ConversationsChatActivity : AppCompatActivity() {
                 Log.d("MUTED", "$muted")
                 if (muted != null && muted) {
                     FirebaseMessaging.getInstance().unsubscribeFromTopic("pushNotifications${intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid}${FirebaseAuth.getInstance().uid}")
-                    val mutedText = findViewById<MenuItem>(R.id.mute_notifications)
+//                    val mutedText = findViewById<TextView>(R.id.mute_notifications)
                     toast("You have muted notifications from this user")
-                    mutedText.text = "Notifications Muted"
+//                    mutedText.text = "Notifications Muted"
                 } else {
-                    val mutedText = findViewById<TextView>(R.id.mute_notifications)
+//                    val mutedText = findViewById<TextView>(R.id.mute_notifications)
                     toast("You have unmuted notifications from this user")
-                    mutedText.text = "Mute Notifications"
+//                    mutedText.text = "Mute Notifications"
                     FirebaseMessaging.getInstance().subscribeToTopic("pushNotifications${intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid}${FirebaseAuth.getInstance().uid}")
                 }
             }
@@ -413,6 +413,11 @@ class ConversationsChatActivity : AppCompatActivity() {
         }
 
         topAppBar_chat_conversation.setOnMenuItemClickListener {
+
+            val muteRef = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().currentUser?.uid}/muted/$toId")
+            val muted = muteRef.get()
+            Log.d(TAG, "onCreate: $muted")
+
             when(it.itemId){
                 R.id.view_profile -> {
                     val dialog = BottomSheetDialog(this)
@@ -858,6 +863,16 @@ class ConversationsChatActivity : AppCompatActivity() {
         }
 
         return super.onContextItemSelected(item)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        closeAllNotifications();
+    }
+
+    private fun closeAllNotifications() {
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancelAll()
     }
 }
 
