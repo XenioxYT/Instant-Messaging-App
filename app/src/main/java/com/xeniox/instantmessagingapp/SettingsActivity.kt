@@ -30,10 +30,17 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.android.synthetic.main.activity_conversations.*
 import kotlinx.android.synthetic.main.activity_settings.*
+import kotlinx.android.synthetic.main.activity_settings.drawer_layout
+import kotlinx.android.synthetic.main.activity_settings.navigation_drawer
 import kotlinx.android.synthetic.main.nav_header.*
 import vadiole.colorpicker.ColorModel
 import vadiole.colorpicker.ColorPickerDialog
+import java.io.IOException
+
+
+
 
 
 private lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -180,7 +187,6 @@ class SettingsActivity : AppCompatActivity() {
                 }
                 R.id.logout -> { // if the item was the fourth item
                     // Create a dialog to confirm the user wants to log out
-                    val builder = AlertDialog.Builder(this)
                     val title =
                         SpannableString("Log out?") // Set title to the text "Creating Account"
                     title.setSpan( // Set the alignment of the text to center
@@ -189,7 +195,7 @@ class SettingsActivity : AppCompatActivity() {
                         title.length, // Set the end of the alignment to the length of the text
                         0 // Set the flags to 0
                     ) // End the alignment
-                    builder.setTitle(title)
+                    val builder = AlertDialog.Builder(this).setTitle(title)
                     val message = SpannableString("Are you sure you want to log out?")
                     message.setSpan( // Set the alignment of the text to center
                         AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), // Set the alignment to center
@@ -199,18 +205,34 @@ class SettingsActivity : AppCompatActivity() {
                     ) // End the alignment
                     builder.setMessage(message)
                     builder.setPositiveButton("Yes") { _, _ ->
-                        val statusRef = FirebaseDatabase.getInstance().getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
+                        val statusRef = FirebaseDatabase.getInstance()
+                            .getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
                         statusRef.setValue(System.currentTimeMillis() / 1000)
-                        FirebaseAuth.getInstance().signOut() // log out the user
-                        val intent = Intent(this, LoginActivity::class.java) // create an intent to go to the login activity
-                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK) // clear the task and start the login activity
+                        val logoutRef = FirebaseDatabase.getInstance().getReference("/latest-messages/${FirebaseAuth.getInstance().uid}/")
+                        val uid = FirebaseAuth.getInstance().uid
+                        logoutRef.get().addOnSuccessListener {
+                            for (data in it.children) {
+                                val toUserId = data.key
+                                Log.d("TAG", "toUserId: $toUserId")
+                                FirebaseMessaging.getInstance().unsubscribeFromTopic("pushNotifications${toUserId}${uid}").addOnSuccessListener {
+                                    Log.d("LogoutNotifications", "unsubscribed from topic: pushNotifications${toUserId}${uid}")
+                                }
+                            } // End for loop
+                        }
+
+                        val intent = Intent(
+                            this,
+                            LoginActivity::class.java
+                        ) // create an intent to go to the login activity
+                        intent.flags =
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK) // clear the task and start the login activity
                         startActivity(intent) // start the intent
+                        FirebaseAuth.getInstance().signOut() // log out the user
                     }
                     builder.setNegativeButton("No") { _, _ ->
                         drawer_layout.closeDrawer(GravityCompat.START) // close the drawer
                     }
                     builder.show() // show the dialog
-
                 }
             }
             //drawer_layout.closeDrawer(navigation_drawer) // close the drawer
