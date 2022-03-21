@@ -14,7 +14,7 @@
         <!-- Color for text selection handles. -->
         <item name="colorOnSurface">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" >?attr/colorPrimary</item>
+        <item name="android:statusBarColor" >@color/lightblue</item>
         <!-- Customize your theme here. -->
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
@@ -26,17 +26,36 @@
     </style>
 
     <style name="Theme.InstantMessagingApp.Day" parent="Theme.InstantMessagingApp">
-        <item name="colorPrimary">@color/black</item>
-        <item name="colorPrimaryVariant">@color/black</item>
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/lightblue</item>
+        <item name="colorPrimaryVariant">@color/lightblue</item>
         <item name="colorOnPrimary">@color/black</item>
-        <item name="colorSecondary">@color/black</item>
-        <item name="colorSecondaryVariant">@color/black</item>
-        <item name="android:windowTranslucentStatus">true</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/lightblue</item>
+        <item name="colorSecondaryVariant">@color/lightblue</item>
+        <item name="colorOnSecondary">@color/lightblue</item>
+        <!-- Background color for surface widgets. -->
+        <item name="colorSurface">@color/lightblue</item>
+        <!-- Color for text selection handles. -->
+        <item name="colorOnSurface">@color/lightblue</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" >@color/lightblue</item>
+        <!-- Customize your theme here. -->
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="colorControlHighlight">@color/black</item>
         <item name="colorControlNormal">@color/black</item>
         <item name="colorControlActivated">@color/black</item>
         <item name="colorAccent">@color/black</item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/black</item>
+        <item name="android:statusBarColor">@color/lightblue</item>
     </style>
 
     <style name="ItemBackground" parent="Theme.AppCompat.Light.DarkActionBar">
