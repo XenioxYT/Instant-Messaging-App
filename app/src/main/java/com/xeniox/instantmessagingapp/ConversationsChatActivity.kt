@@ -670,6 +670,7 @@ class ConversationsChatActivity : AppCompatActivity() {
 
         button_send_message.setOnClickListener {
             Log.d("ConversationsChatActivity", "Attempt to send message...")
+            FirebaseMessaging.getInstance().unsubscribeFromTopic("pushNotifications${intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid}${FirebaseAuth.getInstance().uid}")
 
             performSendMessage()
         }
@@ -794,7 +795,9 @@ class ConversationsChatActivity : AppCompatActivity() {
                     editText_chat_conversation.text.clear()
                     editText_chat_conversation.text.insert(0, "")
                     recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
-
+                    Handler().postDelayed({
+                        FirebaseMessaging.getInstance().subscribeToTopic("pushNotifications${intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid}${FirebaseAuth.getInstance().uid}")
+                    },2000)
                 }
                 toReference.setValue(ChatMessage(toReference.key!!, it.toString(), fromId, toId, System.currentTimeMillis() / 1000, currentUser!!.username))
                 val latestMessageRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId/$toId")
@@ -836,6 +839,9 @@ class ConversationsChatActivity : AppCompatActivity() {
                     editText_chat_conversation.text.clear()
                     editText_chat_conversation.text.insert(0, "")
                     recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
+                    Handler().postDelayed({
+                        FirebaseMessaging.getInstance().subscribeToTopic("pushNotifications${intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!.uid}${FirebaseAuth.getInstance().uid}")
+                    },2000)
 
                 }
                 toReference.setValue(ChatMessage(toReference.key!!, reply, fromId, toId, System.currentTimeMillis() / 1000, currentUser!!.username))
