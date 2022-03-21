@@ -7,21 +7,20 @@
 
     <TextView
         android:id="@+id/text_from_message"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:autoLink="all|email|phone|map"
+        android:layout_marginTop="8dp"
         android:background="@drawable/chat_sent_message_rounded"
         android:fontFamily="@font/outfit_regular"
-        android:maxWidth="290dp"
+        android:maxWidth="300dp"
         android:padding="12dp"
+        android:textSize="15sp"
         android:text=""
         android:textColor="@color/black"
-        android:textSize="17sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
     <!--    <de.hdodenhof.circleimageview.CircleImageView-->
     <!--        android:id="@+id/chat_from_image"-->
     <!--        android:layout_width="45dp"-->
