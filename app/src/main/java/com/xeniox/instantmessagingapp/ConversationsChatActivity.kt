@@ -7,6 +7,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -482,6 +483,12 @@ class ConversationsChatActivity : AppCompatActivity() {
                                 System.currentTimeMillis()
                             )
                         )
+                        button_reply1.visibility = View.GONE
+                        button_reply2.visibility = View.GONE
+                        button_reply3.visibility = View.GONE
+                        button_reply1.height = 0
+                        button_reply2.height = 0
+                        button_reply3.height = 0
 //                           recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
                     } else {
 //                           adapter.add(ChatFromItem(chatMessage.text, intent.getParcelableExtra<User>(NewConversationActivity.USER_KEY)!!))
@@ -492,9 +499,16 @@ class ConversationsChatActivity : AppCompatActivity() {
                                 fromId!!
                             )
                         )
-                           recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
-
+                        button_reply1.visibility = View.VISIBLE
+                        button_reply2.visibility = View.VISIBLE
+                        button_reply3.visibility = View.VISIBLE
+                        button_reply1.height = 40
+                        button_reply2.height = 40
+                        button_reply3.height = 40
+                        recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
                     }
+                    // TODO: delay this til after all the conversations have been loaded
+
                     smartReplyGenerator.suggestReplies(conversations).addOnSuccessListener {
                         Log.d(TAG, "Suggestions: ${it.suggestions}")
                         Log.d(TAG, "Status: ${it.status}")
