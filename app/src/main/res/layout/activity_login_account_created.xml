@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lightblue"
-    tools:context="com.xeniox.instantmessagingapp.LoginAccountCreatedActivity">
+    tools:context="com.xeniox.instantmessagingapp.LoginActivity">
 
 
     <TextView
@@ -13,20 +13,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/outfit_black"
         android:text="@string/account_created_login"
         android:textAllCaps="false"
         android:textColor="@color/black"
         android:textSize="45sp"
-        app:layout_constraintBottom_toTopOf="@+id/email_editText_login_layout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:fontFamily="@font/outfit_light"
         android:text="@string/text_login_description"
         android:textColor="@color/black"
@@ -40,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
         android:hint="@string/email_editText_register"
         app:boxStrokeColor="@color/black"
@@ -49,7 +50,7 @@
         app:hintTextColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView2"
         app:startIconDrawable="@drawable/ic_email_black_24dp"
         tools:override="true">
 
@@ -61,10 +62,11 @@
             android:inputType="textEmailAddress"
             android:textColorHint="@color/black"
             android:textCursorDrawable="@color/black" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/password_editText_login_created_layout"
+        android:id="@+id/password_editText_login_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -74,13 +76,12 @@
         android:hint="@string/password_editText_register"
         app:boxStrokeColor="@color/black"
         app:boxStrokeWidth="1dp"
-        app:endIconMode="password_toggle"
-        app:errorEnabled="true"
         app:hintAnimationEnabled="true"
         app:hintTextColor="@color/black"
         app:layout_constraintEnd_toEndOf="@id/email_editText_login_layout"
         app:layout_constraintStart_toStartOf="@id/email_editText_login_layout"
         app:layout_constraintTop_toBottomOf="@id/email_editText_login_layout"
+        app:passwordToggleEnabled="true"
         app:startIconDrawable="@drawable/ic_lock_black_24dp"
         tools:override="true">
 
@@ -92,22 +93,9 @@
             android:inputType="textPassword"
             android:textColorHint="@color/black"
             android:textCursorDrawable="@color/black" />
+
     </com.google.android.material.textfield.TextInputLayout>
-    <!--    <EditText-->
-    <!--        android:id="@+id/password_editText_login"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="50dp"-->
-    <!--        android:layout_marginTop="16dp"-->
-    <!--        android:autofillHints=""-->
-    <!--        android:background="@color/white"-->
-    <!--        android:ems="10"-->
-    <!--        android:hint="@string/password_editText_register"-->
-    <!--        android:inputType="textPassword"-->
-    <!--        android:textColorHint="#757575"-->
-    <!--        android:padding="10dp"-->
-    <!--        app:layout_constraintEnd_toEndOf="@+id/username_editText_login_layout"-->
-    <!--        app:layout_constraintStart_toStartOf="@+id/username_editText_login_layout"-->
-    <!--        app:layout_constraintTop_toBottomOf="@id/username_editText_login_layout" />-->
+
     <Button
         android:id="@+id/button_login_loginActivity"
         android:layout_width="0dp"
@@ -117,22 +105,22 @@
         android:text="@string/button_login_signupActivity"
         android:textColor="@color/white"
         android:theme="@style/Theme.InstantMessagingApp.Day"
-        app:layout_constraintEnd_toEndOf="@+id/password_editText_login_created_layout"
-        app:layout_constraintStart_toStartOf="@+id/password_editText_login_created_layout"
-        app:layout_constraintTop_toBottomOf="@+id/password_editText_login_created_layout" />
+        app:layout_constraintEnd_toEndOf="@+id/password_editText_login_layout"
+        app:layout_constraintStart_toStartOf="@+id/password_editText_login_layout"
+        app:layout_constraintTop_toBottomOf="@+id/password_editText_login_layout" />
 
     <TextView
         android:id="@+id/text_need_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:fontFamily="@font/outfit_regular"
-        android:text="@string/account_signup_created"
+        android:text="@string/need_an_account"
         android:textColor="@color/primary_text"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/button_back_to_signin"
-        app:layout_constraintLeft_toLeftOf="@id/button_login_loginActivity"
-        app:layout_constraintRight_toRightOf="@id/button_login_loginActivity" />
+        app:layout_constraintBottom_toTopOf="@+id/button_forgot_password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button_back_to_signin"
@@ -144,8 +132,19 @@
         android:textColor="@color/white"
         android:theme="@style/Theme.InstantMessagingApp.Day"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/button_forgot_password"
+        app:layout_constraintStart_toStartOf="@+id/button_forgot_password" />
+
+    <Button
+        android:id="@+id/button_forgot_password"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:fontFamily="@font/outfit_bold"
+        android:text="@string/forgot_password"
+        android:textColor="@color/white"
+        android:theme="@style/Theme.InstantMessagingApp.Day"
+        app:layout_constraintBottom_toTopOf="@+id/button_back_to_signin"
         app:layout_constraintEnd_toEndOf="@+id/text_need_account"
         app:layout_constraintStart_toStartOf="@+id/text_need_account" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

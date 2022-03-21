@@ -17,6 +17,14 @@ import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_login_account_created.*
+import kotlinx.android.synthetic.main.activity_login_account_created.button_back_to_signin
+import kotlinx.android.synthetic.main.activity_login_account_created.button_forgot_password
+import kotlinx.android.synthetic.main.activity_login_account_created.button_login_loginActivity
+import kotlinx.android.synthetic.main.activity_login_account_created.email_editText_login
+import kotlinx.android.synthetic.main.activity_login_account_created.email_editText_login_layout
+import kotlinx.android.synthetic.main.activity_login_account_created.password_editText_login
+import kotlinx.android.synthetic.main.activity_login_account_created.password_editText_login_layout
+import kotlinx.android.synthetic.main.login_activity.*
 
 
 private lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -29,19 +37,28 @@ class LoginAccountCreatedActivity : AppCompatActivity() {
         firebaseAppCheck.installAppCheckProviderFactory(
             SafetyNetAppCheckProviderFactory.getInstance()
         )
+        verifyUserIsLoggedIn()
         // Obtain the FirebaseAnalytics instance.
         firebaseAnalytics = Firebase.analytics
 
 
-// Listen for the login button press
+
+        button_forgot_password.setOnClickListener {
+            val intent = Intent(this, ForgottenPasswordActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+        }
+
+        // Listen for the login button press
         button_login_loginActivity.setOnClickListener {
+
 
 
             Log.d("LoginActivity", "Login button pressed")
             // Check if username is empty
             val email = email_editText_login.text.toString().trim()
             val password = password_editText_login.text.toString()
-            checkEmail(email)
+            checkEmail()
             Log.d("LoginActivity", "Login dialog") // Log the dialog
             // Create a dialog
             val context = this
@@ -63,29 +80,30 @@ class LoginAccountCreatedActivity : AppCompatActivity() {
 
             // Check if password is empty
             if (password_editText_login.text.toString().isEmpty()) { // If password is empty
-                password_editText_login_created_layout.isErrorEnabled = true // Set error
-                password_editText_login_created_layout.error =
-                    "Password cannot be empty" // Show error
+                password_editText_login_layout.isErrorEnabled = true // Set error
+                password_editText_login_layout.error = "Password cannot be empty" // Show error
             } else {
-                password_editText_login_created_layout.isErrorEnabled = false // Remove error
+                password_editText_login_layout.isErrorEnabled = false // Remove error
             }
 
-
-
-            if (email_editText_login.text.toString().trim()
-                    .isNotEmpty() && password_editText_login.text.toString()
-                    .isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
+            if (email_editText_login.text.toString().isNotEmpty() && password_editText_login.text.toString().isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
             ) { // If username and password are not empty
                 Log.d("LoginActivity", "Logging in user") // Log the login
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener {
                         dialog.dismiss()
+                        val uid = FirebaseAuth.getInstance().uid
+                        val email = FirebaseAuth.getInstance().currentUser?.email
+                        User(uid.toString(), "", "", email.toString(),"", "","null","null","")
                         if (!it.isSuccessful) return@addOnCompleteListener
 
                         Log.d(
                             "LoginActivity",
                             "Successfully logged in: ${it.result?.user?.uid}"
                         ) // Log the successful login
+                        val bundle = Bundle()
+                        bundle.putString(FirebaseAnalytics.Param.METHOD, "Login")
+                        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, bundle)
                         val intent = Intent(
                             this,
                             ConversationsActivity::class.java
@@ -111,7 +129,7 @@ class LoginAccountCreatedActivity : AppCompatActivity() {
 
             // Clear error messages
             email_editText_login_layout.error = null // Clear error
-            password_editText_login_created_layout.error = null // Clear error
+            password_editText_login_layout.error = null // Clear error
 
             //Call the signup activity
             val intent = Intent(
@@ -169,9 +187,9 @@ class LoginAccountCreatedActivity : AppCompatActivity() {
         } // End the else statement
     } // End the loginFailedRegister function
 
-    private fun checkEmail(email: String) { // Create a function called checkEmail
+    private fun checkEmail() { // Create a function called checkEmail
         if (!email_editText_login.text.isNullOrEmpty()) { // If the email text box is not empty
-            if (!Patterns.EMAIL_ADDRESS.matcher(email)
+            if (!Patterns.EMAIL_ADDRESS.matcher(email_editText_login.text.toString())
                     .matches()
             ) { // If the email text box does not match the email pattern
                 email_editText_login_layout.isErrorEnabled = true // Enable the error
@@ -181,7 +199,7 @@ class LoginAccountCreatedActivity : AppCompatActivity() {
                 return // Return
             }
         }
-        if (email_editText_login.text.toString().trim().isEmpty()) { // If the email text box is empty
+        if (email_editText_login.text.isNullOrEmpty()) { // If the email text box is empty
             email_editText_login_layout.isErrorEnabled =
                 true // Enable the error message of the email text box
             email_editText_login_layout.error =
@@ -193,5 +211,21 @@ class LoginAccountCreatedActivity : AppCompatActivity() {
                 false // If the email text box is not empty, set the error message to false
         }
     }
-
+    private fun verifyUserIsLoggedIn() { // verify the user is logged in
+        val uid = FirebaseAuth.getInstance().uid // get the current user's uid
+        Log.d("ConversationsActivity", "uid: $uid") // log the uid
+        if (uid != null) { // if the user is not logged in
+            Log.d("ConversationsActivity", "User is logged in") // log the user is not logged in
+            val intent = Intent(
+                this,
+                ConversationsActivity::class.java
+            ) // create an intent to go to the login activity
+            intent.flags =
+                Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK) // clear the task and start a new one
+            startActivity(intent) // start the intent
+            finish()
+        } else {
+            Log.d("ConversationsActivity", "User is not logged in") // log the user is logged in
+        }
+    }
 }

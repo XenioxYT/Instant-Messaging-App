@@ -8,6 +8,7 @@ import android.text.Layout
 import android.text.SpannableString
 import android.text.style.AlignmentSpan
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.view.WindowManager
 import android.widget.TextView
@@ -70,6 +71,7 @@ class ConversationsActivity : AppCompatActivity() {
                 .addData("registrationToken", FirebaseMessaging.getInstance().token.toString())
                 .build()
         )
+
 
         val presenceRef = FirebaseDatabase.getInstance()
             .getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
@@ -244,10 +246,24 @@ class ConversationsActivity : AppCompatActivity() {
                     ) // End the alignment
                     builder.setMessage(message)
                     builder.setPositiveButton("Yes") { _, _ ->
+
                         val statusRef = FirebaseDatabase.getInstance()
                             .getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
+
                         statusRef.setValue(System.currentTimeMillis() / 1000)
-                        FirebaseAuth.getInstance().signOut() // log out the user
+
+                        val logoutRef = FirebaseDatabase.getInstance().getReference("/latest-messages/${FirebaseAuth.getInstance().uid}/")
+                        val uid = FirebaseAuth.getInstance().uid // had to add this otherwise Firebase would sign out before clearing the FCM sub feed, meaning that the user was still subbed to all the channels. Not ideal but it works.
+                        logoutRef.get().addOnSuccessListener {
+                            for (data in it.children) {
+                                val toUserId = data.key
+                                Log.d("TAG", "toUserId: $toUserId")
+                                FirebaseMessaging.getInstance().unsubscribeFromTopic("pushNotifications${toUserId}${uid}").addOnSuccessListener {
+                                    Log.d("LogoutNotifications", "unsubscribed from topic: pushNotifications${toUserId}${uid}")
+                                }
+                            } // End for loop
+                        }
+
                         val intent = Intent(
                             this,
                             LoginActivity::class.java
@@ -255,6 +271,7 @@ class ConversationsActivity : AppCompatActivity() {
                         intent.flags =
                             Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK) // clear the task and start the login activity
                         startActivity(intent) // start the intent
+                        FirebaseAuth.getInstance().signOut() // log out the user
                     }
                     builder.setNegativeButton("No") { _, _ ->
                         drawer_layout.closeDrawer(GravityCompat.START) // close the drawer
@@ -268,6 +285,11 @@ class ConversationsActivity : AppCompatActivity() {
     }
 
     val latestMessagesMap = HashMap<String, ChatMessage>()
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
+        return super.onCreateOptionsMenu(menu)
+    }
 
     private fun listenForConversations() {
         val fromId = FirebaseAuth.getInstance().uid // get the current user's id

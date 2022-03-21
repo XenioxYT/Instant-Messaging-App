@@ -105,7 +105,7 @@ class SignupActivity : AppCompatActivity() { // Start of class
                                 contentResolver,
                                 selectedPhotoUri
                             )
-                            val compressedimage = compressBitmap(bitmap, 10)
+                            compressBitmap(bitmap, 10)
 
                             // add
 
@@ -116,11 +116,11 @@ class SignupActivity : AppCompatActivity() { // Start of class
                                 )
 
 
-                                ref.downloadUrl.addOnSuccessListener { it ->
+                                ref.downloadUrl.addOnSuccessListener {
                                     Log.d("SignupActivity", "File Location: $it")
                                     val fileLocation = it
-                                    val uid = FirebaseAuth.getInstance().uid
-                                        ?: "" // Get the user's uid
+                                    val uid = FirebaseAuth.getInstance().uid ?: "" // Get the user's uid
+//                                    val uid = FirebaseAuth.getInstance().uid.toString()
                                     val ref =
                                         FirebaseDatabase.getInstance("https://instant-messaging-app-7fed6-default-rtdb.europe-west1.firebasedatabase.app/")
                                             .getReference("/users/$uid") // Get the user's reference
@@ -137,10 +137,12 @@ class SignupActivity : AppCompatActivity() { // Start of class
                                         "null",
                                         "I'm using recivo"
                                     ) // Create a user object with the user's uid and username
-                                    val status = Status(-1)
+                                    Log.d("SignupActivity", "user: $user")
                                     ref.setValue(user)
                                         .addOnSuccessListener { // Add an onSuccessListener to the setValue function
-                                            ref.setValue(status) // create a user node with status.
+                                            val statusRef = FirebaseDatabase.getInstance("https://instant-messaging-app-7fed6-default-rtdb.europe-west1.firebasedatabase.app/").getReference("/status/$uid")
+                                            val status = Status(-1)
+                                            statusRef.setValue(status) // create a user node with status.
                                             Log.d(
                                                 "SignupActivity",
                                                 "Finally we saved the user to Firebase Database"
@@ -242,7 +244,12 @@ class SignupActivity : AppCompatActivity() { // Start of class
                     ) // Set intent to an intent to open the login activity
                     intent.flags =
                         Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK // Set the flags of the intent to clear the task and start a new task
+                    overridePendingTransition(
+                        R.anim.slide_in_right,
+                        R.anim.slide_out_left
+                    ) // Override the pending transition to slide in from the right and slide out to the left
                     startActivity(intent) // Start the login activity
+                    // override transition to material design
                 }
                 builder.setNegativeButton("No") { _, _ ->
                     builder.create().dismiss() // Dismiss the alert dialog
