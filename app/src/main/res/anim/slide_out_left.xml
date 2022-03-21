@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--Slide out left animation-->
+    <translate
+        android:duration="500"
+        android:fillAfter="true"
+        android:fromXDelta="0"
+        android:fromYDelta="0"
+        android:toXDelta="-1000"
+        android:toYDelta="0"
+        android:startOffset="0"
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+        android:animation="@anim/slide_out_left" />
+</set>
