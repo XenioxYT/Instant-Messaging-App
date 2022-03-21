@@ -293,8 +293,9 @@ class ConversationsActivity : AppCompatActivity() {
 
     private fun listenForConversations() {
         val fromId = FirebaseAuth.getInstance().uid // get the current user's id
+        val toId = USER_KEY // get the user's id
         val ref = FirebaseDatabase.getInstance()
-            .getReference("/latest-messages/$fromId") // get the reference to the user-conversations node
+            .getReference("/latest-messages/$fromId").orderByChild("$toId/timestamp") // get the reference to the user-conversations node
         ref.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val chatMessage =
