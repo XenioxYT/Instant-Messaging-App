@@ -7,17 +7,18 @@
 
     <TextView
         android:id="@+id/text_to_message"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:autoLink="all|email|phone|map"
         android:background="@drawable/chat_received_message_rounded"
         android:fontFamily="@font/outfit_regular"
-        android:maxWidth="210dp"
+        android:maxWidth="290dp"
         android:padding="12dp"
         android:text=""
         android:textColor="@color/black"
+        android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
