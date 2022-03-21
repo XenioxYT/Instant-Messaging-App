@@ -62,7 +62,7 @@ dependencies {
 
 
     // Import the Firebase BoM
-    implementation platform('com.google.firebase:firebase-bom:29.0.1')
+    implementation platform('com.google.firebase:firebase-bom:29.2.1')
 
     // When using the BoM, you don't specify versions in Firebase library dependencies
 
@@ -91,8 +91,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore-ktx'
     implementation 'com.google.firebase:firebase-storage-ktx:20.0.1'
 
-    implementation 'de.hdodenhof:circleimageview:2.2.0'
-    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.google.firebase:firebase-appcheck-safetynet:16.0.0-beta04'
 
 
@@ -108,7 +107,8 @@ dependencies {
     implementation 'com.github.dhaval2404:imagepicker:2.1'
     implementation 'io.github.vadiole:colorpicker:1.0.2'
     implementation 'com.google.mlkit:smart-reply:17.0.0'
-    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.6'
     implementation 'com.github.kirtan403:BackgroundManager:1.1.0'
     implementation 'com.github.kirtan403.k4kotlin:k4kotlin-core:1.0.0-beta1'
 
