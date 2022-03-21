@@ -27,6 +27,7 @@ import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.squareup.picasso.Picasso
+import com.xeniox.instantmessagingapp.ConversationsChatActivity.Companion.TAG
 import com.xeniox.instantmessagingapp.NewConversationActivity.Companion.USER_KEY
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -294,8 +295,9 @@ class ConversationsActivity : AppCompatActivity() {
     private fun listenForConversations() {
         val fromId = FirebaseAuth.getInstance().uid // get the current user's id
         val toId = USER_KEY // get the user's id
+        Log.d(TAG, "toId: $toId")
         val ref = FirebaseDatabase.getInstance()
-            .getReference("/latest-messages/$fromId").orderByChild("$toId/timestamp") // get the reference to the user-conversations node
+            .getReference("/latest-messages/$fromId") // get the reference to the user-conversations node
         ref.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val chatMessage =
