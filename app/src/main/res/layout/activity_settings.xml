@@ -39,9 +39,9 @@
             android:id="@+id/button_color"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/button"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:text="Tap to change colour"
+            app:layout_constraintStart_toStartOf="@+id/textView4"
+            app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/user_profile_image_settings"
@@ -129,15 +129,60 @@
             app:layout_constraintStart_toStartOf="@+id/edit_text_bio_settings"
             app:layout_constraintTop_toBottomOf="@+id/user_profile_image_settings" />
 
+        <TextView
+            android:id="@+id/text_edit_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/outfit_regular"
+            android:text="Edit your status:"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@+id/button_save_bio"
+            app:layout_constraintTop_toBottomOf="@+id/button_save_bio" />
+
+        <EditText
+            android:id="@+id/edit_text_status_settings"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:importantForAutofill="no"
+            android:inputType="textCapSentences|textMultiLine"
+            android:scrollHorizontally="false"
+            android:text="Status"
+            app:layout_constraintStart_toStartOf="@+id/text_edit_status"
+            app:layout_constraintTop_toBottomOf="@+id/text_edit_status" />
+
+        <Button
+            android:id="@+id/button_save_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            app:layout_constraintStart_toStartOf="@+id/edit_text_status_settings"
+            app:layout_constraintTop_toBottomOf="@+id/edit_text_status_settings" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/outfit_regular"
+            android:text="Change the app's default theme:"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@+id/button_save_status"
+            app:layout_constraintTop_toBottomOf="@+id/button_save_status" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigation_drawer"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@color/white"
-        app:headerLayout="@layout/nav_header"
-        app:menu="@menu/nav_menu" />
+<!--    <com.google.android.material.navigation.NavigationView-->
+<!--        android:id="@+id/navigation_drawer"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_gravity="start"-->
+<!--        android:background="@color/white"-->
+<!--        app:headerLayout="@layout/nav_header"-->
+<!--        app:menu="@menu/nav_menu" />-->
 
 </androidx.drawerlayout.widget.DrawerLayout>
