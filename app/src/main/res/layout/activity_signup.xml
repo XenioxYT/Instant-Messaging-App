@@ -168,7 +168,7 @@
         android:fontFamily="@font/outfit_bold"
         android:text="@string/button_create_account"
         android:textColor="@color/white"
-        android:theme="@style/Theme.InstantMessagingApp.Day"
+        android:theme="@style/Theme.InstantMessagingApp"
         app:layout_constraintEnd_toEndOf="@+id/confirm_password_editText_register_layout"
         app:layout_constraintStart_toStartOf="@+id/confirm_password_editText_register_layout"
         app:layout_constraintTop_toBottomOf="@+id/confirm_password_editText_register_layout" />
@@ -195,7 +195,7 @@
         android:fontFamily="@font/outfit_bold"
         android:text="@string/button_login_signupActivity"
         android:textColor="@color/white"
-        android:theme="@style/Theme.InstantMessagingApp.Day"
+        android:theme="@style/Theme.InstantMessagingApp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/text_already_have_account"
         app:layout_constraintStart_toStartOf="@+id/text_already_have_account" />
@@ -210,7 +210,7 @@
         android:text="@string/select_photo"
         android:textColor="@color/white"
         android:textStyle="bold"
-        android:theme="@style/Theme.InstantMessagingApp.Day"
+        android:theme="@style/Theme.InstantMessagingApp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
