@@ -33,14 +33,9 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_conversations.*
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.android.synthetic.main.activity_settings.drawer_layout
-import kotlinx.android.synthetic.main.activity_settings.navigation_drawer
 import kotlinx.android.synthetic.main.nav_header.*
 import vadiole.colorpicker.ColorModel
 import vadiole.colorpicker.ColorPickerDialog
-import java.io.IOException
-
-
-
 
 
 private lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -69,10 +64,23 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         button_save_bio.setOnClickListener {
-            val bio = edit_text_bio_settings.text.toString().trim()
-            val userRef = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/bio")
-            userRef.setValue(bio)
-            Toast.makeText(this, "Bio saved", Toast.LENGTH_SHORT).show()
+            if (text_edit_bio.text.toString().isNotEmpty()) {
+                val userRef = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/bio")
+                userRef.setValue(text_edit_bio.text.toString().trim())
+                Toast.makeText(this, "Bio saved", Toast.LENGTH_SHORT).show()
+            } else {
+                text_edit_bio.error = "Bio cannot be empty"
+            }
+        }
+        button_save_status.setOnClickListener{
+            if (text_edit_status.text.toString().trim().isEmpty() || text_edit_status.text.toString().trim().length > 12) {
+                text_edit_status.error = "Status must be between 1 and 12 characters"
+            } else {
+                val status = text_edit_status.text.toString().trim()
+                val userRef = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/status")
+                userRef.setValue(status)
+                Toast.makeText(this, "Status saved", Toast.LENGTH_SHORT).show()
+            }
         }
 
 //        val statusRef = FirebaseDatabase.getInstance().getReference("status/${FirebaseAuth.getInstance().uid}/")
@@ -98,30 +106,32 @@ class SettingsActivity : AppCompatActivity() {
         val ref = FirebaseDatabase.getInstance().getReference("/users/$user")
         var getcolor = ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
-                val color = p0.getValue(User::class.java)
-                if (color?.color != null) {
-                    Log.d("SettingsActivity", "Color is: ${color.color}")
-                    val userColor = color.color
-                    Log.d("SettingsActivity", "Color is: $color")
+                val colour = p0.getValue(User::class.java)
+                if (colour?.color != null) {
+                    Log.d("SettingsActivity", "Color is: ${colour.color}")
+                    val userColor = colour.color
+                    Log.d("SettingsActivity", "Color is: $colour")
                     val topappbar = findViewById<MaterialToolbar>(R.id.topAppBar_settings)
-                    topappbar.setBackgroundColor(color.color.toInt())
+                    topappbar.setBackgroundColor(colour.color.toInt())
                     val window = window
                     window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                    window.statusBarColor = color.color.toInt()
+                    window.statusBarColor = colour.color.toInt()
 
-                    button_color.setBackgroundColor(color.color.toInt())
+                    button_color.setBackgroundColor(colour.color.toInt())
 //                    val headerlayout = findViewById<Constraints>(R.id.header_layout)
-                    header_layout.setBackgroundColor(color.color.toInt())
+                    header_layout.setBackgroundColor(colour.color.toInt())
                     val userSettingsImage = findViewById<CircleImageView>(R.id.user_profile_image_settings)
-                    Picasso.get().load(color.profileImageUrl).into(userSettingsImage)
+                    Picasso.get().load(colour.profileImageUrl).into(userSettingsImage)
                     val userSettingsName = findViewById<TextView>(R.id.text_username_settings)
-                    userSettingsName.text = color.username
+                    userSettingsName.text = colour.username
                     val userSettingsEmail = findViewById<TextView>(R.id.text_email_settings)
-                    userSettingsEmail.text = color.email
+                    userSettingsEmail.text = colour.email
                     val userSettingsBio = findViewById<EditText>(R.id.edit_text_bio_settings)
-                    userSettingsBio.setText(color.bio)
+                    userSettingsBio.setText(colour.bio)
+                    val userSettingsStatus = findViewById<EditText>(R.id.edit_text_status_settings)
+                    userSettingsStatus.setText(colour.shortStatus)
                 } else {
-                    Log.d("SettingsActivity", "Color is: null")
+                    Log.d("SettingsActivity", "Colour is: null")
                 }
             }
 
