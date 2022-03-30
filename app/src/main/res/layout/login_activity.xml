@@ -104,7 +104,7 @@
         android:fontFamily="@font/outfit_bold"
         android:text="@string/button_login_signupActivity"
         android:textColor="@color/white"
-        android:theme="@style/Theme.InstantMessagingApp.Day"
+        android:theme="@style/Theme.InstantMessagingApp"
         app:layout_constraintEnd_toEndOf="@+id/password_editText_login_layout"
         app:layout_constraintStart_toStartOf="@+id/password_editText_login_layout"
         app:layout_constraintTop_toBottomOf="@+id/password_editText_login_layout" />
@@ -130,7 +130,7 @@
         android:fontFamily="@font/outfit_bold"
         android:text="@string/back_to_login"
         android:textColor="@color/white"
-        android:theme="@style/Theme.InstantMessagingApp.Day"
+        android:theme="@style/Theme.InstantMessagingApp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/button_forgot_password"
         app:layout_constraintStart_toStartOf="@+id/button_forgot_password" />
@@ -142,7 +142,7 @@
         android:fontFamily="@font/outfit_bold"
         android:text="@string/forgot_password"
         android:textColor="@color/white"
-        android:theme="@style/Theme.InstantMessagingApp.Day"
+        android:theme="@style/Theme.InstantMessagingApp"
         app:layout_constraintBottom_toTopOf="@+id/button_back_to_signin"
         app:layout_constraintEnd_toEndOf="@+id/text_need_account"
         app:layout_constraintStart_toStartOf="@+id/text_need_account" />
