@@ -192,7 +192,7 @@ class ConversationsChatActivity : AppCompatActivity() {
                     Log.d("ConversationsChatActivity", "Current date is: $currentDate")
                     Log.d("ConversationsChatActivity", "Last seen is: $lastSeen")
 
-                    if (currentDate.substring(0, 5) == lastSeen.substring(0, 5)) {
+                    if (currentDate.substring(0, 6) == lastSeen.substring(0, 6)) {
                         Log.d("ConversationsChatActivity", "Date is: ${currentDate.substring(7, lastSeen.length)}")
                         topAppBar_chat_conversation.subtitle = "Last seen today at ${lastSeen.substring(7, lastSeen.length).trim()}"
                         topAppBar_chat_conversation.isSubtitleCentered = true
@@ -298,7 +298,7 @@ class ConversationsChatActivity : AppCompatActivity() {
                                     Log.d("ConversationsChatActivity", "Current date is: $currentDate")
                                     Log.d("ConversationsChatActivity", "Last seen is: $lastSeen")
 
-                                    if (currentDate.substring(0, 5) == lastSeen.substring(0, 5)) {
+                                    if (currentDate.substring(0, 6) == lastSeen.substring(0, 6)) {
                                         Log.d("ConversationsChatActivity", "Date is: ${currentDate.substring(7, lastSeen.length)}")
                                         topAppBar_chat_conversation.subtitle = "Last seen today at ${lastSeen.substring(7, lastSeen.length).trim()}"
                                         topAppBar_chat_conversation.isSubtitleCentered = true
