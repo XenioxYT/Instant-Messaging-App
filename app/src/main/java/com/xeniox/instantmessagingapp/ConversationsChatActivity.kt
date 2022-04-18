@@ -185,14 +185,14 @@ class ConversationsChatActivity : AppCompatActivity() {
 //                    val topappbar = findViewById<MaterialToolbar>(R.id.topAppBar_chat_conversation)
                     topAppBar_chat_conversation.subtitle = "Offline"
                     val dateFormat = SimpleDateFormat("MMM dd HH:mm")
-                    val date = Date(status?.lastSeen!! * 1000)
+                    val date = Date(status?.lastSeen!! * 1000) // set the date val to the user's last seen time
                     val lastSeen = dateFormat.format(date)
 
                     val currentDate = getDateTimeFormat(System.currentTimeMillis() / 1000)
                     Log.d("ConversationsChatActivity", "Current date is: $currentDate")
                     Log.d("ConversationsChatActivity", "Last seen is: $lastSeen")
 
-                    if (currentDate.substring(0, 5) == lastSeen.substring(0, 5)) {
+                    if (currentDate.substring(0, 6) == lastSeen.substring(0, 6)) {
                         Log.d("ConversationsChatActivity", "Date is: ${currentDate.substring(7, lastSeen.length)}")
                         topAppBar_chat_conversation.subtitle = "Last seen today at ${lastSeen.substring(7, lastSeen.length).trim()}"
                         topAppBar_chat_conversation.isSubtitleCentered = true
@@ -298,7 +298,7 @@ class ConversationsChatActivity : AppCompatActivity() {
                                     Log.d("ConversationsChatActivity", "Current date is: $currentDate")
                                     Log.d("ConversationsChatActivity", "Last seen is: $lastSeen")
 
-                                    if (currentDate.substring(0, 5) == lastSeen.substring(0, 5)) {
+                                    if (currentDate.substring(0, 6) == lastSeen.substring(0, 6)) {
                                         Log.d("ConversationsChatActivity", "Date is: ${currentDate.substring(7, lastSeen.length)}")
                                         topAppBar_chat_conversation.subtitle = "Last seen today at ${lastSeen.substring(7, lastSeen.length).trim()}"
                                         topAppBar_chat_conversation.isSubtitleCentered = true
