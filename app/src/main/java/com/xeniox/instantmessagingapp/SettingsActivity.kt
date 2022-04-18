@@ -64,9 +64,10 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         button_save_bio.setOnClickListener {
-            if (text_edit_bio.text.toString().isNotEmpty()) {
+            if (text_edit_bio.text.toString().trim().isNotEmpty()) {
+                val bio = text_edit_bio.text.toString().trim()
                 val userRef = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/bio")
-                userRef.setValue(text_edit_bio.text.toString().trim())
+                userRef.setValue(bio)
                 Toast.makeText(this, "Bio saved", Toast.LENGTH_SHORT).show()
             } else {
                 text_edit_bio.error = "Bio cannot be empty"
