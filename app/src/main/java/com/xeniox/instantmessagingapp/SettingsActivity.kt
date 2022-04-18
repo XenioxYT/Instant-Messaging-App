@@ -64,20 +64,20 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         button_save_bio.setOnClickListener {
-            if (text_edit_bio.text.toString().isNotEmpty()) {
-                val userRef = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/bio")
-                userRef.setValue(text_edit_bio.text.toString().trim())
-                Toast.makeText(this, "Bio saved", Toast.LENGTH_SHORT).show()
+            if (edit_text_status_settings.text.toString().trim().isEmpty() || text_edit_status.text.toString().trim().length > 50) {
+                edit_text_bio_settings.error = "Bio must be between 1 and 24 characters"
             } else {
-                text_edit_bio.error = "Bio cannot be empty"
+                val userRef = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/bio")
+                userRef.setValue(edit_text_bio_settings.text.toString().trim())
+                Toast.makeText(this, "Bio saved", Toast.LENGTH_SHORT).show()
             }
         }
         button_save_status.setOnClickListener{
-            if (text_edit_status.text.toString().trim().isEmpty() || text_edit_status.text.toString().trim().length > 12) {
-                text_edit_status.error = "Status must be between 1 and 12 characters"
+            if (edit_text_status_settings.text.toString().trim().isEmpty() || text_edit_status.text.toString().trim().length > 24) {
+                edit_text_status_settings.error = "Status must be between 1 and 12 characters"
             } else {
-                val status = text_edit_status.text.toString().trim()
-                val userRef = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/status")
+                val status = edit_text_status_settings.text.toString().trim()
+                val userRef = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/shortStatus")
                 userRef.setValue(status)
                 Toast.makeText(this, "Status saved", Toast.LENGTH_SHORT).show()
             }
@@ -130,6 +130,8 @@ class SettingsActivity : AppCompatActivity() {
                     userSettingsBio.setText(colour.bio)
                     val userSettingsStatus = findViewById<EditText>(R.id.edit_text_status_settings)
                     userSettingsStatus.setText(colour.shortStatus)
+                    button_save_bio.setBackgroundColor(colour.color.toInt())
+                    button_save_status.setBackgroundColor(colour.color.toInt())
                 } else {
                     Log.d("SettingsActivity", "Colour is: null")
                 }
@@ -185,7 +187,7 @@ class SettingsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true) // enable the back button on the top app bar
 
 
-        navigation_drawer.setNavigationItemSelectedListener { // Set the navigation click listener
+        navigation_drawer_settings.setNavigationItemSelectedListener { // Set the navigation click listener
             when(it.itemId){ // check which item was clicked
                 R.id.conversations -> { // if the item was the second item
                     val intent = Intent(this, ConversationsActivity::class.java) // create an intent to go to the Conversations activity
@@ -276,10 +278,10 @@ class SettingsActivity : AppCompatActivity() {
             override fun onDataChange(p0: DataSnapshot) {
                 ConversationsActivity.currentUser = p0.getValue(User::class.java)
                 Log.d("ConversationsActivity","Current user: ${ConversationsActivity.currentUser?.username}")
-                navigation_drawer.findViewById<TextView>(R.id.username_nav_header).text = ConversationsActivity.currentUser?.username
+                navigation_drawer_settings.findViewById<TextView>(R.id.username_nav_header).text = ConversationsActivity.currentUser?.username
                 val email = ConversationsActivity.currentUser?.email
                 Log.d("ConversationsActivity","Current user email: $email")
-                navigation_drawer.findViewById<TextView>(R.id.email_nav_header).text = ConversationsActivity.currentUser?.email
+                navigation_drawer_settings.findViewById<TextView>(R.id.email_nav_header).text = ConversationsActivity.currentUser?.email
                 val navHeaderImage = findViewById<CircleImageView>(R.id.nav_header_image)
                 Picasso.get().load(ConversationsActivity.currentUser?.profileImageUrl).into(navHeaderImage)
             }
