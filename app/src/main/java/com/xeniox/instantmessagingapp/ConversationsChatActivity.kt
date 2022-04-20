@@ -382,6 +382,7 @@ class ConversationsChatActivity : AppCompatActivity() {
                     val user = FirebaseAuth.getInstance().currentUser?.uid
                     val refTyping = FirebaseDatabase.getInstance().getReference("/users/$user/typing")
                     refTyping.setValue(toId)
+                    editText_chat_conversation.error = null // set error to null
                 }
             }
         )
@@ -764,7 +765,8 @@ class ConversationsChatActivity : AppCompatActivity() {
             FirebaseDatabase.getInstance().getReference("/user-messages/$toId/$fromId")
                 .push() // new messages node in firebase
 
-        if (editText_chat_conversation.text.trim().isEmpty()) {
+        if (editText_chat_conversation.text.trim().isEmpty() || editText_chat_conversation.text.trim().length > 2000) {
+            editText_chat_conversation.error = "Message must be between 1 and 2000 characters"
             Log.d("chat", "message is null")
             return
         } else {
