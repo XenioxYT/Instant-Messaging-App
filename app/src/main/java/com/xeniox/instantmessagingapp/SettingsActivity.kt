@@ -3,11 +3,14 @@ package com.xeniox.instantmessagingapp
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
 import android.text.Layout
 import android.text.SpannableString
+import android.text.TextWatcher
 import android.text.style.AlignmentSpan
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.TextView
@@ -31,11 +34,13 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_conversations.*
+import kotlinx.android.synthetic.main.activity_conversations_chat.*
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.android.synthetic.main.activity_settings.drawer_layout
 import kotlinx.android.synthetic.main.nav_header.*
 import vadiole.colorpicker.ColorModel
 import vadiole.colorpicker.ColorPickerDialog
+import java.util.*
 
 
 private lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -83,28 +88,19 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-//        val statusRef = FirebaseDatabase.getInstance().getReference("status/${FirebaseAuth.getInstance().uid}/")
-//        statusRef.addValueEventListener(object : ValueEventListener {
-//            override fun onCancelled(p0: DatabaseError) {
-////                TODO("Not yet implemented")
-//            }
-//
-//            override fun onDataChange(p0: DataSnapshot) {
-//                val userStatus = p0.getValue(Status::class.java)
-//                if (userStatus != null) {
-//                    if (!userStatus.status) {
-//                        val statusRef = FirebaseDatabase.getInstance().getReference("status/${FirebaseAuth.getInstance().uid}/status")
-//                        statusRef.setValue(true)
-//                        val lastSeenRef = FirebaseDatabase.getInstance().getReference("users/${FirebaseAuth.getInstance().uid}/lastSeen")
-//                        lastSeenRef.setValue(-1)
-//                    }
-//                }
-//            }
-//        })
+        save_username.setOnClickListener {
+            if (text_username_settings.text.toString().trim().isEmpty() || text_username_settings.text.toString().trim().length >= 18) {
+                text_username_settings.error = "Username must be between 1 and 18 characters"
+            } else {
+                val userRef = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().uid}/username")
+                userRef.setValue(text_username_settings.text.toString().trim())
+                Toast.makeText(this, "Username saved", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         val user = FirebaseAuth.getInstance().currentUser?.uid
         val ref = FirebaseDatabase.getInstance().getReference("/users/$user")
-        var getcolor = ref.addValueEventListener(object : ValueEventListener {
+        ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 val colour = p0.getValue(User::class.java)
                 if (colour?.color != null) {
@@ -118,7 +114,6 @@ class SettingsActivity : AppCompatActivity() {
                     window.statusBarColor = colour.color.toInt()
 
                     button_color.setBackgroundColor(colour.color.toInt())
-//                    val headerlayout = findViewById<Constraints>(R.id.header_layout)
                     header_layout.setBackgroundColor(colour.color.toInt())
                     val userSettingsImage = findViewById<CircleImageView>(R.id.user_profile_image_settings)
                     Picasso.get().load(colour.profileImageUrl).into(userSettingsImage)
@@ -132,6 +127,7 @@ class SettingsActivity : AppCompatActivity() {
                     userSettingsStatus.setText(colour.shortStatus)
                     button_save_bio.setBackgroundColor(colour.color.toInt())
                     button_save_status.setBackgroundColor(colour.color.toInt())
+                    save_username.setBackgroundColor(colour.color.toInt())
                 } else {
                     Log.d("SettingsActivity", "Colour is: null")
                 }
@@ -291,31 +287,4 @@ class SettingsActivity : AppCompatActivity() {
             }
         })
     }
-
-//    private fun updateUserStatus(status: Boolean, lastSeen: Long?) {
-//        if (FirebaseAuth.getInstance().uid == null) return // if the user is not logged in, return
-//        else {
-//            val refStatus = FirebaseDatabase.getInstance()
-//                .getReference("/status/${FirebaseAuth.getInstance().uid}/status")
-//            refStatus.setValue(status)
-//            val refLastSeen = FirebaseDatabase.getInstance()
-//                .getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
-//            refLastSeen.setValue(lastSeen)
-//        }
-//    }
-//
-//    override fun onStop() {
-//        super.onStop()
-//        val statusRef = FirebaseDatabase.getInstance().getReference("/status/${FirebaseAuth.getInstance().uid}/status")
-//        statusRef.setValue(false)
-//        val lastSeenRef = FirebaseDatabase.getInstance().getReference("/status/${FirebaseAuth.getInstance().uid}/lastSeen")
-//        lastSeenRef.setValue(System.currentTimeMillis() / 1000)
-//    }
-//
-//    override fun onResume() {
-//        super.onResume()
-//        Log.d("ConversationsActivity", "onResume")
-//        // set a timer to update the user status every 5 seconds
-//        updateUserStatus(true, -1)
-//    }
 }
