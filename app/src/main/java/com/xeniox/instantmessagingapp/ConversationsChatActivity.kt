@@ -481,7 +481,7 @@ class ConversationsChatActivity : AppCompatActivity() {
                         conversations.add(
                             TextMessage.createForLocalUser(
                                 chatMessage?.text.toString(),
-                                System.currentTimeMillis()
+                                chatMessage!!.timestamp
                             )
                         )
                         recyclerView_chat_conversation.scrollToPosition(adapter.itemCount - 1)
@@ -490,7 +490,7 @@ class ConversationsChatActivity : AppCompatActivity() {
                         conversations.add(
                             TextMessage.createForRemoteUser(
                                 chatMessage?.text.toString(),
-                                System.currentTimeMillis(),
+                                chatMessage!!.timestamp,
                                 fromId!!
                             )
                         )
