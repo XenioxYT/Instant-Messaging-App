@@ -4,4 +4,5 @@
     <item name="email_editText_register_layout" type="id" />
     <item name="password_editText_register_layout" type="id" />
     <item name="confirm_password_editText_register_layout" type="id" />
+    <item name="navigation_drawer_settings" type="id" />
 </resources>
