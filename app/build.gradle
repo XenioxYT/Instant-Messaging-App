@@ -18,7 +18,7 @@ android {
     defaultConfig {
         applicationId "com.xeniox.instantmessagingapp"
         minSdk 24
-        targetSdk 30
+        targetSdk 31
         versionCode 26
         versionName "6.0.1"
 
